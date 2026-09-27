@@ -19,7 +19,7 @@ export function CopyEmail({ email }: { email: string }) {
     <button
       type="button"
       onClick={copy}
-      className="group inline-flex items-baseline gap-3 text-left text-[clamp(1.5rem,4vw,3rem)] font-medium tracking-tight"
+      className="group inline-flex items-baseline gap-3 text-left text-[clamp(1.25rem,2.6vw,2rem)] font-medium tracking-tight"
     >
       <span className="bg-[linear-gradient(var(--accent),var(--accent))] bg-[length:0%_0.12em] bg-left-bottom bg-no-repeat transition-[background-size] duration-500 ease-[var(--ease-out)] group-hover:bg-[length:100%_0.12em]">
         {email}

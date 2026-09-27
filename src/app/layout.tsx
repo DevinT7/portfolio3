@@ -46,8 +46,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${archivo.variable} ${instrument.variable} ${plexMono.variable} antialiased`}
     >
       <head>
-        {/* Opt into reveal animations only when JS runs, so nothing is hidden without it. */}
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+        {/* Opt into reveal animations only when JS runs, so nothing is hidden without it.
+            If the app is slow to hydrate, reveal everything after 2.5s anyway. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "document.documentElement.classList.add('js');setTimeout(function(){document.querySelectorAll('[data-reveal]').forEach(function(e){e.classList.add('is-in')})},2500)",
+          }}
+        />
       </head>
       <body>{children}</body>
     </html>

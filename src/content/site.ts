@@ -1,15 +1,22 @@
-// All copy on the site. Keep it short.
+// All copy on the site. Keep it short and specific.
 //
-// Hover previews: drop a file at /public/<media>.(mp4|webm|webp|jpg|png) and it's used
-// automatically. Until then the preview is a solid color block.
+// Images: drop a file at /public/<path>.(jpg|png|webp|mp4|webm) and it's used automatically.
+//   me              hero photo (also used in About unless me-about exists)
+//   me-about        photo in the About panel
+//   work/<id>       preview + panel image for any entry below
 
-export type Work = {
+export type Entry = {
+  id: string;
   year: string;
   name: string;
   what: string;
   stat: string;
-  media?: string;
-  href?: string;
+  role: string;
+  when: string;
+  summary: string;
+  did: string[];
+  stack?: string[];
+  links?: { label: string; href: string }[];
 };
 
 export const site = {
@@ -24,12 +31,162 @@ export const site = {
     { label: "LinkedIn", href: "https://www.linkedin.com/in/devint7" },
   ],
 
+  about: {
+    line: "Informatics at UT Austin. Based in Austin, TX.",
+    interests: ["F1", "Baking", "Basketball", "Traveling", "Skiing", "Swimming"],
+  },
+
   work: [
-    { year: "2026", name: "IBM", what: "watsonx voice runtime", stat: "2.23s latency", media: "work/ibm" },
-    { year: "2026", name: "Convergent", what: "Member platform", stat: "300+ members", media: "work/convergent" },
-    { year: "2025", name: "City of Austin", what: "Safety routing", stat: "Best App", media: "work/ctm" },
-    { year: "2026", name: "REFIND", what: "Event analytics", stat: "80 events", media: "work/refind" },
-    { year: "2026", name: "Forge", what: "Multimodal retrieval", stat: "Tech lead", media: "work/forge" },
-    { year: "2026", name: "StudyMon", what: "Study tracker", stat: "AI + maps", media: "work/studymon" },
-  ] satisfies Work[],
+    {
+      id: "ibm",
+      year: "2026",
+      name: "IBM",
+      what: "watsonx voice runtime",
+      stat: "2.23s latency",
+      role: "Software Developer Intern",
+      when: "Mar — Aug 2026",
+      summary:
+        "watsonx Orchestrate lets companies build AI agents that can take phone calls. I worked on its voice runtime: the part that turns a caller’s speech into text for the agent, and the agent’s reply back into speech.",
+      did: [
+        "Integrated Google Speech-to-Text and Text-to-Speech into the runtime. 2.23s median end-to-end response time, 0.0% error rate across 80+ traced calls.",
+        "Built a direct gRPC streaming pipeline with Pipecat that skips the AI Gateway. It gets around API streaming connection limits and handles multiple languages automatically.",
+        "Wrote CRUD APIs to move voice configuration out of local YAML files and into PostgreSQL.",
+        "Extended auth to support service-account credentials across 5 speech providers.",
+      ],
+      stack: ["Python", "Pipecat", "gRPC", "Google Cloud STT/TTS", "PostgreSQL"],
+    },
+    {
+      id: "convergent",
+      year: "2026",
+      name: "Convergent",
+      what: "Member platform",
+      stat: "300+ members",
+      role: "Software Engineer",
+      when: "Jun 2026 — Now",
+      summary:
+        "Texas Convergent has 300+ members and was tracking them in spreadsheets. I built the portal it now runs on: membership, roles, and event check-in.",
+      did: [
+        "Role-based access enforced in Postgres with row-level security, so permissions hold even if the UI is bypassed.",
+        "Check-in QR codes rotate and are signed with HMAC-SHA256. A live camera scanner verifies them at the door.",
+        "Tracked down a validation bug that was rejecting real codes and widened the redemption window from 2.5s to 10s.",
+        "Wrote an idempotent Node.js ETL job that migrated 3 semesters of member records with natural-key upserts. It can be re-run without creating duplicates.",
+      ],
+      stack: ["Next.js", "React 19", "TypeScript", "PostgreSQL", "Node.js"],
+    },
+    {
+      id: "ctm",
+      year: "2025",
+      name: "City of Austin",
+      what: "Safety routing",
+      stat: "Best App",
+      role: "Software Engineer Intern",
+      when: "Jun — Jul 2025",
+      summary:
+        "A public safety app that helps Austin residents avoid high-crime areas. Built with a multidisciplinary team in a 6-week sprint.",
+      did: [
+        "Processed 500+ live crime reports a day to calculate risk-averse navigation paths.",
+        "Built a real-time sync layer on Firebase so users get safety alerts instantly while navigating.",
+        "Wrote custom routing with GraphHopper and the Google Maps APIs, simulating 200+ safe routes weighted against historical crime density.",
+        "Pitched the MVP to Capital Factory investors and won Overall Best App out of 8 teams.",
+      ],
+      stack: ["React", "TypeScript", "Firebase", "GraphHopper", "Google Maps"],
+    },
+    {
+      id: "refind",
+      year: "2026",
+      name: "REFIND",
+      what: "Event analytics",
+      stat: "80 events",
+      role: "Software Engineer, Forge",
+      when: "Jan 2026 — Now",
+      summary:
+        "A B2B event platform for consumer brands. Brands can see which events actually paid off and how attendees felt about them.",
+      did: [
+        "Built the core product with a team, on Next.js and Supabase.",
+        "Designed a multi-tenant backend with row-level security and Node.js. 10 brand workspaces, fully isolated from each other.",
+        "Aggregated sentiment and conversion funnels from live attendee streams, turning 300+ interactions into per-campaign metrics.",
+        "Built the dashboards: conversion rates and engagement heatmaps across 80 events and 250+ attendees.",
+      ],
+      stack: ["Next.js", "Supabase", "Node.js", "Tailwind CSS"],
+    },
+    {
+      id: "forge",
+      year: "2026",
+      name: "Forge",
+      what: "Multimodal retrieval",
+      stat: "Tech lead",
+      role: "Software Tech Lead, Texas Convergent",
+      when: "Jul 2026 — Now",
+      summary: "Event-to-image retrieval for Pax Historia, a YC-backed AI game studio: given an event in the game, find the right image for it.",
+      did: [
+        "Leading a team of 13 engineers.",
+        "Benchmarking lexical, embedding, and hybrid multimodal retrieval against each other.",
+      ],
+      stack: ["Python", "Embeddings"],
+    },
+    {
+      id: "studymon",
+      year: "2026",
+      name: "StudyMon",
+      what: "Study tracker",
+      stat: "AI + maps",
+      role: "Full Stack Developer",
+      when: "Mar 2026",
+      summary: "A study tracker for UT students. Studying at real campus spots earns you Pokémon-style creatures.",
+      did: [
+        "AI study assistant on the Anthropic and OpenAI APIs that recommends spots through tool-calling.",
+        "Supabase with row-level security, plus server actions for session logic.",
+        "Campus map built with React Leaflet.",
+      ],
+      stack: ["Next.js", "Tailwind CSS", "Supabase", "React Leaflet"],
+    },
+  ] satisfies Entry[],
+
+  leadership: [
+    {
+      id: "baxa",
+      year: "2026",
+      name: "Texas BAXA",
+      what: "Corporate Director",
+      stat: "Exec Board",
+      role: "Corporate Director",
+      when: "Apr 2026 — Now",
+      summary:
+        "My job is emailing hundreds of companies for sponsorships. The old process was one Excel sheet updated by hand and every email copied into Gmail one at a time, hours of work per batch.",
+      did: [
+        "Contacts come in as a CSV and live in Supabase. The import generates emails and skips duplicate companies.",
+        "Bulk send pulls the company name from each email into the template and puts the drafts straight into Gmail.",
+        "LinkedIn extractor: on a recruiter’s profile, it combines Hunter.io with an extraction algorithm to guess their email, no paid service like ContactOut needed.",
+        "Built-in email verifier, and Quick Send for pasting any emails you’ve gathered and sending right away.",
+        "One-click follow-ups for companies that haven’t replied.",
+        "Brought in $1,000+ from 4 companies so far and ran recruiting events and case competitions for 150+ members.",
+      ],
+      stack: ["Supabase", "Hunter.io", "Gmail"],
+    },
+    {
+      id: "convergent-exec",
+      year: "2026",
+      name: "Texas Convergent",
+      what: "Memberships Chair",
+      stat: "Board",
+      role: "Memberships Chair",
+      when: "May 2026 — Now",
+      summary: "On the exec board of a 300+ member org. I run recruitment.",
+      did: [
+        "Set recruitment strategy with the program directors.",
+        "Run the application, review, and team-selection process each semester.",
+      ],
+    },
+    {
+      id: "slsa",
+      year: "2024",
+      name: "SLSA",
+      what: "Sri Lankan Student Association",
+      stat: "Co-founder",
+      role: "Co-founder",
+      when: "2024 — Now",
+      summary: "Co-founded UT’s Sri Lankan Student Association.",
+      did: ["Grew it to 30+ active members in its first semester.", "Coordinator and outreach."],
+    },
+  ] satisfies Entry[],
 };
