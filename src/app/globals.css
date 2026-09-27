@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f4f3ef;
+  --fg: #111111;
+  --muted: #6a6a64;
+  --line: rgb(17 17 17 / 0.12);
+  --accent: #ff4f1a;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-wipe: cubic-bezier(0.77, 0, 0.18, 1);
+}
+
+@theme inline {
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+}
+
+::selection { background: var(--accent); color: var(--fg); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@layer components {
+  /* Archivo at its narrowest width. */
+  .display {
+    font-variation-settings: "wdth" 62;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 0.88;
+  }
+  .serif {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    text-transform: none;
+  }
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+}
+
+/* ── Motion. Everything is visible without JS; `.js` on <html> opts in. ───── */
+
+/* Block wipe: an accent bar sweeps across, the text is there when it leaves. */
+.wipe { position: relative; display: inline-block; }
+.js .wipe > .wipe-text { opacity: 0; }
+.js .wipe::after {
+  content: "";
+  position: absolute;
+  inset: 0.04em -0.04em 0.02em;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  pointer-events: none;
+}
+.js .wipe.is-in > .wipe-text { animation: wipe-text 0.95s var(--d, 0ms) both; }
+.js .wipe.is-in::after { animation: wipe-block 0.95s var(--ease-wipe) var(--d, 0ms) both; }
+
+@keyframes wipe-block {
+  0% { transform: scaleX(0); transform-origin: left; }
+  50% { transform: scaleX(1); transform-origin: left; }
+  50.01% { transform: scaleX(1); transform-origin: right; }
+  100% { transform: scaleX(0); transform-origin: right; }
+}
+@keyframes wipe-text {
+  0%, 50% { opacity: 0; }
+  50.01%, 100% { opacity: 1; }
+}
+
+/* Quiet rise, staggered with --i. */
+.js .rise {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+  transition: opacity 0.7s var(--ease-out), transform 0.9s var(--ease-out);
+  transition-delay: calc(var(--d, 0ms) + var(--i, 0) * 60ms);
+}
+.js .rise.is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .wipe > .wipe-text,
+  .js .rise { opacity: 1; transform: none; transition: none; animation: none; }
+  .js .wipe::after { display: none; }
+}
