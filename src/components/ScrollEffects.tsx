@@ -2,7 +2,10 @@
 
 import { useEffect } from "react";
 
-/** Adds `.is-in` to [data-reveal] elements the first time they enter the viewport. */
+/**
+ * Adds `.is-in` to [data-reveal] elements the first time they enter the viewport.
+ * While the intro is playing, waits for it to finish so the page fades in around the name.
+ */
 export function ScrollEffects() {
   useEffect(() => {
     const io = new IntersectionObserver(
@@ -16,8 +19,16 @@ export function ScrollEffects() {
       },
       { rootMargin: "0px 0px -5% 0px", threshold: 0.1 },
     );
-    document.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    const start = () => document.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
+    if (document.documentElement.classList.contains("intro")) {
+      window.addEventListener("intro:done", start, { once: true });
+    } else {
+      start();
+    }
+    return () => {
+      window.removeEventListener("intro:done", start);
+      io.disconnect();
+    };
   }, []);
 
   return null;

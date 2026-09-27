@@ -100,6 +100,16 @@ body {
 }
 .js .rise.is-in { opacity: 1; transform: none; }
 
+/* First-visit intro (see Intro.tsx). Letters rise in place of the wipe. */
+.ch { display: inline-block; }
+html.intro .wipe > .wipe-text,
+.js .wipe.wiped > .wipe-text { opacity: 1; animation: none; }
+html.intro .wipe::after,
+.js .wipe.wiped::after { display: none; }
+html.intro .ch { opacity: 0; transform: translate3d(0, 0.3em, 0); }
+html.intro-play .ch { animation: ch-rise 0.7s var(--ease-out) calc(var(--c) * 40ms) forwards; }
+@keyframes ch-rise { to { opacity: 1; transform: none; } }
+
 @media (prefers-reduced-motion: reduce) {
   .js .wipe > .wipe-text,
   .js .rise { opacity: 1; transform: none; transition: none; animation: none; }
