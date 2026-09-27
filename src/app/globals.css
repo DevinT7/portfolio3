@@ -100,15 +100,27 @@ body {
 }
 .js .rise.is-in { opacity: 1; transform: none; }
 
-/* First-visit intro (see Intro.tsx). Letters rise in place of the wipe. */
-.ch { display: inline-block; }
-html.intro .wipe > .wipe-text,
-.js .wipe.wiped > .wipe-text { opacity: 1; animation: none; }
-html.intro .wipe::after,
-.js .wipe.wiped::after { display: none; }
-html.intro .ch { opacity: 0; transform: translate3d(0, 0.3em, 0); }
-html.intro-play .ch { animation: ch-rise 0.7s var(--ease-out) calc(var(--c) * 40ms) forwards; }
-@keyframes ch-rise { to { opacity: 1; transform: none; } }
+/* First-visit intro (see Intro.tsx): an orange curtain with the name wiped in, which
+   then lifts away with a curved bottom edge. Shown only while <html> has `.intro`. */
+.curtain { display: none; }
+html.intro .curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  color: var(--fg);
+}
+.curtain .wipe::after { background: var(--fg); }
+.curtain.lift { animation: curtain-lift var(--lift, 900ms) cubic-bezier(0.76, 0, 0.24, 1) forwards; }
+.curtain.lift .curtain-name { animation: curtain-name var(--lift, 900ms) cubic-bezier(0.76, 0, 0.24, 1) forwards; }
+@keyframes curtain-lift {
+  to { transform: translateY(-100%); border-radius: 0 0 50% 50% / 0 0 18vh 18vh; }
+}
+@keyframes curtain-name {
+  to { transform: translateY(-6vh); opacity: 0; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .js .wipe > .wipe-text,

@@ -1,11 +1,10 @@
 import { CopyEmail } from "@/components/CopyEmail";
 import { ScrollEffects } from "@/components/ScrollEffects";
 import { Sheet } from "@/components/Sheet";
-import { Thumb } from "@/components/Thumb";
 import { Wipe } from "@/components/Wipe";
 import { EntryList } from "@/components/EntryList";
+import { Thumb } from "@/components/Thumb";
 import { Intro } from "@/components/Intro";
-import { Letters } from "@/components/Letters";
 import { site } from "@/content/site";
 import { findMedia } from "@/lib/media";
 
@@ -22,7 +21,7 @@ export default function Home() {
     <>
       <div id="page" className="mx-auto flex min-h-dvh max-w-[1240px] flex-col px-4 md:px-8">
         <ScrollEffects />
-        <Intro />
+        <Intro name={site.name} />
 
         <header className="rise flex h-16 items-center justify-between md:h-20" data-reveal>
           <span className="label text-fg">{site.name}</span>
@@ -47,18 +46,13 @@ export default function Home() {
         <main className="flex-1">
           <section className="grid items-end gap-8 pt-10 pb-12 md:pt-16 md:pb-16 lg:grid-cols-12">
             <div className="lg:col-span-8">
-              <h1 id="name" className="display relative z-10 w-fit text-[clamp(4rem,15.5vw,8rem)] lg:text-[min(11vw,10.5rem)]">
-                <span className="sr-only">{site.name}</span>
-                <span className="block" aria-hidden>
-                  <Wipe delay={100}>
-                    <Letters text="Devin" />
-                  </Wipe>
+              <h1 className="display text-[clamp(4rem,15.5vw,8rem)] lg:text-[min(11vw,10.5rem)]">
+                <span className="block">
+                  <Wipe delay={100}>Devin</Wipe>
                 </span>
-                <span className="block" aria-hidden>
+                <span className="block">
                   <Wipe delay={260}>
-                    <span className="serif">
-                      <Letters text="Thenuwara" start={5} />
-                    </span>
+                    <span className="serif">Thenuwara</span>
                   </Wipe>
                 </span>
               </h1>
