@@ -5,14 +5,14 @@
   --fg: #111111;
   --muted: #6a6a64;
   --line: rgb(17 17 17 / 0.12);
-  --accent: #ff4f1a;
+  --accent: #1d4ed8;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-wipe: cubic-bezier(0.77, 0, 0.18, 1);
 }
 
 @theme inline {
-  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
   --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
 
   --color-bg: var(--bg);
@@ -29,7 +29,7 @@ body {
   line-height: 1.5;
 }
 
-::selection { background: var(--accent); color: var(--fg); }
+::selection { background: var(--accent); color: #fff; }
 
 @layer base {
   :focus-visible {
@@ -40,19 +40,15 @@ body {
 }
 
 @layer components {
-  /* Archivo at its narrowest width. */
   .display {
-    font-variation-settings: "wdth" 62;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: -0.01em;
-    line-height: 0.88;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
   }
   .serif {
     font-family: var(--font-serif);
     font-style: italic;
     font-weight: 400;
-    text-transform: none;
   }
   .label {
     font-family: var(--font-mono);
@@ -110,9 +106,9 @@ html.intro .curtain {
   display: grid;
   place-items: center;
   background: var(--accent);
-  color: var(--fg);
+  color: #fff;
 }
-.curtain .wipe::after { background: var(--fg); }
+.curtain .wipe::after { background: #fff; }
 .curtain.lift { animation: curtain-lift var(--lift, 900ms) cubic-bezier(0.76, 0, 0.24, 1) forwards; }
 .curtain.lift .curtain-name { animation: curtain-name var(--lift, 900ms) cubic-bezier(0.76, 0, 0.24, 1) forwards; }
 @keyframes curtain-lift {
