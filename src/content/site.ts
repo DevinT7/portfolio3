@@ -34,6 +34,27 @@ export const site = {
   about: {
     line: "Informatics at UT Austin. Based in Austin, TX.",
     interests: ["F1", "Baking", "Basketball", "Traveling", "Skiing", "Swimming"],
+    // Pins on the travel map. The first one is home.
+    places: [
+      { name: "Austin, TX", lat: 30.27, lon: -97.74 },
+      { name: "San Francisco, CA", lat: 37.77, lon: -122.42 },
+      { name: "New York, NY", lat: 40.71, lon: -74.01 },
+      { name: "Denver, CO", lat: 39.74, lon: -104.99 },
+      { name: "Durango, CO", lat: 37.28, lon: -107.88 },
+      { name: "Seattle, WA", lat: 47.61, lon: -122.33 },
+      { name: "Baltimore, MD", lat: 39.29, lon: -76.61 },
+      { name: "Chicago, IL", lat: 41.88, lon: -87.63 },
+      { name: "Miami, FL", lat: 25.76, lon: -80.19 },
+      { name: "Santa Fe, NM", lat: 35.69, lon: -105.94 },
+      { name: "Alaska", lat: 61.22, lon: -149.9 },
+      { name: "Vancouver, Canada", lat: 49.28, lon: -123.12 },
+      { name: "Cancún, Mexico", lat: 21.16, lon: -86.85 },
+      { name: "Cozumel, Mexico", lat: 20.42, lon: -86.92 },
+      { name: "United Kingdom", lat: 51.51, lon: -0.13 },
+      { name: "France", lat: 48.86, lon: 2.35 },
+      { name: "Zürich, Switzerland", lat: 47.38, lon: 8.54 },
+      { name: "Sri Lanka", lat: 7.87, lon: 80.77 },
+    ],
   },
 
   work: [

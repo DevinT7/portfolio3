@@ -4,10 +4,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { Entry } from "@/content/site";
 import type { Found } from "@/lib/media";
 import { Thumb } from "./Thumb";
+import { TravelMap } from "./TravelMap";
 
 type Props = {
   entries: (Entry & { found: Found; tint: number })[];
-  about: { line: string; interests: string[]; photo: Found };
+  about: { line: string; interests: string[]; places: { name: string; lat: number; lon: number }[]; photo: Found };
 };
 
 /**
@@ -133,6 +134,10 @@ export function Sheet({ entries, about }: Props) {
                   <li key={t}>{t}</li>
                 ))}
               </ul>
+            </div>
+            <div>
+              <p className="label mb-3">Been to · {about.places.length}</p>
+              <TravelMap places={about.places} />
             </div>
           </article>
         )}
