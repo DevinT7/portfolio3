@@ -47,6 +47,7 @@ export const site = {
       { src: "/about/newyork.webp", alt: "New York skyline with the Empire State Building", caption: "New York", w: 1141, h: 856 },
       { src: "/about/durango.webp", alt: "Green valley and mountains near Durango", caption: "Durango", w: 1141, h: 856 },
       { src: "/about/cota.webp", alt: "Turn 1 hill and grandstands at Circuit of the Americas", caption: "COTA", w: 1141, h: 856 },
+      { src: "/about/lake-travis.webp", alt: "Sunset over Lake Travis with hills on the far shore", caption: "Lake Travis", w: 2000, h: 1500 },
     ],
     interests: ["F1", "Baking", "Basketball", "Traveling", "Skiing", "Swimming"],
     // Pins on the travel map. The first one is home.
