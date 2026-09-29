@@ -3,11 +3,11 @@ import { site } from "@/content/site";
 type Ev = { type: string; created_at: string; repo: { name: string } };
 
 const TZ = "America/Chicago";
-const DAYS = 30;
+const DAYS = 14;
 const key = (d: Date) => new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(d); // YYYY-MM-DD
 
 /**
- * Live from GitHub's public events API (refreshed hourly on the server): a 30-day strip of
+ * Live from GitHub's public events API (refreshed hourly on the server): a 14-day strip of
  * squares, one per day, shaded by how many pushes you made, plus the last repo pushed to.
  * Renders nothing if GitHub can't be reached.
  */
