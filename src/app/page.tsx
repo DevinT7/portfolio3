@@ -64,7 +64,7 @@ export default function Home() {
         </header>
 
         <main className="flex-1">
-          <section className="grid gap-8 pt-8 pb-12 md:pt-12 md:pb-16 lg:grid-cols-12 lg:items-stretch">
+          <section className="grid gap-8 pt-8 pb-14 md:pt-12 md:pb-20 lg:grid-cols-12 lg:items-stretch">
             <div className="flex flex-col justify-between gap-12 lg:col-span-8">
               <h1 className="display text-[clamp(3rem,6.5vw,5rem)]">
                 <span className="block">
@@ -79,7 +79,7 @@ export default function Home() {
 
               <dl className="grid grid-cols-1 border-t border-line sm:grid-cols-2">
                 {facts.map(([k, v], i) => (
-                  <div key={k} className={`rise items-baseline gap-6 border-b border-line py-3 ${i >= 4 ? "hidden sm:flex" : "flex"}`} data-reveal style={{ "--i": i, "--d": "400ms" } as React.CSSProperties}>
+                  <div key={k} className={`rise items-baseline gap-6 border-b border-line py-3 ${i >= 4 ? "hidden sm:flex sm:border-b-0" : i === 3 ? "flex border-b-0 sm:border-b" : "flex"}`} data-reveal style={{ "--i": i, "--d": "400ms" } as React.CSSProperties}>
                     <dt className="label w-16 shrink-0">{k}</dt>
                     <dd className="text-lg">{v}</dd>
                   </div>
@@ -95,16 +95,22 @@ export default function Home() {
           </section>
 
           <section aria-labelledby="work-label">
-            <h2 id="work-label" className="label rise mb-3" data-reveal style={{ "--d": "450ms" } as React.CSSProperties}>
-              Work
-            </h2>
+            <div className="rise mb-4 flex items-baseline justify-between" data-reveal style={{ "--d": "450ms" } as React.CSSProperties}>
+              <h2 id="work-label" className="display text-[clamp(1.5rem,2.6vw,2rem)]">
+                Selected work
+              </h2>
+              <span className="label">{String(work.length).padStart(2, "0")}</span>
+            </div>
             <EntryList items={work} />
           </section>
 
           <section aria-labelledby="leadership-label" className="mt-16 md:mt-20">
-            <h2 id="leadership-label" className="label rise mb-3" data-reveal>
-              Leadership
-            </h2>
+            <div className="rise mb-4 flex items-baseline justify-between" data-reveal>
+              <h2 id="leadership-label" className="display text-[clamp(1.5rem,2.6vw,2rem)]">
+                Leadership
+              </h2>
+              <span className="label">{String(leadership.length).padStart(2, "0")}</span>
+            </div>
             <EntryList items={leadership} small />
           </section>
         </main>
