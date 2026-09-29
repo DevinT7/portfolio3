@@ -44,6 +44,9 @@ export const site = {
       { src: "/about/florida.webp", alt: "Jurassic Park entrance at a theme park", caption: "Florida", w: 1521, h: 856 },
       { src: "/about/alaska.webp", alt: "Snowy mountains and a glacier reflected in the water", caption: "Alaska", w: 1141, h: 856 },
       { src: "/about/honduras.webp", alt: "Green hills and a ferry dock on the water", caption: "Honduras", w: 1141, h: 856 },
+      { src: "/about/newyork.webp", alt: "New York skyline with the Empire State Building", caption: "New York", w: 1141, h: 856 },
+      { src: "/about/durango.webp", alt: "Green valley and mountains near Durango", caption: "Durango", w: 1141, h: 856 },
+      { src: "/about/cota.webp", alt: "Turn 1 hill and grandstands at Circuit of the Americas", caption: "COTA", w: 1141, h: 856 },
     ],
     interests: ["F1", "Baking", "Basketball", "Traveling", "Skiing", "Swimming"],
     // Pins on the travel map. The first one is home.

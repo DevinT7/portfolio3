@@ -3,6 +3,8 @@ import { CopyEmail } from "@/components/CopyEmail";
 import { ScrollEffects } from "@/components/ScrollEffects";
 import { Sheet } from "@/components/Sheet";
 import { Ski, SkiButton } from "@/components/Ski";
+import { F1, F1Button } from "@/components/F1";
+import { Circuit } from "@/components/Circuit";
 import { Wipe } from "@/components/Wipe";
 import { EntryList } from "@/components/EntryList";
 import { Thumb } from "@/components/Thumb";
@@ -92,16 +94,19 @@ export default function Home() {
           </section>
         </main>
 
-        <footer className="rise flex flex-col gap-6 py-16 md:flex-row md:items-end md:justify-between md:py-24" data-reveal>
+        <footer className="rise flex flex-col gap-6 py-16 md:flex-row md:items-end md:justify-between md:pt-24 md:pb-36" data-reveal>
           <CopyEmail email={site.email} />
           <div className="flex items-center gap-6">
             <SkiButton />
+            <F1Button />
             <p className="label">© {new Date().getFullYear()}</p>
           </div>
         </footer>
       </div>
 
+      <Circuit />
       <Ski />
+      <F1 />
       <Sheet entries={[...work, ...leadership]} />
     </>
   );

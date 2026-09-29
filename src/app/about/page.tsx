@@ -44,7 +44,7 @@ export default function About() {
           {/* Portraits and landscapes each get one shared shape so rows line up. */}
           {[
             { list: photos.filter((p) => p.h > p.w), cols: "sm:grid-cols-3", shape: "aspect-[3/4]" },
-            { list: photos.filter((p) => p.h <= p.w), cols: "sm:grid-cols-2", shape: "aspect-[4/3]" },
+            { list: photos.filter((p) => p.h <= p.w), cols: "sm:grid-cols-2 lg:grid-cols-3", shape: "aspect-[4/3]" },
           ].map(({ list, cols, shape }) => (
             <ul key={cols} className={`grid grid-cols-1 gap-4 ${cols}`}>
               {list.map((p, i) => (
