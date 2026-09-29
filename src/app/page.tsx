@@ -66,8 +66,15 @@ export default function Home() {
         <main className="flex-1">
           <section className="grid gap-8 pt-8 pb-12 md:pt-12 md:pb-16 lg:grid-cols-12 lg:items-stretch">
             <div className="flex flex-col justify-between gap-12 lg:col-span-8">
-              <h1 className="text-[clamp(2.25rem,5vw,3.75rem)] leading-none font-semibold tracking-[-0.03em]">
-                <Wipe delay={100}>{site.name}</Wipe>
+              <h1 className="display text-[clamp(3rem,6.5vw,5rem)]">
+                <span className="block">
+                  <Wipe delay={100}>Devin</Wipe>
+                </span>
+                <span className="block">
+                  <Wipe delay={260}>
+                    <span className="serif">Thenuwara</span>
+                  </Wipe>
+                </span>
               </h1>
 
               <dl className="grid grid-cols-1 border-t border-line sm:grid-cols-2">
