@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { MAP, MAP_ROWS } from "@/content/world-dots";
 
 type Place = { name: string; lat: number; lon: number };
@@ -61,10 +61,21 @@ function spread(places: Place[]) {
  * Whole-world dotted map. Click anywhere (or a pin) to zoom in around it; click again or
  * press "World" to zoom back out. Pins keep their size while the map scales.
  */
-export function TravelMap({ places }: { places: Place[] }) {
+export function TravelMap({
+  places,
+  selected,
+  onSelect,
+}: {
+  places: Place[];
+  /** Index of the selected pin (the map zooms to it), or null for the world view. */
+  selected: number | null;
+  onSelect: (i: number | null) => void;
+}) {
   const [active, setActive] = useState<number | null>(null);
-  const [focus, setFocus] = useState<{ x: number; y: number } | null>(null);
-  const pins = spread(places);
+  const [free, setFree] = useState<{ x: number; y: number } | null>(null); // zoomed by clicking empty map
+  const pins = useMemo(() => spread(places), [places]);
+  const focus = selected !== null ? { x: pins[selected].x, y: pins[selected].y } : free;
+  const shown = active ?? selected;
 
   const z = focus ? ZOOM : 1;
   // Translate (in % of the layer) so the focus point sits in the middle, clamped to the edges.
@@ -73,9 +84,12 @@ export function TravelMap({ places }: { places: Place[] }) {
   const ty = focus ? clamp(50 - (focus.y / H) * 100 * z) : 0;
 
   const onMapClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (focus) return setFocus(null);
+    if (focus) {
+      setFree(null);
+      return onSelect(null);
+    }
     const r = e.currentTarget.getBoundingClientRect();
-    setFocus({ x: ((e.clientX - r.left) / r.width) * W, y: ((e.clientY - r.top) / r.height) * H });
+    setFree({ x: ((e.clientX - r.left) / r.width) * W, y: ((e.clientY - r.top) / r.height) * H });
   };
 
   return (
@@ -94,7 +108,7 @@ export function TravelMap({ places }: { places: Place[] }) {
               <path d={DOTS} stroke="var(--muted)" strokeOpacity={0.4} strokeWidth={0.8} strokeLinecap="round" />
               {pins.map((p, i) =>
                 Math.hypot(p.x - p.hx, p.y - p.hy) > 0.4 ? (
-                  <g key={i} stroke="var(--muted)" strokeWidth={0.12} opacity={active === i ? 1 : 0.7}>
+                  <g key={i} stroke="var(--muted)" strokeWidth={0.12} opacity={shown === i ? 1 : 0.7}>
                     <line x1={p.hx} y1={p.hy} x2={p.x} y2={p.y} />
                     <circle cx={p.hx} cy={p.hy} r={0.25} fill="var(--muted)" stroke="none" />
                   </g>
@@ -105,7 +119,7 @@ export function TravelMap({ places }: { places: Place[] }) {
             <ul>
               {places.map((pl, i) => {
                 const home = i === 0;
-                const on = active === i;
+                const on = shown === i;
                 const p = pins[i];
                 const edge = !focus && p.x / W < 0.15 ? "left-[-10px]" : !focus && p.x / W > 0.85 ? "right-[-10px]" : "left-0 -translate-x-1/2";
                 return (
@@ -122,7 +136,8 @@ export function TravelMap({ places }: { places: Place[] }) {
                       onBlur={() => setActive(null)}
                       onClick={(e) => {
                         e.stopPropagation();
-                        if (!focus) setFocus({ x: p.x, y: p.y });
+                        setFree(null);
+                        onSelect(i);
                         setActive(i);
                       }}
                       className="absolute top-0 left-0 grid size-4 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full"
@@ -148,7 +163,10 @@ export function TravelMap({ places }: { places: Place[] }) {
 
         <button
           type="button"
-          onClick={() => setFocus(null)}
+          onClick={() => {
+            setFree(null);
+            onSelect(null);
+          }}
           tabIndex={focus ? 0 : -1}
           className={`label absolute top-2 right-2 h-8 rounded-full border border-line bg-bg px-3 text-fg transition-opacity duration-300 ${focus ? "opacity-100" : "pointer-events-none opacity-0"}`}
         >
@@ -166,10 +184,11 @@ export function TravelMap({ places }: { places: Place[] }) {
               type="button"
               onPointerEnter={() => setActive(i)}
               onClick={() => {
-                setFocus({ x: pins[i].x, y: pins[i].y });
+                setFree(null);
+                onSelect(i);
                 setActive(i);
               }}
-              className={`transition-colors hover:text-fg ${active === i ? "text-fg" : ""}`}
+              className={`transition-colors hover:text-fg ${shown === i ? "text-fg" : ""}`}
             >
               {p.name}
               {i === 0 && <span className="text-accent"> ●</span>}

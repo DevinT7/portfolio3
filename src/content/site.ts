@@ -36,21 +36,21 @@ export const site = {
 
   about: {
     line: "Informatics at UT Austin. Based in Austin, TX.",
-    // Photos on /about. Drop a file in /public/about and add a line here; the grid re-flows.
+    // Photos on /about. `place` must match a pin name in `places` so the map can link to it. Drop a file in /public/about and add a line here; the grid re-flows.
     photos: [
-      { src: "/about/colombo.webp", alt: "Colombo skyline at dusk", caption: "Sri Lanka", w: 1141, h: 856 },
-      { src: "/about/dog.webp", alt: "My golden retriever resting on a porch", caption: "Home", w: 642, h: 856 },
-      { src: "/about/sunset.webp", alt: "Sunset over the ocean with palm trees", caption: "Sri Lanka", w: 642, h: 856 },
-      { src: "/about/colorado.webp", alt: "Sun setting behind a ski lift and mountains", caption: "Colorado", w: 1141, h: 856 },
-      { src: "/about/switzerland.webp", alt: "Snowy mountain above a Swiss village street", caption: "Switzerland", w: 642, h: 856 },
-      { src: "/about/switzerland-lake.webp", alt: "Snowy Alps reflected in a lake at dusk", caption: "Switzerland", w: 1141, h: 856 },
-      { src: "/about/florida.webp", alt: "Jurassic Park entrance at a theme park", caption: "Florida", w: 1521, h: 856 },
-      { src: "/about/alaska.webp", alt: "Snowy mountains and a glacier reflected in the water", caption: "Alaska", w: 1141, h: 856 },
-      { src: "/about/honduras.webp", alt: "Green hills and a ferry dock on the water", caption: "Honduras", w: 1141, h: 856 },
-      { src: "/about/newyork.webp", alt: "New York skyline with the Empire State Building", caption: "New York", w: 1141, h: 856 },
-      { src: "/about/durango.webp", alt: "Green valley and mountains near Durango", caption: "Durango", w: 1141, h: 856 },
-      { src: "/about/cota.webp", alt: "Turn 1 hill and grandstands at Circuit of the Americas", caption: "COTA", w: 1141, h: 856 },
-      { src: "/about/lake-travis.webp", alt: "Sunset over Lake Travis with hills on the far shore", caption: "Lake Travis", w: 2000, h: 1500 },
+      { src: "/about/colombo.webp", alt: "Colombo skyline at dusk", caption: "Sri Lanka", place: "Sri Lanka", w: 1141, h: 856 },
+      { src: "/about/dog.webp", alt: "My golden retriever resting on a porch", caption: "Home", place: "Austin, TX", w: 642, h: 856 },
+      { src: "/about/sunset.webp", alt: "Sunset over the ocean with palm trees", caption: "Sri Lanka", place: "Sri Lanka", w: 642, h: 856 },
+      { src: "/about/colorado.webp", alt: "Sun setting behind a ski lift and mountains", caption: "Colorado", place: "Denver, CO", w: 1141, h: 856 },
+      { src: "/about/switzerland.webp", alt: "Snowy mountain above a Swiss village street", caption: "Switzerland", place: "Zürich, Switzerland", w: 642, h: 856 },
+      { src: "/about/switzerland-lake.webp", alt: "Snowy Alps reflected in a lake at dusk", caption: "Switzerland", place: "Zürich, Switzerland", w: 1141, h: 856 },
+      { src: "/about/florida.webp", alt: "Jurassic Park entrance at a theme park", caption: "Florida", place: "Orlando, FL", w: 1521, h: 856 },
+      { src: "/about/alaska.webp", alt: "Snowy mountains and a glacier reflected in the water", caption: "Alaska", place: "Alaska", w: 1141, h: 856 },
+      { src: "/about/honduras.webp", alt: "Green hills and a ferry dock on the water", caption: "Honduras", place: "Roatán, Honduras", w: 1141, h: 856 },
+      { src: "/about/newyork.webp", alt: "New York skyline with the Empire State Building", caption: "New York", place: "New York, NY", w: 1141, h: 856 },
+      { src: "/about/durango.webp", alt: "Green valley and mountains near Durango", caption: "Durango", place: "Durango, CO", w: 1141, h: 856 },
+      { src: "/about/cota.webp", alt: "Turn 1 hill and grandstands at Circuit of the Americas", caption: "COTA", place: "Austin, TX", w: 1141, h: 856 },
+      { src: "/about/lake-travis.webp", alt: "Sunset over Lake Travis with hills on the far shore", caption: "Lake Travis", place: "Austin, TX", w: 2000, h: 1500 },
     ],
     interests: ["F1", "Baking", "Basketball", "Traveling", "Skiing", "Swimming"],
     // Pins on the travel map. The first one is home.

@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ScrollEffects } from "@/components/ScrollEffects";
-import { TravelMap } from "@/components/TravelMap";
+import { Explore } from "@/components/Explore";
 import { site } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "About — Devin Thenuwara",
   description: site.about.line,
 };
-
-const at = (i: number) => ({ "--i": i }) as React.CSSProperties;
 
 export default function About() {
   const { line, interests, places, photos } = site.about;
@@ -53,63 +51,7 @@ export default function About() {
           </div>
         </section>
 
-        <section aria-label="Photos" className="flex flex-col gap-4">
-          {/* Portraits and landscapes each get one shared shape so rows line up. */}
-          {[
-            {
-              list: photos.filter((p) => p.h > p.w),
-              cols: "sm:grid-cols-3",
-              shape: "aspect-[3/4]",
-            },
-            {
-              list: photos.filter((p) => p.h <= p.w),
-              cols: "sm:grid-cols-2 lg:grid-cols-3",
-              shape: "aspect-[4/3]",
-            },
-          ].map(({ list, cols, shape }) => (
-            <ul key={cols} className={`grid grid-cols-1 gap-4 ${cols}`}>
-              {list.map((p, i) => {
-                // A lone last photo on the desktop row becomes a wide banner instead of leaving a gap.
-                const wide =
-                  cols.includes("lg:grid-cols-3") &&
-                  list.length % 3 === 1 &&
-                  i === list.length - 1;
-                return (
-                  <li
-                    key={p.src}
-                    className={`rise ${wide ? "lg:col-span-3" : ""}`}
-                    data-reveal
-                    style={at(i)}
-                  >
-                    <figure>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={p.src}
-                        alt={p.alt}
-                        width={p.w}
-                        height={p.h}
-                        loading="lazy"
-                        className={`w-full rounded-[20px] bg-line object-cover ${wide ? "lg:aspect-[21/9]" : shape}`}
-                      />
-                      <figcaption className="label mt-2">
-                        {p.caption}
-                      </figcaption>
-                    </figure>
-                  </li>
-                );
-              })}
-            </ul>
-          ))}
-        </section>
-
-        <section aria-labelledby="map-label" className="mt-16 md:mt-24">
-          <h2 id="map-label" className="label rise mb-3" data-reveal>
-            Been to · {places.length}
-          </h2>
-          <div className="rise" data-reveal>
-            <TravelMap places={places} />
-          </div>
-        </section>
+        <Explore photos={photos} places={places} />
       </main>
 
       <footer
