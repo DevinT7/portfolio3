@@ -24,17 +24,25 @@ export default function Home() {
   return (
     <>
       <div id="page" className="mx-auto flex min-h-dvh max-w-[1240px] flex-col px-4 md:px-8">
+        <a href="#work-label" className="label fixed top-2 left-2 z-[70] -translate-y-16 bg-fg px-3 py-2 !text-bg focus:translate-y-0">
+          Skip to work
+        </a>
         <ScrollEffects />
         <Intro name={site.name} />
 
-        <header className="rise flex h-16 items-center justify-between md:h-20" data-reveal>
-          <span className="label text-fg">{site.name}</span>
+        <header className="rise flex h-16 items-center justify-end md:h-20 md:justify-between" data-reveal>
+          <span className="label hidden text-fg md:block">{site.name}</span>
           <nav aria-label="Links">
             <ul className="flex gap-4 md:gap-6">
               <li>
                 <Link href="/about" className="label text-fg transition-colors hover:text-accent">
                   About
                 </Link>
+              </li>
+              <li>
+                <a href={`mailto:${site.email}`} className="label text-fg transition-colors hover:text-accent">
+                  Email
+                </a>
               </li>
               {external.map((l) => (
                 <li key={l.label}>

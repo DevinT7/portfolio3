@@ -66,7 +66,27 @@ export function Sheet({ entries }: Props) {
   }, [key, close]);
 
   const open = key !== null;
-  const w = entries.find((e) => e.id === shown) ?? null;
+  const idx = entries.findIndex((e) => e.id === shown);
+  const w = idx >= 0 ? entries[idx] : null;
+  const prev = idx >= 0 ? entries[(idx - 1 + entries.length) % entries.length] : null;
+  const next = idx >= 0 ? entries[(idx + 1) % entries.length] : null;
+
+  // Replace (not push) so Close still returns to the page in one step.
+  const go = useCallback((id: string) => {
+    panel.current?.scrollTo({ top: 0 });
+    location.replace(`#${id}`);
+  }, []);
+
+  // Left/Right arrows flip between projects while a panel is open.
+  useEffect(() => {
+    if (!open || !prev || !next) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") go(prev.id);
+      else if (e.key === "ArrowRight") go(next.id);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, prev, next, go]);
 
   return (
     <div className={`fixed inset-0 z-50 ${open ? "" : "pointer-events-none"}`} aria-hidden={!open}>
@@ -115,6 +135,16 @@ export function Sheet({ entries }: Props) {
                   </a>
                 ))}
               </div>
+            )}
+            {prev && next && (
+              <nav aria-label="Other projects" className="flex justify-between gap-4 border-t border-line pt-5">
+                <button type="button" onClick={() => go(prev.id)} className="label -ml-2 h-11 px-2 text-fg hover:text-accent">
+                  ← {prev.name}
+                </button>
+                <button type="button" onClick={() => go(next.id)} className="label -mr-2 h-11 px-2 text-fg hover:text-accent">
+                  {next.name} →
+                </button>
+              </nav>
             )}
           </article>
         )}
