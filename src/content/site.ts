@@ -24,6 +24,7 @@ export const site = {
   role: "Software Engineer",
   school: "UT Austin ’28",
   status: "Available Summer 2027",
+  github: "DevinT7",
   base: "Austin, TX",
   now: "Texas Convergent",
   before: "IBM",

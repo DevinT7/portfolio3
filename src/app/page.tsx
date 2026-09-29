@@ -4,6 +4,7 @@ import { ScrollEffects } from "@/components/ScrollEffects";
 import { Sheet } from "@/components/Sheet";
 import { Ski, SkiButton } from "@/components/Ski";
 import { F1, F1Button } from "@/components/F1";
+import { GithubActivity } from "@/components/GithubActivity";
 import { LapRail } from "@/components/LapRail";
 import { Wipe } from "@/components/Wipe";
 import { EntryList } from "@/components/EntryList";
@@ -115,12 +116,15 @@ export default function Home() {
           </section>
         </main>
 
-        <footer className="rise flex flex-col gap-6 py-16 md:flex-row md:items-end md:justify-between md:py-24" data-reveal>
-          <CopyEmail email={site.email} />
-          <div className="flex items-center gap-6">
-            <SkiButton />
-            <F1Button />
-            <p className="label">© {new Date().getFullYear()}</p>
+        <footer className="rise flex flex-col gap-10 py-16 md:py-24" data-reveal>
+          <GithubActivity />
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <CopyEmail email={site.email} />
+            <div className="flex items-center gap-6">
+              <SkiButton />
+              <F1Button />
+              <p className="label">© {new Date().getFullYear()}</p>
+            </div>
           </div>
         </footer>
       </div>
