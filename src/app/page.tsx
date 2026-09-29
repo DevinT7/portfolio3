@@ -4,6 +4,7 @@ import { ScrollEffects } from "@/components/ScrollEffects";
 import { Sheet } from "@/components/Sheet";
 import { Ski, SkiButton } from "@/components/Ski";
 import { F1, F1Button } from "@/components/F1";
+import { PageTransition } from "@/components/PageTransition";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { GithubActivity } from "@/components/GithubActivity";
 import { LapRail } from "@/components/LapRail";
@@ -33,6 +34,7 @@ export default function Home() {
 
   return (
     <>
+      <PageTransition>
       <div id="page" className="mx-auto flex min-h-dvh max-w-[1240px] flex-col px-4 md:px-8">
         <a href="#work-label" className="label fixed top-2 left-2 z-[70] -translate-y-16 bg-fg px-3 py-2 !text-bg focus:translate-y-0">
           Skip to work
@@ -45,7 +47,7 @@ export default function Home() {
           <nav aria-label="Links">
             <ul className="flex items-center gap-4 md:gap-6">
               <li>
-                <Link href="/about" className="label text-fg transition-colors hover:text-accent">
+                <Link href="/about" transitionTypes={["nav-forward"]} className="label text-fg transition-colors hover:text-accent">
                   About
                 </Link>
               </li>
@@ -132,6 +134,7 @@ export default function Home() {
           </div>
         </footer>
       </div>
+      </PageTransition>
 
       <LapRail />
       <Ski />

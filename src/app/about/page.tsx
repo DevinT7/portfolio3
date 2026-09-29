@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ScrollEffects } from "@/components/ScrollEffects";
+import { PageTransition } from "@/components/PageTransition";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Explore } from "@/components/Explore";
 import { site } from "@/content/site";
@@ -14,6 +15,7 @@ export default function About() {
   const { line, interests, places, photos } = site.about;
 
   return (
+    <PageTransition>
     <div className="mx-auto flex min-h-dvh max-w-[1240px] flex-col px-4 md:px-8">
       <ScrollEffects />
 
@@ -23,6 +25,7 @@ export default function About() {
       >
         <Link
           href="/"
+          transitionTypes={["nav-back"]}
           className="label text-fg transition-colors hover:text-accent"
         >
           ← {site.name}
@@ -61,6 +64,7 @@ export default function About() {
       >
         <Link
           href="/"
+          transitionTypes={["nav-back"]}
           className="label text-fg transition-colors hover:text-accent"
         >
           ← Back
@@ -68,5 +72,6 @@ export default function About() {
         <p className="label">© {new Date().getFullYear()}</p>
       </footer>
     </div>
+    </PageTransition>
   );
 }

@@ -150,3 +150,26 @@ html.intro .curtain {
   .js .rise { opacity: 1; transform: none; transition: none; animation: none; }
   .js .wipe::after { display: none; }
 }
+
+/* Route transitions (see PageTransition.tsx): pages slide a short way in the direction of travel. */
+@keyframes vt-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes vt-slide { from { translate: var(--slide-offset); } to { translate: 0; } }
+::view-transition-old(.nav-forward) {
+  --slide-offset: -48px;
+  animation: 150ms ease-in both vt-fade reverse, 400ms ease-in-out both vt-slide reverse;
+}
+::view-transition-new(.nav-forward) {
+  --slide-offset: 48px;
+  animation: 210ms ease-out 150ms both vt-fade, 400ms ease-in-out both vt-slide;
+}
+::view-transition-old(.nav-back) {
+  --slide-offset: 48px;
+  animation: 150ms ease-in both vt-fade reverse, 400ms ease-in-out both vt-slide reverse;
+}
+::view-transition-new(.nav-back) {
+  --slide-offset: -48px;
+  animation: 210ms ease-out 150ms both vt-fade, 400ms ease-in-out both vt-slide;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
