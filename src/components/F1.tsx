@@ -136,7 +136,7 @@ export function F1() {
 
   return (
     <div className={`fixed inset-0 z-[60] ${open ? "" : "pointer-events-none"}`} aria-hidden={!open}>
-      <div onClick={close} className={`absolute inset-0 bg-fg/60 backdrop-blur-[2px] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0"}`} />
+      <div onClick={close} className={`absolute inset-0 bg-black/60 backdrop-blur-[2px] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0"}`} />
       <div
         ref={panel}
         role="dialog"
@@ -147,11 +147,11 @@ export function F1() {
           if ((e.target as HTMLElement).closest("button")) return;
           press();
         }}
-        className={`absolute top-1/2 left-1/2 w-[min(92vw,34rem)] -translate-x-1/2 rounded-[24px] bg-fg px-6 py-8 text-bg outline-none select-none transition-[opacity,scale,translate] duration-500 ease-[var(--ease-out)] md:px-10 md:py-10 ${open ? "-translate-y-1/2 scale-100 opacity-100" : "-translate-y-[45%] scale-95 opacity-0"}`}
+        className={`absolute top-1/2 left-1/2 w-[min(92vw,34rem)] -translate-x-1/2 rounded-[24px] border border-white/10 bg-[#111111] px-6 py-8 text-[#f4f3ef] outline-none select-none transition-[opacity,scale,translate] duration-500 ease-[var(--ease-out)] md:px-10 md:py-10 ${open ? "-translate-y-1/2 scale-100 opacity-100" : "-translate-y-[45%] scale-95 opacity-0"}`}
       >
         <div className="flex items-center justify-between">
-          <span className="label !text-bg/60">Reaction test</span>
-          <button type="button" onClick={close} className="label -mr-3 h-11 px-3 !text-bg/60 hover:!text-bg">
+          <span className="label !text-[#f4f3ef]/60">Reaction test</span>
+          <button type="button" onClick={close} className="label -mr-3 h-11 px-3 !text-[#f4f3ef]/60 hover:!text-[#f4f3ef]">
             Close ✕
           </button>
         </div>
@@ -174,8 +174,8 @@ export function F1() {
           <p className="display text-[clamp(3rem,12vw,5rem)] tabular-nums" style={{ color: phase === "jump" ? RED : undefined }}>
             {phase === "result" ? `${(time / 1000).toFixed(3)}s` : phase === "jump" ? "Jump" : "—"}
           </p>
-          <p className="label mt-2 !text-bg/70">{msg}</p>
-          {best !== null && <p className="label mt-1 !text-bg/40">Best {(best / 1000).toFixed(3)}s</p>}
+          <p className="label mt-2 !text-[#f4f3ef]/70">{msg}</p>
+          {best !== null && <p className="label mt-1 !text-[#f4f3ef]/40">Best {(best / 1000).toFixed(3)}s</p>}
         </div>
       </div>
     </div>

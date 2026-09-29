@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ScrollEffects } from "@/components/ScrollEffects";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Explore } from "@/components/Explore";
 import { site } from "@/content/site";
 
@@ -26,7 +27,7 @@ export default function About() {
         >
           ← {site.name}
         </Link>
-        <span className="label">About</span>
+        <ThemeToggle />
       </header>
 
       <main className="flex-1">

@@ -4,6 +4,7 @@ import { ScrollEffects } from "@/components/ScrollEffects";
 import { Sheet } from "@/components/Sheet";
 import { Ski, SkiButton } from "@/components/Ski";
 import { F1, F1Button } from "@/components/F1";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { GithubActivity } from "@/components/GithubActivity";
 import { LapRail } from "@/components/LapRail";
 import { Wipe } from "@/components/Wipe";
@@ -42,7 +43,7 @@ export default function Home() {
         <header className="rise flex h-16 items-center justify-end md:h-20 md:justify-between" data-reveal>
           <span />
           <nav aria-label="Links">
-            <ul className="flex gap-4 md:gap-6">
+            <ul className="flex items-center gap-4 md:gap-6">
               <li>
                 <Link href="/about" className="label text-fg transition-colors hover:text-accent">
                   About
@@ -60,6 +61,9 @@ export default function Home() {
                   </a>
                 </li>
               ))}
+              <li>
+                <ThemeToggle />
+              </li>
             </ul>
           </nav>
         </header>

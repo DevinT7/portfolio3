@@ -10,6 +10,33 @@
   --ease-wipe: cubic-bezier(0.77, 0, 0.18, 1);
 }
 
+/* Dark theme. layout.tsx sets data-theme before first paint (saved choice, else the system
+   setting); the media query below is only the no-JS fallback. */
+:root[data-theme="dark"] {
+  --bg: #121211;
+  --fg: #f0efea;
+  --muted: #9b9a92;
+  --line: rgb(240 239 234 / 0.14);
+  --accent: #7c9cff;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: #121211;
+    --fg: #f0efea;
+    --muted: #9b9a92;
+    --line: rgb(240 239 234 / 0.14);
+    --accent: #7c9cff;
+    color-scheme: dark;
+  }
+}
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/* A short cross-fade while the theme flips, only when the toggle asks for it. */
+html.theme-fade, html.theme-fade * {
+  transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, fill 0.35s ease, stroke 0.35s ease !important;
+}
+
 @theme inline {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
@@ -29,7 +56,7 @@ body {
   line-height: 1.5;
 }
 
-::selection { background: var(--accent); color: #fff; }
+::selection { background: var(--accent); color: var(--bg); }
 
 @layer base {
   :focus-visible {
@@ -105,7 +132,7 @@ html.intro .curtain {
   z-index: 100;
   display: grid;
   place-items: center;
-  background: var(--accent);
+  background: #1d4ed8;
   color: #fff;
 }
 .curtain .wipe::after { background: #fff; }

@@ -92,7 +92,7 @@ export function Sheet({ entries }: Props) {
     <div className={`fixed inset-0 z-50 ${open ? "" : "pointer-events-none"}`} aria-hidden={!open}>
       <div
         onClick={close}
-        className={`absolute inset-0 bg-fg/25 backdrop-blur-[2px] transition-opacity duration-500 ${open ? "opacity-100" : "opacity-0"}`}
+        className={`absolute inset-0 bg-black/30 backdrop-blur-[2px] transition-opacity duration-500 ${open ? "opacity-100" : "opacity-0"}`}
       />
       <div
         ref={panel}

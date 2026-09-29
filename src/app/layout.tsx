@@ -26,6 +26,11 @@ const BOOT = `(function(){
 var d=document.documentElement,intro=false;
 d.classList.add('js');
 try{
+  var t=localStorage.getItem('theme');
+  if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  d.setAttribute('data-theme',t);
+}catch(e){}
+try{
   intro=!sessionStorage.getItem('intro')&&!location.hash&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
   sessionStorage.setItem('intro','1');
 }catch(e){}
@@ -47,7 +52,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f4f3ef",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f4f3ef" },
+    { media: "(prefers-color-scheme: dark)", color: "#121211" },
+  ],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
