@@ -13,7 +13,7 @@ const external = [...site.links, { label: "Résumé", href: site.resume }];
 
 export default function Home() {
   const withMedia = <T extends { id: string }>(list: T[], offset: number) =>
-    list.map((e, i) => ({ ...e, found: findMedia(`work/${e.id}`), tint: i + offset }));
+    list.map((e, i) => ({ ...e, found: findMedia(`work/${e.id}`), logo: findMedia(`logo/${e.id}`), tint: i + offset }));
   const work = withMedia(site.work, 0);
   const leadership = withMedia(site.leadership, site.work.length);
   const photo = findMedia("me");
@@ -87,7 +87,7 @@ export default function Home() {
             <h2 id="leadership-label" className="label rise mb-3" data-reveal>
               Leadership
             </h2>
-            <EntryList items={leadership} small offset={site.work.length} />
+            <EntryList items={leadership} small />
           </section>
         </main>
 

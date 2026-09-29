@@ -7,7 +7,7 @@ import { Thumb } from "./Thumb";
 import { TravelMap } from "./TravelMap";
 
 type Props = {
-  entries: (Entry & { found: Found; tint: number })[];
+  entries: (Entry & { found: Found; logo: Found; tint: number })[];
   about: { line: string; interests: string[]; places: { name: string; lat: number; lon: number }[]; photo: Found };
 };
 
@@ -94,7 +94,7 @@ export function Sheet({ entries, about }: Props) {
         {w && (
           <article key={w.id} className="flex flex-col gap-8 px-6 pb-12 md:px-8">
             <div className="aspect-[16/10] overflow-hidden rounded-[20px]">
-              <Thumb found={w.found} name={w.name} i={w.tint} size="text-5xl" />
+              <Thumb found={w.found} logo={w.logo} name={w.name} i={w.tint} size="text-5xl" />
             </div>
             <div>
               <h2 className="display text-[clamp(3rem,9vw,4.5rem)]">{w.name}</h2>
