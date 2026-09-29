@@ -5,7 +5,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 /**
  * F1 start-lights reaction test. Five lights come on one by one, stay on for a random beat,
  * then go out; click, tap or hit Space as fast as you can. Opens from the footer button
- * (an `f1:start` event) or the F key. Esc closes. Best time is kept in this browser only.
+ * (an `f1:start` event), or by typing "f1" anywhere on the page, which sends a car racing
+ * across the screen first. Esc closes. Best time is kept in this browser only.
  */
 
 type Phase = "idle" | "lights" | "hold" | "go" | "result" | "jump";
@@ -17,6 +18,7 @@ const rate = (ms: number) => (ms < 200 ? "Pole position." : ms < 280 ? "Points f
 
 export function F1() {
   const [open, setOpen] = useState(false);
+  const [race, setRace] = useState(false);
   const [phase, setPhase] = useState<Phase>("idle");
   const [lit, setLit] = useState(0);
   const [time, setTime] = useState(0);
@@ -83,18 +85,26 @@ export function F1() {
     setOpen(false);
   }, []);
 
+  const show = useCallback(() => {
+    opener.current = document.activeElement as HTMLElement;
+    try {
+      const b = Number(localStorage.getItem(KEY));
+      if (b > 0) setBest(b);
+    } catch {}
+    setOpen(true);
+  }, []);
+
   useEffect(() => {
-    const show = () => {
-      try {
-        const b = Number(localStorage.getItem(KEY));
-        if (b > 0) setBest(b);
-      } catch {}
-      opener.current = document.activeElement as HTMLElement;
-      setOpen(true);
-    };
+    let typed = "";
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement;
-      if (e.key.toLowerCase() === "f" && !e.metaKey && !e.ctrlKey && !e.altKey && !/INPUT|TEXTAREA/.test(t.tagName) && !t.isContentEditable) show();
+      if (e.metaKey || e.ctrlKey || e.altKey || e.key.length !== 1) return;
+      if (/INPUT|TEXTAREA/.test(t.tagName) || t.isContentEditable) return;
+      typed = (typed + e.key.toLowerCase()).slice(-2);
+      if (typed !== "f1" || phaseRef.current === "lights" || document.getElementById("page")?.hasAttribute("inert")) return;
+      typed = "";
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) show();
+      else setRace(true);
     };
     window.addEventListener("f1:start", show);
     window.addEventListener("keydown", onKey);
@@ -102,7 +112,7 @@ export function F1() {
       window.removeEventListener("f1:start", show);
       window.removeEventListener("keydown", onKey);
     };
-  }, []);
+  }, [show]);
 
   useEffect(() => {
     if (!open) return;
@@ -135,6 +145,30 @@ export function F1() {
     : rate(time);
 
   return (
+    <>
+      {race && (
+        <div aria-hidden className="pointer-events-none fixed inset-x-0 bottom-16 z-[65] overflow-hidden md:bottom-24">
+          <div
+            className="race-by flex w-fit items-center"
+            onAnimationEnd={() => {
+              setRace(false);
+              show();
+            }}
+          >
+            <span className="h-[3px] w-40 bg-gradient-to-r from-transparent to-accent md:w-72" />
+            <svg viewBox="-9 -5 18 10" className="w-24 md:w-32">
+              <rect x={-8} y={-3.6} width={1.8} height={7.2} rx={0.4} fill="var(--fg)" />
+              <rect x={5.6} y={-3.8} width={1.6} height={7.6} rx={0.4} fill="var(--fg)" />
+              <rect x={-5.6} y={-3.6} width={3} height={1.8} rx={0.6} fill="var(--fg)" />
+              <rect x={-5.6} y={1.8} width={3} height={1.8} rx={0.6} fill="var(--fg)" />
+              <rect x={2.8} y={-3.2} width={2.4} height={1.5} rx={0.5} fill="var(--fg)" />
+              <rect x={2.8} y={1.7} width={2.4} height={1.5} rx={0.5} fill="var(--fg)" />
+              <path d="M-6.4 -1.3 L1 -1.5 L5.8 -0.5 L5.8 0.5 L1 1.5 L-6.4 1.3Z" fill="var(--accent)" stroke="var(--bg)" strokeWidth={0.5} strokeLinejoin="round" />
+              <circle cx={-0.8} cy={0} r={0.9} fill="var(--bg)" />
+            </svg>
+          </div>
+        </div>
+      )}
     <div className={`fixed inset-0 z-[60] ${open ? "" : "pointer-events-none"}`} aria-hidden={!open}>
       <div onClick={close} className={`absolute inset-0 bg-black/60 backdrop-blur-[2px] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0"}`} />
       <div
@@ -179,6 +213,7 @@ export function F1() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
@@ -190,7 +225,7 @@ export function F1Button() {
       onClick={() => window.dispatchEvent(new Event("f1:start"))}
       className="label inline-flex h-11 items-center gap-2 text-fg transition-colors hover:text-accent"
     >
-      Lights out <kbd className="rounded border border-line px-1.5 py-0.5 font-mono text-[0.65rem]">F</kbd>
+      Lights out <kbd className="rounded border border-line px-1.5 py-0.5 font-mono text-[0.65rem]">f1</kbd>
     </button>
   );
 }
