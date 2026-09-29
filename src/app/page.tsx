@@ -72,7 +72,7 @@ export default function Home() {
         </header>
 
         <main className="flex-1">
-          <section className="grid gap-8 pt-8 pb-14 md:pt-12 md:pb-20 lg:grid-cols-12 lg:items-stretch">
+          <section className="grid gap-8 pt-8 pb-10 md:pt-12 md:pb-12 lg:grid-cols-12 lg:items-stretch">
             <div className="flex flex-col justify-between gap-12 lg:col-span-8">
               <h1 className="display text-[clamp(3rem,6.5vw,5rem)]">
                 <span className="block">
@@ -101,6 +101,10 @@ export default function Home() {
               </div>
             </figure>
           </section>
+
+          <div className="rise pb-12 md:pb-16" data-reveal>
+            <GithubActivity />
+          </div>
 
           <section aria-labelledby="work-label">
             <div className="rise mb-4 flex items-baseline justify-between" data-reveal style={{ "--d": "450ms" } as React.CSSProperties}>
@@ -133,15 +137,12 @@ export default function Home() {
           </section>
         </main>
 
-        <footer className="rise flex flex-col gap-10 py-16 md:py-24" data-reveal>
-          <GithubActivity />
-          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <CopyEmail email={site.email} />
-            <div className="flex items-center gap-6">
-              <SkiButton />
-              <F1Button />
-              <p className="label">© {new Date().getFullYear()}</p>
-            </div>
+        <footer className="rise flex flex-col gap-6 py-16 md:flex-row md:items-end md:justify-between md:py-24" data-reveal>
+          <CopyEmail email={site.email} />
+          <div className="flex items-center gap-6">
+            <SkiButton />
+            <F1Button />
+            <p className="label">© {new Date().getFullYear()}</p>
           </div>
         </footer>
       </div>
