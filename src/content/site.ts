@@ -115,6 +115,7 @@ export const site = {
         "Wrote an idempotent Node.js ETL job that migrated 3 semesters of member records with natural-key upserts. It can be re-run without creating duplicates.",
       ],
       stack: ["Next.js", "React 19", "TypeScript", "PostgreSQL", "Node.js"],
+      links: [{ label: "Website", href: "https://convergent-website.vercel.app" }],
     },
     {
       id: "ctm",
@@ -205,6 +206,7 @@ export const site = {
         "Brought in $1,000+ from 4 companies so far and ran recruiting events and case competitions for 150+ members.",
       ],
       stack: ["Supabase", "Hunter.io", "Gmail"],
+      links: [{ label: "Code", href: "https://github.com/DevinT7/baxa-outreach" }],
     },
     {
       id: "convergent-exec",
