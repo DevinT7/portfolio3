@@ -126,7 +126,6 @@ export function Sheet({ entries }: Props) {
                 </li>
               ))}
             </ul>
-            {w.stack && <p className="font-mono text-sm text-muted">{w.stack.join(" · ")}</p>}
             {w.shots && w.shots.length > 0 && (
               <div>
                 <p className="label mb-3">Screens</p>
@@ -150,6 +149,7 @@ export function Sheet({ entries }: Props) {
                 ))}
               </div>
             )}
+            {w.stack && <p className="font-mono text-sm text-muted">{w.stack.join(" · ")}</p>}
             {prev && next && (
               <nav aria-label="Other projects" className="flex justify-between gap-4 border-t border-line pt-5">
                 <button type="button" onClick={() => go(prev.id)} className="label -ml-2 h-11 px-2 text-fg hover:text-accent">

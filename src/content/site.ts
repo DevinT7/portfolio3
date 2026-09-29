@@ -188,7 +188,6 @@ export const site = {
         "First place in the Multimodal Search & Generation track at Hook ’Em Hacks, with a team of 4.",
         "Scans lab panels and prescriptions with on-device OCR, and tracks medications with schedules, streaks, and a drug-interaction checker.",
         "On-device AI chat grounded in the user’s own records. Emergency words like chest pain bring up a one-tap 911/988 card.",
-        "My part: the Meds tab, chat keyboard fixes, an AI disclaimer, and the 911 shortcut.",
       ],
       stack: ["Swift", "SwiftUI", "SwiftData", "Apple Intelligence", "Vision"],
       links: [
