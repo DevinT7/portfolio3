@@ -136,6 +136,15 @@ export const site = {
         "Pitched the MVP to Capital Factory investors and won Overall Best App out of 8 teams.",
       ],
       stack: ["React", "TypeScript", "Firebase", "GraphHopper", "Google Maps"],
+      shots: [
+        { src: "/ctm/home.webp", alt: "Safe Route home screen: Community Safety Hub with stats and quick actions" },
+        { src: "/ctm/map.webp", alt: "Crime hotspot map of Austin with heat clusters" },
+        { src: "/ctm/route.webp", alt: "A safe route drawn on the map away from crime hotspots" },
+        { src: "/ctm/navigation.webp", alt: "Route planner with start, destination, and a Safety Score" },
+        { src: "/ctm/feed.webp", alt: "Community crime feed with reports, likes, and comments" },
+        { src: "/ctm/report.webp", alt: "Report Incident form with incident types and a location field" },
+        { src: "/ctm/buddy.webp", alt: "Buddy System friends list with neighborhood safety volunteers" },
+      ],
     },
   ] satisfies Entry[],
 
@@ -235,7 +244,10 @@ export const site = {
         "Worked on the zip-code map and request listings.",
       ],
       stack: ["JavaScript", "HTML/CSS", "Node.js", "Python"],
-      links: [{ label: "Code", href: "https://github.com/Network-Green/Network-Green" }],
+      links: [
+        { label: "Website", href: "https://networkgreen.org/" },
+        { label: "Code", href: "https://github.com/Network-Green/Network-Green" },
+      ],
     },
   ] satisfies Entry[],
 
