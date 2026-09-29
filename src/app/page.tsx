@@ -12,6 +12,14 @@ import { Intro } from "@/components/Intro";
 import { site } from "@/content/site";
 import { findMedia } from "@/lib/media";
 
+const facts = [
+  ["Role", site.role],
+  ["School", site.school],
+  ["Based", site.base],
+  ["Status", site.status],
+  ["Now", site.now],
+  ["Before", site.before],
+];
 const external = [...site.links, { label: "Résumé", href: site.resume }];
 
 export default function Home() {
@@ -31,7 +39,7 @@ export default function Home() {
         <Intro name={site.name} />
 
         <header className="rise flex h-16 items-center justify-end md:h-20 md:justify-between" data-reveal>
-          <span className="label hidden text-fg md:block">{site.name}</span>
+          <span />
           <nav aria-label="Links">
             <ul className="flex gap-4 md:gap-6">
               <li>
@@ -56,28 +64,20 @@ export default function Home() {
         </header>
 
         <main className="flex-1">
-          <section className="grid items-end gap-8 pt-10 pb-12 md:pt-16 md:pb-16 lg:grid-cols-12">
-            <div className="lg:col-span-8">
-              <h1 className="display text-[clamp(4rem,15.5vw,8rem)] lg:text-[min(11vw,10.5rem)]">
-                <span className="block">
-                  <Wipe delay={100}>Devin</Wipe>
-                </span>
-                <span className="block">
-                  <Wipe delay={260}>
-                    <span className="serif">Thenuwara</span>
-                  </Wipe>
-                </span>
+          <section className="grid gap-8 pt-8 pb-12 md:pt-12 md:pb-16 lg:grid-cols-12 lg:items-stretch">
+            <div className="flex flex-col justify-between gap-12 lg:col-span-8">
+              <h1 className="text-[clamp(2.25rem,5vw,3.75rem)] leading-none font-semibold tracking-[-0.03em]">
+                <Wipe delay={100}>{site.name}</Wipe>
               </h1>
 
-              <div className="rise mt-8 flex flex-wrap items-center gap-x-8 gap-y-3" data-reveal style={{ "--d": "700ms" } as React.CSSProperties}>
-                <p className="text-lg">
-                  {site.role} <span className="text-muted">— {site.school}</span>
-                </p>
-                <p className="label inline-flex items-center gap-2 text-fg">
-                  <span className="size-2 rounded-full bg-accent" aria-hidden />
-                  {site.status}
-                </p>
-              </div>
+              <dl className="grid grid-cols-1 border-t border-line sm:grid-cols-2">
+                {facts.map(([k, v], i) => (
+                  <div key={k} className={`rise items-baseline gap-6 border-b border-line py-3 ${i >= 4 ? "hidden sm:flex" : "flex"}`} data-reveal style={{ "--i": i, "--d": "400ms" } as React.CSSProperties}>
+                    <dt className="label w-16 shrink-0">{k}</dt>
+                    <dd className="text-lg">{v}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
 
             <figure className="rise hidden lg:col-span-3 lg:col-start-10 lg:block" data-reveal style={{ "--d": "400ms" } as React.CSSProperties}>

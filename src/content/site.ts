@@ -24,6 +24,9 @@ export const site = {
   role: "Software Engineer",
   school: "UT Austin ’28",
   status: "Available Summer 2027",
+  base: "Austin, TX",
+  now: "Texas Convergent",
+  before: "IBM",
   email: "devinethenuwara@gmail.com",
   resume: "/resume.pdf",
   links: [
