@@ -6,6 +6,14 @@ const TZ = "America/Chicago";
 const DAYS = 14;
 const key = (d: Date) => new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(d); // YYYY-MM-DD
 
+/** "2026-09-18" -> "September 18th", like GitHub's contribution tooltips. */
+function nice(k: string) {
+  const [y, m, d] = k.split("-").map(Number);
+  const month = new Intl.DateTimeFormat("en-US", { month: "long", timeZone: "UTC" }).format(new Date(Date.UTC(y, m - 1, d)));
+  const suffix = d % 100 >= 11 && d % 100 <= 13 ? "th" : ({ 1: "st", 2: "nd", 3: "rd" } as Record<number, string>)[d % 10] ?? "th";
+  return `${month} ${d}${suffix}`;
+}
+
 /**
  * Live from GitHub's public events API (refreshed hourly on the server): a 14-day strip of
  * squares, one per day, shaded by how many pushes you made, plus the last repo pushed to.
@@ -51,12 +59,20 @@ export async function GithubActivity() {
         {days.map((d) => {
           const n = count.get(d) ?? 0;
           return (
-            <span
-              key={d}
-              title={`${d}: ${n} ${n === 1 ? "push" : "pushes"}`}
-              className="size-2.5 rounded-[2px] md:size-3"
-              style={{ background: n === 0 ? "var(--line)" : "var(--accent)", opacity: n === 0 ? 1 : Math.min(1, 0.35 + n * 0.22) }}
-            />
+            <span key={d} className="group/sq relative">
+              <span
+                className="block size-2.5 rounded-[2px] transition-transform duration-150 group-hover/sq:scale-125 md:size-3"
+                style={{ background: n === 0 ? "var(--line)" : "var(--accent)", opacity: n === 0 ? 1 : Math.min(1, 0.35 + n * 0.22) }}
+              />
+              {/* Tooltip in the style of GitHub's contribution graph. */}
+              <span
+                role="tooltip"
+                className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 translate-y-1 rounded-lg bg-fg px-3 py-1.5 text-sm font-medium whitespace-nowrap text-bg opacity-0 shadow-lg transition-[opacity,translate] duration-150 group-hover/sq:translate-y-0 group-hover/sq:opacity-100"
+              >
+                {n === 0 ? "No pushes" : `${n} ${n === 1 ? "push" : "pushes"}`} on {nice(d)}.
+                <span className="absolute top-full left-1/2 size-2 -translate-x-1/2 -translate-y-1 rotate-45 bg-fg" aria-hidden />
+              </span>
+            </span>
           );
         })}
       </span>
