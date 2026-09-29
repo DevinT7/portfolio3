@@ -4,18 +4,16 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { Entry } from "@/content/site";
 import type { Found } from "@/lib/media";
 import { Thumb } from "./Thumb";
-import { TravelMap } from "./TravelMap";
 
 type Props = {
   entries: (Entry & { found: Found; logo: Found; tint: number })[];
-  about: { line: string; interests: string[]; places: { name: string; lat: number; lon: number }[]; photo: Found };
 };
 
 /**
- * Side panel for a project (#ibm, #convergent, …) or #about. Driven by the URL hash so
+ * Side panel for a project (#ibm, #convergent, …). Driven by the URL hash so
  * every panel has a shareable link and the back button closes it.
  */
-export function Sheet({ entries, about }: Props) {
+export function Sheet({ entries }: Props) {
   const [key, setKey] = useState<string | null>(null);
   const [shown, setShown] = useState<string | null>(null); // last opened, kept while closing
   const panel = useRef<HTMLDivElement>(null);
@@ -23,7 +21,7 @@ export function Sheet({ entries, about }: Props) {
   const pushed = useRef(false); // opened by an in-page click, so Back is the right way to close
 
   useEffect(() => {
-    const valid = new Set(["about", ...entries.map((w) => w.id)]);
+    const valid = new Set(entries.map((w) => w.id));
     const sync = (e?: HashChangeEvent) => {
       const h = decodeURIComponent(location.hash.slice(1));
       const next = valid.has(h) ? h : null;
@@ -80,12 +78,12 @@ export function Sheet({ entries, about }: Props) {
         ref={panel}
         role="dialog"
         aria-modal="true"
-        aria-label={w ? w.name : "About"}
+        aria-label={w?.name}
         tabIndex={-1}
         className={`absolute inset-y-0 right-0 flex w-full max-w-[34rem] flex-col overflow-y-auto bg-bg outline-none transition-[translate,box-shadow] duration-600 ease-[var(--ease-out)] ${open ? "translate-x-0 shadow-2xl" : "translate-x-full shadow-none"}`}
       >
         <div className="sticky top-0 z-10 flex h-16 items-center justify-between bg-bg px-6 md:h-20 md:px-8">
-          <span className="label">{w ? `${w.role} · ${w.when}` : "About"}</span>
+          <span className="label">{w && `${w.role} · ${w.when}`}</span>
           <button type="button" onClick={close} className="label -mr-3 h-11 px-3 text-fg hover:text-accent">
             Close ✕
           </button>
@@ -121,26 +119,6 @@ export function Sheet({ entries, about }: Props) {
           </article>
         )}
 
-        {shown === "about" && (
-          <article className="flex flex-col gap-8 px-6 pb-12 md:px-8">
-            <div className="aspect-[4/5] w-2/3 overflow-hidden rounded-[20px]">
-              <Thumb found={about.photo} name="Photo" i={2} size="text-3xl" position="50% 85%" />
-            </div>
-            <p className="text-lg">{about.line}</p>
-            <div>
-              <p className="label mb-3">Into</p>
-              <ul className="display flex flex-wrap gap-x-5 gap-y-1 text-[clamp(2rem,6vw,3rem)]">
-                {about.interests.map((t) => (
-                  <li key={t}>{t}</li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <p className="label mb-3">Been to · {about.places.length}</p>
-              <TravelMap places={about.places} />
-            </div>
-          </article>
-        )}
       </div>
     </div>
   );

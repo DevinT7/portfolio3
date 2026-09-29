@@ -33,6 +33,18 @@ export const site = {
 
   about: {
     line: "Informatics at UT Austin. Based in Austin, TX.",
+    // Photos on /about. Drop a file in /public/about and add a line here; the grid re-flows.
+    photos: [
+      { src: "/about/colombo.webp", alt: "Colombo skyline at dusk", caption: "Sri Lanka", w: 1141, h: 856 },
+      { src: "/about/dog.webp", alt: "My golden retriever resting on a porch", caption: "Home", w: 642, h: 856 },
+      { src: "/about/sunset.webp", alt: "Sunset over the ocean with palm trees", caption: "Sri Lanka", w: 642, h: 856 },
+      { src: "/about/colorado.webp", alt: "Sun setting behind a ski lift and mountains", caption: "Colorado", w: 1141, h: 856 },
+      { src: "/about/switzerland.webp", alt: "Snowy mountain above a Swiss village street", caption: "Switzerland", w: 642, h: 856 },
+      { src: "/about/switzerland-lake.webp", alt: "Snowy Alps reflected in a lake at dusk", caption: "Switzerland", w: 1141, h: 856 },
+      { src: "/about/florida.webp", alt: "Jurassic Park entrance at a theme park", caption: "Florida", w: 1521, h: 856 },
+      { src: "/about/alaska.webp", alt: "Snowy mountains and a glacier reflected in the water", caption: "Alaska", w: 1141, h: 856 },
+      { src: "/about/honduras.webp", alt: "Green hills and a ferry dock on the water", caption: "Honduras", w: 1141, h: 856 },
+    ],
     interests: ["F1", "Baking", "Basketball", "Traveling", "Skiing", "Swimming"],
     // Pins on the travel map. The first one is home.
     places: [
@@ -45,11 +57,13 @@ export const site = {
       { name: "Baltimore, MD", lat: 39.29, lon: -76.61 },
       { name: "Chicago, IL", lat: 41.88, lon: -87.63 },
       { name: "Miami, FL", lat: 25.76, lon: -80.19 },
+      { name: "Orlando, FL", lat: 28.54, lon: -81.38 },
       { name: "Santa Fe, NM", lat: 35.69, lon: -105.94 },
       { name: "Alaska", lat: 61.22, lon: -149.9 },
       { name: "Vancouver, Canada", lat: 49.28, lon: -123.12 },
       { name: "Cancún, Mexico", lat: 21.16, lon: -86.85 },
       { name: "Cozumel, Mexico", lat: 20.42, lon: -86.92 },
+      { name: "Roatán, Honduras", lat: 16.33, lon: -86.53 },
       { name: "United Kingdom", lat: 51.51, lon: -0.13 },
       { name: "France", lat: 48.86, lon: 2.35 },
       { name: "Zürich, Switzerland", lat: 47.38, lon: 8.54 },

@@ -20,7 +20,7 @@ export function ScrollEffects() {
       { rootMargin: "0px 0px -5% 0px", threshold: 0.1 },
     );
     const start = () => document.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
-    if (document.documentElement.classList.contains("intro")) {
+    if (document.documentElement.classList.contains("intro") && document.getElementById("curtain")) {
       window.addEventListener("intro:done", start, { once: true });
     } else {
       start();

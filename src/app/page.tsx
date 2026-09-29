@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CopyEmail } from "@/components/CopyEmail";
 import { ScrollEffects } from "@/components/ScrollEffects";
 import { Sheet } from "@/components/Sheet";
@@ -29,9 +30,9 @@ export default function Home() {
           <nav aria-label="Links">
             <ul className="flex gap-4 md:gap-6">
               <li>
-                <a href="#about" className="label text-fg transition-colors hover:text-accent">
+                <Link href="/about" className="label text-fg transition-colors hover:text-accent">
                   About
-                </a>
+                </Link>
               </li>
               {external.map((l) => (
                 <li key={l.label}>
@@ -101,7 +102,7 @@ export default function Home() {
       </div>
 
       <Ski />
-      <Sheet entries={[...work, ...leadership]} about={{ ...site.about, photo: findMedia("me-about") ?? photo }} />
+      <Sheet entries={[...work, ...leadership]} />
     </>
   );
 }
