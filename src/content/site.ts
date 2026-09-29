@@ -99,6 +99,25 @@ export const site = {
       stack: ["Python", "Pipecat", "gRPC", "Google Cloud STT/TTS", "PostgreSQL"],
     },
     {
+      id: "convergent",
+      year: "2026",
+      name: "Convergent",
+      what: "Member platform",
+      stat: "300+ members",
+      role: "Software Engineer",
+      when: "Jun 2026 — Now",
+      summary:
+        "Texas Convergent has 300+ members and was tracking them in spreadsheets. I built the portal it now runs on: membership, roles, and event check-in.",
+      did: [
+        "Role-based access enforced in Postgres with row-level security, so permissions hold even if the UI is bypassed.",
+        "Check-in QR codes rotate and are signed with HMAC-SHA256. A live camera scanner verifies them at the door.",
+        "Tracked down a validation bug that was rejecting real codes and widened the redemption window from 2.5s to 10s.",
+        "Wrote an idempotent Node.js ETL job that migrated 3 semesters of member records with natural-key upserts. It can be re-run without creating duplicates.",
+      ],
+      stack: ["Next.js", "React 19", "TypeScript", "PostgreSQL", "Node.js"],
+      links: [{ label: "Website", href: "https://convergent-website.vercel.app" }],
+    },
+    {
       id: "ctm",
       year: "2025",
       name: "City of Austin",
@@ -120,25 +139,6 @@ export const site = {
 
   // Things I built outside a job title: team products, hackathons, programs.
   projects: [
-    {
-      id: "convergent",
-      year: "2026",
-      name: "Convergent",
-      what: "Member platform",
-      stat: "300+ members",
-      role: "Software Engineer",
-      when: "Jun 2026 — Now",
-      summary:
-        "Texas Convergent has 300+ members and was tracking them in spreadsheets. I built the portal it now runs on: membership, roles, and event check-in.",
-      did: [
-        "Role-based access enforced in Postgres with row-level security, so permissions hold even if the UI is bypassed.",
-        "Check-in QR codes rotate and are signed with HMAC-SHA256. A live camera scanner verifies them at the door.",
-        "Tracked down a validation bug that was rejecting real codes and widened the redemption window from 2.5s to 10s.",
-        "Wrote an idempotent Node.js ETL job that migrated 3 semesters of member records with natural-key upserts. It can be re-run without creating duplicates.",
-      ],
-      stack: ["Next.js", "React 19", "TypeScript", "PostgreSQL", "Node.js"],
-      links: [{ label: "Website", href: "https://convergent-website.vercel.app" }],
-    },
     {
       id: "refind",
       year: "2026",

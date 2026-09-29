@@ -119,7 +119,7 @@ export default function Home() {
               </h2>
               <span className="label">{String(projects.length).padStart(2, "0")}</span>
             </div>
-            <EntryList items={projects} />
+            <EntryList items={projects} size="md" />
           </section>
 
           <section aria-labelledby="leadership-label" className="mt-16 md:mt-20">
@@ -129,7 +129,7 @@ export default function Home() {
               </h2>
               <span className="label">{String(leadership.length).padStart(2, "0")}</span>
             </div>
-            <EntryList items={leadership} small />
+            <EntryList items={leadership} size="sm" />
           </section>
         </main>
 
