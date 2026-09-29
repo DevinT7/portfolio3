@@ -127,6 +127,20 @@ export function Sheet({ entries }: Props) {
               ))}
             </ul>
             {w.stack && <p className="font-mono text-sm text-muted">{w.stack.join(" · ")}</p>}
+            {w.shots && w.shots.length > 0 && (
+              <div>
+                <p className="label mb-3">Screens</p>
+                {/* Bleeds to the panel edge so it reads as scrollable. */}
+                <ul className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2 md:-mx-8 md:px-8">
+                  {w.shots.map((sh) => (
+                    <li key={sh.src} className="shrink-0 snap-start">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={sh.src} alt={sh.alt} loading="lazy" className="h-80 w-auto rounded-[18px] border border-line" />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             {w.links && w.links.length > 0 && (
               <div className="flex gap-5">
                 {w.links.map((l) => (

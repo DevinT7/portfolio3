@@ -17,6 +17,8 @@ export type Entry = {
   did: string[];
   stack?: string[];
   links?: { label: string; href: string }[];
+  /** Extra screenshots shown as a scrolling strip in the panel. */
+  shots?: { src: string; alt: string }[];
 };
 
 export const site = {
@@ -181,14 +183,26 @@ export const site = {
       role: "Developer",
       when: "Apr 2026",
       summary:
-        "An iPhone health companion built over a weekend at HookemHacks, where it won first place. Scan your medications, get plain-language explanations of your health trends, and ask an assistant questions.",
+        "An iPhone app that keeps your health records, medications, and AI guidance in one place, with everything processed on the device. Built over a weekend at Hook ’Em Hacks.",
       did: [
-        "Won first place at HookemHacks with a team of 3.",
-        "Built in Swift: medication scanning, AI-written trend explanations, an in-app chat assistant, and Apple Reminders integration.",
-        "My part: the Meds tab, chat keyboard fixes, an AI disclaimer, and a one-tap 911 shortcut.",
+        "First place in the Multimodal Search & Generation track at Hook ’Em Hacks, with a team of 4.",
+        "Scans lab panels and prescriptions with on-device OCR, and tracks medications with schedules, streaks, and a drug-interaction checker.",
+        "On-device AI chat grounded in the user’s own records. Emergency words like chest pain bring up a one-tap 911/988 card.",
+        "My part: the Meds tab, chat keyboard fixes, an AI disclaimer, and the 911 shortcut.",
       ],
-      stack: ["Swift", "SwiftUI"],
-      links: [{ label: "Code", href: "https://github.com/PanavMhatre/Interval" }],
+      stack: ["Swift", "SwiftUI", "SwiftData", "Apple Intelligence", "Vision"],
+      links: [
+        { label: "Devpost", href: "https://devpost.com/software/awesome-demo-project-h0ibsd" },
+        { label: "Code", href: "https://github.com/PanavMhatre/Interval" },
+      ],
+      shots: [
+        { src: "/interval/home.webp", alt: "Interval home screen with today’s meds and a flagged A1C result" },
+        { src: "/interval/docs.webp", alt: "Documents screen listing labs, prescriptions, and visit notes" },
+        { src: "/interval/meds.webp", alt: "Medications schedule with a daily goal" },
+        { src: "/interval/chat.webp", alt: "Chat explaining an A1C result with range and trend cards" },
+        { src: "/interval/emergency.webp", alt: "Chat showing a Get help now card with Call 911 and 988 buttons" },
+        { src: "/interval/doctor.webp", alt: "Doctor draft screen for writing an email to a clinic" },
+      ],
     },
     {
       id: "studymon",
