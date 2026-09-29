@@ -120,15 +120,17 @@ export default function Home() {
             </div>
             <EntryList items={leadership} small />
           </section>
-          <GithubActivity />
         </main>
 
-        <footer className="rise flex flex-col gap-6 py-16 md:flex-row md:items-end md:justify-between md:py-24" data-reveal>
-          <CopyEmail email={site.email} />
-          <div className="flex items-center gap-6">
-            <SkiButton />
-            <F1Button />
-            <p className="label">© {new Date().getFullYear()}</p>
+        <footer className="rise flex flex-col gap-10 py-16 md:py-24" data-reveal>
+          <GithubActivity />
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <CopyEmail email={site.email} />
+            <div className="flex items-center gap-6">
+              <SkiButton />
+              <F1Button />
+              <p className="label">© {new Date().getFullYear()}</p>
+            </div>
           </div>
         </footer>
       </div>
