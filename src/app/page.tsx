@@ -29,7 +29,8 @@ export default function Home() {
   const withMedia = <T extends { id: string }>(list: T[], offset: number) =>
     list.map((e, i) => ({ ...e, found: findMedia(`work/${e.id}`), logo: findMedia(`logo/${e.id}`), tint: i + offset }));
   const work = withMedia(site.work, 0);
-  const leadership = withMedia(site.leadership, site.work.length);
+  const projects = withMedia(site.projects, site.work.length);
+  const leadership = withMedia(site.leadership, site.work.length + site.projects.length);
   const photo = findMedia("me");
 
   return (
@@ -104,11 +105,21 @@ export default function Home() {
           <section aria-labelledby="work-label">
             <div className="rise mb-4 flex items-baseline justify-between" data-reveal style={{ "--d": "450ms" } as React.CSSProperties}>
               <h2 id="work-label" className="display text-[clamp(1.5rem,2.6vw,2rem)]">
-                Selected work
+                Work
               </h2>
               <span className="label">{String(work.length).padStart(2, "0")}</span>
             </div>
             <EntryList items={work} />
+          </section>
+
+          <section aria-labelledby="projects-label" className="mt-16 md:mt-20">
+            <div className="rise mb-4 flex items-baseline justify-between" data-reveal>
+              <h2 id="projects-label" className="display text-[clamp(1.5rem,2.6vw,2rem)]">
+                Projects
+              </h2>
+              <span className="label">{String(projects.length).padStart(2, "0")}</span>
+            </div>
+            <EntryList items={projects} />
           </section>
 
           <section aria-labelledby="leadership-label" className="mt-16 md:mt-20">
@@ -139,7 +150,7 @@ export default function Home() {
       <LapRail />
       <Ski />
       <F1 />
-      <Sheet entries={[...work, ...leadership]} />
+      <Sheet entries={[...work, ...projects, ...leadership]} />
     </>
   );
 }

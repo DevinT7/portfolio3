@@ -3,7 +3,7 @@
 // Images: drop a file at /public/<path>.(jpg|png|webp|mp4|webm) and it's used automatically.
 //   me              hero photo (also used in About unless me-about exists)
 //   me-about        photo in the About panel
-//   work/<id>       preview + panel image for any entry below
+//   work/<id>       panel image for any entry below (logo/<id> is the fallback tile)
 
 export type Entry = {
   id: string;
@@ -99,6 +99,28 @@ export const site = {
       stack: ["Python", "Pipecat", "gRPC", "Google Cloud STT/TTS", "PostgreSQL"],
     },
     {
+      id: "ctm",
+      year: "2025",
+      name: "City of Austin",
+      what: "Safety routing",
+      stat: "Best App",
+      role: "Software Engineer Intern",
+      when: "Jun — Jul 2025",
+      summary:
+        "A public safety app that helps Austin residents avoid high-crime areas. Built with a multidisciplinary team in a 6-week sprint.",
+      did: [
+        "Processed 500+ live crime reports a day to calculate risk-averse navigation paths.",
+        "Built a real-time sync layer on Firebase so users get safety alerts instantly while navigating.",
+        "Wrote custom routing with GraphHopper and the Google Maps APIs, simulating 200+ safe routes weighted against historical crime density.",
+        "Pitched the MVP to Capital Factory investors and won Overall Best App out of 8 teams.",
+      ],
+      stack: ["React", "TypeScript", "Firebase", "GraphHopper", "Google Maps"],
+    },
+  ] satisfies Entry[],
+
+  // Things I built outside a job title: team products, hackathons, programs.
+  projects: [
+    {
       id: "convergent",
       year: "2026",
       name: "Convergent",
@@ -116,24 +138,6 @@ export const site = {
       ],
       stack: ["Next.js", "React 19", "TypeScript", "PostgreSQL", "Node.js"],
       links: [{ label: "Website", href: "https://convergent-website.vercel.app" }],
-    },
-    {
-      id: "ctm",
-      year: "2025",
-      name: "City of Austin",
-      what: "Safety routing",
-      stat: "Best App",
-      role: "Software Engineer Intern",
-      when: "Jun — Jul 2025",
-      summary:
-        "A public safety app that helps Austin residents avoid high-crime areas. Built with a multidisciplinary team in a 6-week sprint.",
-      did: [
-        "Processed 500+ live crime reports a day to calculate risk-averse navigation paths.",
-        "Built a real-time sync layer on Firebase so users get safety alerts instantly while navigating.",
-        "Wrote custom routing with GraphHopper and the Google Maps APIs, simulating 200+ safe routes weighted against historical crime density.",
-        "Pitched the MVP to Capital Factory investors and won Overall Best App out of 8 teams.",
-      ],
-      stack: ["React", "TypeScript", "Firebase", "GraphHopper", "Google Maps"],
     },
     {
       id: "refind",
@@ -169,6 +173,24 @@ export const site = {
       stack: ["Python", "Embeddings"],
     },
     {
+      id: "interval",
+      year: "2026",
+      name: "Interval",
+      what: "Health companion",
+      stat: "1st place",
+      role: "Developer",
+      when: "Apr 2026",
+      summary:
+        "An iPhone health companion built over a weekend at HookemHacks, where it won first place. Scan your medications, get plain-language explanations of your health trends, and ask an assistant questions.",
+      did: [
+        "Won first place at HookemHacks with a team of 3.",
+        "Built in Swift: medication scanning, AI-written trend explanations, an in-app chat assistant, and Apple Reminders integration.",
+        "My part: the Meds tab, chat keyboard fixes, an AI disclaimer, and a one-tap 911 shortcut.",
+      ],
+      stack: ["Swift", "SwiftUI"],
+      links: [{ label: "Code", href: "https://github.com/PanavMhatre/Interval" }],
+    },
+    {
       id: "studymon",
       year: "2026",
       name: "StudyMon",
@@ -183,6 +205,24 @@ export const site = {
         "Campus map built with React Leaflet.",
       ],
       stack: ["Next.js", "Tailwind CSS", "Supabase", "React Leaflet"],
+    },
+    {
+      id: "network-green",
+      year: "2023",
+      name: "Network Green",
+      what: "Food donations",
+      stat: "Team of 4",
+      role: "Front-end Developer",
+      when: "Jun — Jul 2023",
+      summary:
+        "A City of Austin summer program project: a web app for sharing surplus food, where people can request food or donate, with options shown by zip code on a map.",
+      did: [
+        "Built the front end with a team of 4: the request, donation, about, contact, and error pages.",
+        "Designed the donation flow, including the amount slider.",
+        "Worked on the zip-code map and request listings.",
+      ],
+      stack: ["JavaScript", "HTML/CSS", "Node.js", "Python"],
+      links: [{ label: "Code", href: "https://github.com/Network-Green/Network-Green" }],
     },
   ] satisfies Entry[],
 

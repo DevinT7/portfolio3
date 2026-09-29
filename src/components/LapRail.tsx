@@ -7,8 +7,8 @@ const YELLOW = "#ffd400";
 const SECTORS = ["S1", "S2", "S3"];
 
 /**
- * A lap tracker down the left edge. The page is one lap: Work is sector 1, Leadership sector 2,
- * the footer sector 3, and each segment is as long as its part of the page. A little F1 car
+ * A lap tracker down the left edge. The page is one lap: Work is sector 1, Projects sector 2,
+ * Leadership and the footer sector 3, and each segment is as long as its part of the page. A little F1 car
  * drives down the rail as you scroll; sectors turn yellow while you're in them and purple once
  * done, and the finish earns a "Fastest lap". Desktop only. Decorative.
  */
@@ -29,10 +29,10 @@ export function LapRail() {
       const y = window.scrollY;
       const f = max > 0 ? Math.min(1, Math.max(0, y / max)) : 0;
 
-      // Sector edges follow the real page: Leadership and the footer coming into view.
+      // Sector edges follow the real page: Projects and Leadership coming into view.
       const top = (el: Element | null) => (el ? el.getBoundingClientRect().top + y : max);
-      const b1 = Math.min(max * 0.9, Math.max(1, top(document.getElementById("leadership-label")) - vh * 0.5));
-      const b2 = Math.min(max - 1, Math.max(b1 + 1, top(document.querySelector("footer")) - vh * 0.6));
+      const b1 = Math.min(max * 0.9, Math.max(1, top(document.getElementById("projects-label")) - vh * 0.5));
+      const b2 = Math.min(max - 1, Math.max(b1 + 1, top(document.getElementById("leadership-label")) - vh * 0.5));
       const edges = [0, b1 / max, b2 / max, 1];
       const fill = [y / b1, (y - b1) / (b2 - b1), (y - b2) / (max - b2)].map((v) => Math.min(1, Math.max(0, v)));
 
