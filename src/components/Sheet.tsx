@@ -16,6 +16,7 @@ type Props = {
 export function Sheet({ entries }: Props) {
   const [key, setKey] = useState<string | null>(null);
   const [shown, setShown] = useState<string | null>(null); // last opened, kept while closing
+  const [zoom, setZoom] = useState<{ id: string; i: number } | null>(null); // screenshot open full size
   const panel = useRef<HTMLDivElement>(null);
   const opener = useRef<HTMLElement | null>(null);
   const pushed = useRef(false); // opened by an in-page click, so Back is the right way to close
@@ -77,6 +78,26 @@ export function Sheet({ entries }: Props) {
     location.replace(`#${id}`);
   }, []);
 
+  const shots = w?.shots ?? [];
+  const zi = open && zoom && w && zoom.id === w.id && shots[zoom.i] ? zoom.i : null;
+
+  // Full-size screenshot: Esc closes just the viewer, arrows flip screens (captured first so the
+  // panel's own Esc / project arrows don't also fire).
+  useEffect(() => {
+    if (zi === null || !w) return;
+    const id = w.id;
+    const n = shots.length;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      if (e.key === "Escape") setZoom(null);
+      else setZoom({ id, i: (zi + (e.key === "ArrowRight" ? 1 : n - 1)) % n });
+    };
+    window.addEventListener("keydown", onKey, true);
+    return () => window.removeEventListener("keydown", onKey, true);
+  }, [zi, w, shots.length]);
+
   // Left/Right arrows flip between projects while a panel is open.
   useEffect(() => {
     if (!open || !prev || !next) return;
@@ -131,10 +152,12 @@ export function Sheet({ entries }: Props) {
                 <p className="label mb-3">Screens</p>
                 {/* Bleeds to the panel edge so it reads as scrollable. */}
                 <ul className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2 md:-mx-8 md:px-8">
-                  {w.shots.map((sh) => (
+                  {w.shots.map((sh, i) => (
                     <li key={sh.src} className="shrink-0 snap-start">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={sh.src} alt={sh.alt} loading="lazy" className="h-80 w-auto rounded-[18px] border border-line" />
+                      <button type="button" onClick={() => setZoom({ id: w.id, i })} aria-label={`View larger: ${sh.alt}`} className="block cursor-zoom-in rounded-[18px] outline-offset-2">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={sh.src} alt="" loading="lazy" className="h-80 w-auto rounded-[18px] border border-line transition-opacity hover:opacity-90" />
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -164,6 +187,29 @@ export function Sheet({ entries }: Props) {
         )}
 
       </div>
+
+      {zi !== null && (
+        <div role="dialog" aria-modal="true" aria-label="Screenshot viewer" className="viewer-in absolute inset-0 z-10 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm" onClick={() => setZoom(null)}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={shots[zi].src} alt={shots[zi].alt} onClick={(e) => e.stopPropagation()} className="max-h-[86dvh] max-w-[92vw] rounded-[24px] object-contain shadow-2xl" />
+          <button type="button" onClick={() => setZoom(null)} className="label absolute top-3 right-3 h-11 px-3 !text-white/80 hover:!text-white md:top-5 md:right-6">
+            Close ✕
+          </button>
+          {shots.length > 1 && (
+            <>
+              <button type="button" aria-label="Previous screen" onClick={(e) => { e.stopPropagation(); setZoom({ id: w!.id, i: (zi + shots.length - 1) % shots.length }); }} className="label absolute left-2 h-12 w-12 !text-white/80 hover:!text-white md:left-6">
+                ←
+              </button>
+              <button type="button" aria-label="Next screen" onClick={(e) => { e.stopPropagation(); setZoom({ id: w!.id, i: (zi + 1) % shots.length }); }} className="label absolute right-2 h-12 w-12 !text-white/80 hover:!text-white md:right-6">
+                →
+              </button>
+              <p className="label absolute bottom-3 left-1/2 -translate-x-1/2 !text-white/70">
+                {zi + 1} / {shots.length}
+              </p>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }
