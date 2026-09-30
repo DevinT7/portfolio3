@@ -208,3 +208,8 @@ html[data-nav] .wipe > .wipe-text { transform: none; }
 .viewer-in { animation: viewer-in 0.25s var(--ease-out) both; }
 @keyframes viewer-in { from { opacity: 0; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .viewer-in { animation: none; } }
+
+/* Remote cursor (Presence.tsx) settles in instead of popping. */
+@keyframes cursor-in { from { scale: 0.6; opacity: 0; } }
+.cursor-in > * { animation: cursor-in 0.35s var(--ease-out) both; transform-origin: 0 0; }
+@media (prefers-reduced-motion: reduce) { .cursor-in > * { animation: none; } }
