@@ -24,6 +24,9 @@ export function Presence() {
   const channel = useRef<RealtimeChannel | null>(null);
   const me = useRef({ id: "", hue: 0, city: "" });
   const alone = useRef(true);
+  // Phones join and are counted (and their touches show up for desktop visitors), but don't draw cursors:
+  // a phone's page is laid out too differently for another visitor's position to mean anything.
+  const draws = useRef(false);
 
   useEffect(() => {
     pathRef.current = path;
@@ -31,8 +34,7 @@ export function Presence() {
 
   useEffect(() => {
     if (!URL || !KEY) return;
-    if (matchMedia("(pointer: coarse)").matches && !matchMedia("(pointer: fine)").matches) return; // no cursors on phones
-
+    draws.current = matchMedia("(pointer: fine)").matches;
     const id = crypto.randomUUID();
     me.current = { id, hue: Math.floor(Math.random() * 360), city: "" };
     let dead = false;
@@ -51,7 +53,7 @@ export function Presence() {
 
     ch.on("broadcast", { event: "cursor" }, ({ payload }) => {
       const { id: from, x, y, city, hue, path: at } = payload ?? {};
-      if (typeof from !== "string" || !Number.isFinite(x) || !Number.isFinite(y)) return;
+      if (!draws.current || typeof from !== "string" || !Number.isFinite(x) || !Number.isFinite(y)) return;
       setPeers((p) => {
         if (!(from in p) && Object.keys(p).length >= MAX_PEERS) return p;
         return { ...p, [from]: { x, y, city: String(city ?? "").slice(0, 40), hue: Number(hue) || 0, path: String(at), seen: Date.now() } };
@@ -72,17 +74,18 @@ export function Presence() {
       });
 
     const onMove = (e: PointerEvent) => {
-      if (e.pointerType !== "mouse" || alone.current || document.hidden) return;
+      if (alone.current || document.hidden) return;
       const now = performance.now();
       if (now - last < 50) return;
       last = now;
       ch.send({
         type: "broadcast",
         event: "cursor",
-        payload: { id, x: e.clientX / innerWidth, y: e.clientY + scrollY, city: me.current.city, hue: me.current.hue, path: pathRef.current },
+        payload: { id, x: e.clientX / innerWidth, y: (e.clientY + scrollY) / document.documentElement.scrollHeight, city: me.current.city, hue: me.current.hue, path: pathRef.current },
       });
     };
     window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointerdown", onMove, { passive: true });
 
     // Drop cursors that have gone quiet.
     const sweep = setInterval(() => {
@@ -96,6 +99,7 @@ export function Presence() {
     return () => {
       dead = true;
       window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerdown", onMove);
       clearInterval(sweep);
       client.removeChannel(ch);
       channel.current = null;
@@ -113,7 +117,7 @@ export function Presence() {
             <div
               key={k}
               className="absolute top-0 left-0 transition-transform duration-100 ease-linear will-change-transform"
-              style={{ transform: `translate3d(${p.x * 100}vw, ${p.y}px, 0)` }}
+              style={{ transform: `translate3d(${p.x * 100}vw, ${p.y * document.documentElement.scrollHeight}px, 0)` }}
             >
               <svg width="14" height="18" viewBox="0 0 14 18" className="drop-shadow-sm" style={{ color: `hsl(${p.hue} 70% 50%)` }}>
                 <path d="M1 1l11 7-5 1.5L5 15z" fill="currentColor" stroke="#fff" strokeWidth="1" strokeLinejoin="round" />
