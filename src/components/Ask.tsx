@@ -86,12 +86,12 @@ export function Ask() {
       aria-label="Ask me anything"
       aria-hidden={open}
       tabIndex={open ? -1 : 0}
-      className={`group fixed right-4 bottom-4 z-40 flex h-14 items-center gap-2 rounded-full bg-fg px-[1.05rem] text-bg shadow-lg transition-[opacity,scale,background-color] duration-300 ease-[var(--ease-out)] hover:bg-accent hover:scale-105 sm:right-6 sm:bottom-6 ${open ? "pointer-events-none scale-90 opacity-0" : ""}`}
+      className={`group fixed right-4 bottom-4 z-40 grid size-14 place-items-center rounded-full bg-fg text-bg shadow-lg transition-[opacity,scale,background-color] duration-300 ease-[var(--ease-out)] hover:bg-accent hover:scale-105 sm:right-6 sm:bottom-6 ${open ? "pointer-events-none scale-90 opacity-0" : ""}`}
     >
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
         <path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z" />
       </svg>
-      <span className="label max-w-0 overflow-hidden whitespace-nowrap !text-bg opacity-0 transition-[max-width,opacity] duration-300 group-hover:max-w-20 group-hover:opacity-100 group-focus-visible:max-w-20 group-focus-visible:opacity-100">
+      <span className="label pointer-events-none absolute right-full mr-3 rounded-full bg-fg px-3 py-1.5 whitespace-nowrap !text-bg opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
         Ask me
       </span>
     </button>
