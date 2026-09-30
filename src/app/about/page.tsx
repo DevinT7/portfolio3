@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ScrollEffects } from "@/components/ScrollEffects";
+import { NavOrigin } from "@/components/NavOrigin";
 import { PageTransition } from "@/components/PageTransition";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Explore } from "@/components/Explore";
@@ -18,6 +19,7 @@ export default function About() {
     <PageTransition>
     <div className="mx-auto flex min-h-dvh max-w-[1240px] flex-col px-4 md:px-8">
       <ScrollEffects />
+      <NavOrigin />
 
       <header
         className="rise flex h-16 items-center justify-between md:h-20"
