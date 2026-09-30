@@ -4,6 +4,7 @@ import { ScrollEffects } from "@/components/ScrollEffects";
 import { Sheet } from "@/components/Sheet";
 import { Ski, SkiButton } from "@/components/Ski";
 import { F1, F1Button } from "@/components/F1";
+import { Ask } from "@/components/Ask";
 import { PageTransition } from "@/components/PageTransition";
 import { ResumeViewer } from "@/components/ResumeViewer";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -157,6 +158,7 @@ export default function Home() {
       <LapRail />
       <Ski />
       <F1 />
+      <Ask />
       <Sheet entries={[...work, ...projects, ...leadership]} />
     </>
   );

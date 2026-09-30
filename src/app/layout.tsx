@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, IBM_Plex_Mono, Source_Serif_4 } from "next/font/google";
+import { Presence } from "@/components/Presence";
 import "./globals.css";
 
 const inter = Inter({
@@ -73,7 +74,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             - failsafe: if the app is slow to hydrate, show everything anyway */}
         <script dangerouslySetInnerHTML={{ __html: BOOT }} />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Presence />
+      </body>
     </html>
   );
 }
