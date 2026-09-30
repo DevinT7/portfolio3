@@ -19,7 +19,15 @@ export function ScrollEffects() {
       },
       { rootMargin: "0px 0px -5% 0px", threshold: 0.1 },
     );
-    const start = () => document.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
+    const start = () => {
+      // Arriving through a route transition: what's on screen is already showing (see NavOrigin),
+      // so mark it revealed now rather than waiting for the observer.
+      const arriving = document.documentElement.hasAttribute("data-nav");
+      document.querySelectorAll("[data-reveal]").forEach((el) => {
+        if (arriving && el.getBoundingClientRect().top < window.innerHeight) el.classList.add("is-in");
+        else io.observe(el);
+      });
+    };
     if (document.documentElement.classList.contains("intro") && document.getElementById("curtain")) {
       window.addEventListener("intro:done", start, { once: true });
     } else {
