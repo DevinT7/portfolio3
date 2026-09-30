@@ -6,19 +6,6 @@ type Msg = { role: "user" | "assistant"; content: string };
 
 const STARTERS = ["What did you build at IBM?", "Tell me about Forge", "Are you available?"];
 
-/** Footer trigger. Opens <Ask /> via a window event so the two don't need to share a parent. */
-export function AskButton() {
-  return (
-    <button
-      type="button"
-      onClick={() => window.dispatchEvent(new Event("ask:open"))}
-      className="label inline-flex h-11 items-center gap-2 text-fg transition-colors hover:text-accent"
-    >
-      Ask me
-    </button>
-  );
-}
-
 /**
  * Chat grounded in site.ts (see lib/persona.ts), answered in first person by /api/ask.
  * Not modal: the page stays usable behind it.
@@ -92,6 +79,22 @@ export function Ask() {
   };
 
   return (
+    <>
+    <button
+      type="button"
+      onClick={() => setOpen(true)}
+      aria-label="Ask me anything"
+      aria-hidden={open}
+      tabIndex={open ? -1 : 0}
+      className={`group fixed right-4 bottom-4 z-40 flex h-14 items-center gap-2 rounded-full bg-fg px-[1.05rem] text-bg shadow-lg transition-[opacity,scale,background-color] duration-300 ease-[var(--ease-out)] hover:bg-accent hover:scale-105 sm:right-6 sm:bottom-6 ${open ? "pointer-events-none scale-90 opacity-0" : ""}`}
+    >
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z" />
+      </svg>
+      <span className="label max-w-0 overflow-hidden whitespace-nowrap !text-bg opacity-0 transition-[max-width,opacity] duration-300 group-hover:max-w-20 group-hover:opacity-100 group-focus-visible:max-w-20 group-focus-visible:opacity-100">
+        Ask me
+      </span>
+    </button>
     <div
       role="dialog"
       aria-label="Ask Devin"
@@ -152,5 +155,6 @@ export function Ask() {
         </button>
       </form>
     </div>
+    </>
   );
 }
