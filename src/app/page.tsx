@@ -13,6 +13,7 @@ import { Wipe } from "@/components/Wipe";
 import { EntryList } from "@/components/EntryList";
 import { Thumb } from "@/components/Thumb";
 import { Intro } from "@/components/Intro";
+import { NavOrigin } from "@/components/NavOrigin";
 import { site } from "@/content/site";
 import { findMedia } from "@/lib/media";
 
@@ -42,6 +43,7 @@ export default function Home() {
           Skip to work
         </a>
         <ScrollEffects />
+        <NavOrigin />
         <Intro name={site.name} />
 
         <header className="rise flex h-16 items-center justify-end md:h-20 md:justify-between" data-reveal>
@@ -78,7 +80,7 @@ export default function Home() {
         <main className="flex-1">
           <section className="grid gap-8 pt-8 pb-10 md:pt-12 md:pb-12 lg:grid-cols-12 lg:items-stretch">
             <div className="flex flex-col justify-between gap-12 lg:col-span-8">
-              <h1 className="display text-[clamp(3rem,6.5vw,5rem)]">
+              <h1 className="hero-name display text-[clamp(3rem,6.5vw,5rem)]">
                 <span className="block">
                   <Wipe delay={100}>Devin</Wipe>
                 </span>
@@ -89,7 +91,7 @@ export default function Home() {
                 </span>
               </h1>
 
-              <dl className="grid grid-cols-1 border-t border-line sm:grid-cols-2">
+              <dl className="hero-facts grid grid-cols-1 border-t border-line sm:grid-cols-2">
                 {facts.map(([k, v], i) => (
                   <div key={k} className={`rise items-baseline gap-6 border-b border-line py-3 ${i >= 4 ? "hidden sm:flex sm:border-b-0" : i === 3 ? "flex border-b-0 sm:border-b" : "flex"}`} data-reveal style={{ "--i": i, "--d": "400ms" } as React.CSSProperties}>
                     <dt className="label w-16 shrink-0">{k}</dt>
@@ -99,7 +101,7 @@ export default function Home() {
               </dl>
             </div>
 
-            <figure className="rise mx-auto w-full max-w-[280px] lg:col-span-3 lg:col-start-10 lg:mx-0 lg:max-w-none" data-reveal style={{ "--d": "400ms" } as React.CSSProperties}>
+            <figure className="hero-photo rise mx-auto w-full max-w-[280px] lg:col-span-3 lg:col-start-10 lg:mx-0 lg:max-w-none" data-reveal style={{ "--d": "400ms" } as React.CSSProperties}>
               <div className="aspect-[4/5] overflow-hidden rounded-[20px]">
                 <Thumb found={photo} name="Photo" i={2} position="50% 85%" alt={site.name} />
               </div>
@@ -112,7 +114,7 @@ export default function Home() {
 
           <section aria-labelledby="work-label">
             <div className="rise mb-4 flex items-baseline justify-between" data-reveal style={{ "--d": "450ms" } as React.CSSProperties}>
-              <h2 id="work-label" className="display text-[clamp(1.5rem,2.6vw,2rem)]">
+              <h2 id="work-label" className="section-title display text-[clamp(1.5rem,2.6vw,2rem)]">
                 Work
               </h2>
               <span className="label">{String(work.length).padStart(2, "0")}</span>
@@ -122,7 +124,7 @@ export default function Home() {
 
           <section aria-labelledby="projects-label" className="mt-16 md:mt-20">
             <div className="rise mb-4 flex items-baseline justify-between" data-reveal>
-              <h2 id="projects-label" className="display text-[clamp(1.5rem,2.6vw,2rem)]">
+              <h2 id="projects-label" className="section-title display text-[clamp(1.5rem,2.6vw,2rem)]">
                 Projects
               </h2>
               <span className="label">{String(projects.length).padStart(2, "0")}</span>
@@ -132,7 +134,7 @@ export default function Home() {
 
           <section aria-labelledby="leadership-label" className="mt-16 md:mt-20">
             <div className="rise mb-4 flex items-baseline justify-between" data-reveal>
-              <h2 id="leadership-label" className="display text-[clamp(1.5rem,2.6vw,2rem)]">
+              <h2 id="leadership-label" className="section-title display text-[clamp(1.5rem,2.6vw,2rem)]">
                 Leadership
               </h2>
               <span className="label">{String(leadership.length).padStart(2, "0")}</span>

@@ -8,6 +8,9 @@
   --accent: #1d4ed8;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-wipe: cubic-bezier(0.77, 0, 0.18, 1);
+  --ease-move: cubic-bezier(0.76, 0, 0.24, 1);
+  --dur-base: 600ms;
+  --dur-slow: 950ms;
 }
 
 /* Dark theme. layout.tsx sets data-theme before first paint (saved choice, else the system
@@ -151,27 +154,50 @@ html.intro .curtain {
   .js .wipe::after { display: none; }
 }
 
-/* Route transitions (see PageTransition.tsx): pages slide a short way in the direction of travel. */
-@keyframes vt-fade { from { opacity: 0; } to { opacity: 1; } }
-@keyframes vt-slide { from { translate: var(--slide-offset); } to { translate: 0; } }
-::view-transition-old(.nav-forward) {
-  --slide-offset: -48px;
-  animation: 150ms ease-in both vt-fade reverse, 400ms ease-in-out both vt-slide reverse;
+/* Route transitions (see PageTransition.tsx, NavOrigin.tsx). Opacity and translate only, so it
+   runs on the compositor: the old page fades out, the new one fades in while settling a short
+   way in the direction of travel. While a transition is in flight <html> has `data-nav`, which
+   lets the arriving page show at once instead of replaying its own reveals under the fade. */
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in-fwd { from { opacity: 0; translate: 0 2.5vh; } }
+@keyframes vt-in-back { from { opacity: 0; translate: 0 -2.5vh; } }
+::view-transition-old(.nav-forward), ::view-transition-old(.nav-back) {
+  animation: 200ms ease-in both vt-out;
+  mix-blend-mode: normal;
 }
-::view-transition-new(.nav-forward) {
-  --slide-offset: 48px;
-  animation: 210ms ease-out 150ms both vt-fade, 400ms ease-in-out both vt-slide;
-}
-::view-transition-old(.nav-back) {
-  --slide-offset: 48px;
-  animation: 150ms ease-in both vt-fade reverse, 400ms ease-in-out both vt-slide reverse;
-}
-::view-transition-new(.nav-back) {
-  --slide-offset: -48px;
-  animation: 210ms ease-out 150ms both vt-fade, 400ms ease-in-out both vt-slide;
-}
+::view-transition-new(.nav-forward) { animation: 420ms var(--ease-out) 120ms both vt-in-fwd; mix-blend-mode: normal; }
+::view-transition-new(.nav-back) { animation: 420ms var(--ease-out) 120ms both vt-in-back; mix-blend-mode: normal; }
+html[data-nav] .rise { opacity: 1; transform: none; transition: none; }
+html[data-nav] .wipe.is-in > .wipe-text { animation-duration: 0s; animation-delay: 0s; }
+html[data-nav] .wipe > .wipe-text { transform: none; }
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+
+/* ── Scroll-scrubbed motion. Runs on the compositor via animation-timeline, so it stays smooth,
+   and only where supported and motion is allowed. Uses the individual `translate`/`scale`
+   properties so it composes with the reveal transforms above. ─────────────────────────────── */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Hero: as you scroll, the name lifts away and fades, and the photo recedes into a softer,
+       rounder frame, at different speeds so the two read as layers. */
+    .hero-name { animation: hero-name linear both; animation-timeline: view(); animation-range: exit 0% exit 85%; }
+    .hero-photo { animation: hero-photo linear both; animation-timeline: view(); animation-range: exit 0% exit 100%; }
+    .hero-photo > div { animation: hero-frame linear both; animation-timeline: view(); animation-range: exit 0% exit 100%; }
+    .hero-facts { animation: hero-facts linear both; animation-timeline: view(); animation-range: exit 0% exit 60%; }
+    @keyframes hero-name { to { translate: 0 -12vh; opacity: 0.08; } }
+    @keyframes hero-photo { to { scale: 0.86; translate: 0 6vh; } }
+    @keyframes hero-frame { to { border-radius: 48px; } }
+    @keyframes hero-facts { to { translate: 0 -5vh; opacity: 0; } }
+
+    /* Work list: rows brighten as they cross the middle of the screen, dim at the edges. */
+    .spot { animation: spot linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
+    @keyframes spot { 0% { opacity: 0.22; } 38%, 62% { opacity: 1; } 100% { opacity: 0.22; } }
+
+    /* Section titles slide in from the left as they enter. */
+    .section-title { animation: title-in linear both; animation-timeline: view(); animation-range: entry 0% entry 90%; }
+    @keyframes title-in { from { translate: -6vw 0; opacity: 0; } }
+  }
 }
 
 /* "Type f1" easter egg (see F1.tsx): a car crosses the screen, trail first. */
