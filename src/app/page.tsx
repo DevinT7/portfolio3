@@ -99,7 +99,7 @@ export default function Home() {
               </dl>
             </div>
 
-            <figure className="rise hidden lg:col-span-3 lg:col-start-10 lg:block" data-reveal style={{ "--d": "400ms" } as React.CSSProperties}>
+            <figure className="rise mx-auto w-full max-w-[280px] lg:col-span-3 lg:col-start-10 lg:mx-0 lg:max-w-none" data-reveal style={{ "--d": "400ms" } as React.CSSProperties}>
               <div className="aspect-[4/5] overflow-hidden rounded-[20px]">
                 <Thumb found={photo} name="Photo" i={2} position="50% 85%" alt={site.name} />
               </div>
