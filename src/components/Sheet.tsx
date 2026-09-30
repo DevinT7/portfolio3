@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { flushSync } from "react-dom";
 import type { Entry } from "@/content/site";
 import type { Found } from "@/lib/media";
 import { Thumb } from "./Thumb";
@@ -21,59 +20,23 @@ export function Sheet({ entries }: Props) {
   const panel = useRef<HTMLDivElement>(null);
   const opener = useRef<HTMLElement | null>(null);
   const pushed = useRef(false); // opened by an in-page click, so Back is the right way to close
-  const keyRef = useRef<string | null>(null);
-  const title = useRef<HTMLHeadingElement>(null);
-
-  // Open/close as a shared-element transition: the row's name flies into the panel title (and
-  // back), and the panel slides in its own layer. Falls back to a plain state change.
-  const run = useCallback((update: () => void, id: string, opening: boolean) => {
-    const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const row = () => document.querySelector<HTMLElement>(`[data-entry="${CSS.escape(id)}"] .entry-name`);
-    if (!document.startViewTransition || calm) return update();
-    const p = panel.current;
-    const mark = (el: HTMLElement | null | undefined, name: string | null) => el && (el.style.viewTransitionName = name ?? "");
-    if (!opening) mark(title.current, "entry-title");
-    mark(p, "sheet-panel");
-    if (opening) mark(row(), "entry-title");
-    if (p) p.style.transition = "none";
-    const vt = document.startViewTransition(() => {
-      flushSync(update);
-      if (opening) { mark(row(), null); mark(title.current, "entry-title"); }
-      else { mark(title.current, null); mark(row(), "entry-title"); }
-    });
-    const done = () => {
-      mark(title.current, null); mark(row(), null); mark(p, null);
-      if (p) p.style.transition = "";
-    };
-    vt.ready.catch(() => {}); // e.g. document hidden: the change still applies, just without the animation
-    vt.finished.then(done, done);
-  }, []);
 
   useEffect(() => {
     const valid = new Set(entries.map((w) => w.id));
     const sync = (e?: HashChangeEvent) => {
       const h = decodeURIComponent(location.hash.slice(1));
       const next = valid.has(h) ? h : null;
-      const was = keyRef.current;
-      const apply = () => {
-        if (next) setShown(next);
-        setKey(next);
-      };
       if (next) {
-        if (!was) {
-          pushed.current = !!e;
-          opener.current = document.activeElement as HTMLElement;
-        }
+        pushed.current = !!e;
+        opener.current = document.activeElement as HTMLElement;
+        setShown(next);
       }
-      keyRef.current = next;
-      if (e && next && !was) run(apply, next, true);
-      else if (e && !next && was) run(apply, was, false);
-      else apply();
+      setKey(next);
     };
     sync();
     window.addEventListener("hashchange", sync);
     return () => window.removeEventListener("hashchange", sync);
-  }, [entries, run]);
+  }, [entries]);
 
   const close = useCallback(() => {
     if (pushed.current) {
@@ -81,12 +44,9 @@ export function Sheet({ entries }: Props) {
       history.back();
     } else {
       history.replaceState(null, "", location.pathname + location.search);
-      const was = keyRef.current;
-      keyRef.current = null;
-      if (was) run(() => setKey(null), was, false);
-      else setKey(null);
+      setKey(null);
     }
-  }, [run]);
+  }, []);
 
   // While open: lock scroll, make the page inert, focus the panel, Esc to close.
   useEffect(() => {
@@ -176,7 +136,7 @@ export function Sheet({ entries }: Props) {
               <Thumb found={w.found} logo={w.logo} name={w.name} i={w.tint} size="text-5xl" />
             </div>
             <div>
-              <h2 ref={title} className="display w-fit text-[clamp(3rem,9vw,4.5rem)]">{w.name}</h2>
+              <h2 className="display text-[clamp(3rem,9vw,4.5rem)]">{w.name}</h2>
               <p className="mt-4 text-lg leading-relaxed">{w.summary}</p>
             </div>
             <ul className="border-t border-line">

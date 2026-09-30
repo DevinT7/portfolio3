@@ -173,16 +173,6 @@ html.intro .curtain {
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }
 
-/* Project panel (see Sheet.tsx): the row's name flies into the panel title and the panel slides
-   in its own layer. */
-::view-transition-group(entry-title) { animation-duration: var(--dur-slow); animation-timing-function: var(--ease-out); }
-::view-transition-old(entry-title), ::view-transition-new(entry-title) { animation-duration: var(--dur-slow); }
-::view-transition-group(sheet-panel) { animation-duration: var(--dur-slow); }
-::view-transition-old(sheet-panel) { animation: var(--dur-base) var(--ease-move) both sheet-out; }
-::view-transition-new(sheet-panel) { animation: var(--dur-slow) var(--ease-out) both sheet-in; }
-@keyframes sheet-in { from { translate: 100% 0; opacity: 1; } to { translate: 0 0; } }
-@keyframes sheet-out { from { translate: 0 0; } to { translate: 100% 0; opacity: 1; } }
-
 /* ── Scroll-scrubbed motion. Runs on the compositor via animation-timeline, so it stays smooth,
    and only where supported and motion is allowed. Uses the individual `translate`/`scale`
    properties so it composes with the reveal transforms above. ─────────────────────────────── */
