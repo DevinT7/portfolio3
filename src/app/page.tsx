@@ -5,6 +5,7 @@ import { Sheet } from "@/components/Sheet";
 import { Ski, SkiButton } from "@/components/Ski";
 import { F1, F1Button } from "@/components/F1";
 import { PageTransition } from "@/components/PageTransition";
+import { ResumeViewer } from "@/components/ResumeViewer";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { GithubActivity } from "@/components/GithubActivity";
 import { LapRail } from "@/components/LapRail";
@@ -23,7 +24,7 @@ const facts = [
   ["Now", site.now],
   ["Before", site.before],
 ];
-const external = [...site.links, { label: "Résumé", href: site.resume }];
+const external = site.links;
 
 export default function Home() {
   const withMedia = <T extends { id: string }>(list: T[], offset: number) =>
@@ -64,6 +65,9 @@ export default function Home() {
                   </a>
                 </li>
               ))}
+              <li>
+                <ResumeViewer href={site.resume} filename="Devin-Thenuwara-Resume.pdf" />
+              </li>
               <li>
                 <ThemeToggle />
               </li>
