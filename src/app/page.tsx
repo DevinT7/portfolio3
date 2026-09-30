@@ -46,7 +46,7 @@ export default function Home() {
         <header className="rise flex h-16 items-center justify-end md:h-20 md:justify-between" data-reveal>
           <span />
           <nav aria-label="Links">
-            <ul className="flex items-center gap-4 md:gap-6">
+            <ul className="flex items-baseline gap-4 md:gap-6">
               <li>
                 <Link href="/about" transitionTypes={["nav-forward"]} className="label text-fg transition-colors hover:text-accent">
                   About

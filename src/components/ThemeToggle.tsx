@@ -17,7 +17,7 @@ export function ThemeToggle() {
   };
 
   return (
-    <button type="button" onClick={flip} className="label -mx-1 inline-flex h-11 items-center px-1 text-fg transition-colors hover:text-accent" aria-label="Switch between light and dark theme">
+    <button type="button" onClick={flip} className="label block text-fg transition-colors hover:text-accent" aria-label="Switch between light and dark theme">
       <span className="dark:hidden">Dark</span>
       <span className="hidden dark:inline">Light</span>
     </button>
