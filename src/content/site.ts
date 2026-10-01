@@ -54,6 +54,10 @@ export const site = {
       { src: "/about/durango.webp", alt: "Green valley and mountains near Durango", caption: "Durango", place: "Durango, CO", w: 1141, h: 856 },
       { src: "/about/cota.webp", alt: "Turn 1 hill and grandstands at Circuit of the Americas", caption: "COTA", place: "Austin, TX", w: 1141, h: 856 },
       { src: "/about/lake-travis.webp", alt: "Sunset over Lake Travis with hills on the far shore", caption: "Lake Travis", place: "Austin, TX", w: 2000, h: 1500 },
+      { src: "/about/austin.webp", alt: "Austin skyline at golden hour from above", caption: "Austin", place: "Austin, TX", w: 1141, h: 856 },
+      { src: "/about/sri-lanka-resort.webp", alt: "Sandy path through palm trees toward the beach", caption: "Sri Lanka", place: "Sri Lanka", w: 642, h: 856 },
+      { src: "/about/sri-lanka-beach.webp", alt: "Sunset over the ocean framed by palm trees", caption: "Sri Lanka", place: "Sri Lanka", w: 1141, h: 856 },
+      { src: "/about/oasis.webp", alt: "Lake Travis at dusk seen from Oasis", caption: "Oasis, Austin", place: "Austin, TX", w: 1141, h: 856 },
     ],
     interests: ["F1", "Baking", "Basketball", "Traveling", "Skiing", "Swimming"],
     // Pins on the travel map. The first one is home.
