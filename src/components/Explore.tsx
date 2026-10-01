@@ -24,6 +24,7 @@ export function Explore({ photos, places }: { photos: Photo[]; places: Place[] }
     map.current?.scrollIntoView({ behavior: still ? "auto" : "smooth", block: "center" });
   };
 
+  const portraits = photos.filter((p) => p.h > p.w);
   const here = sel === null ? [] : photos.filter((p) => p.place === places[sel].name);
 
   return (
@@ -31,7 +32,8 @@ export function Explore({ photos, places }: { photos: Photo[]; places: Place[] }
       <section aria-label="Photos" className="flex flex-col gap-4">
         {/* Portraits and landscapes each get one shared shape so rows line up. */}
         {[
-          { list: photos.filter((p) => p.h > p.w), cols: "sm:grid-cols-3", shape: "aspect-[3/4]" },
+          // Four portraits sit in a 2x2 / 4-up grid; otherwise three across.
+          { list: portraits, cols: portraits.length % 4 === 0 ? "sm:grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-3", shape: "aspect-[3/4]" },
           { list: photos.filter((p) => p.h <= p.w), cols: "sm:grid-cols-2 lg:grid-cols-3", shape: "aspect-[4/3]" },
         ].map(({ list, cols, shape }) => (
           <ul key={cols} className={`grid grid-cols-1 gap-4 ${cols}`}>
