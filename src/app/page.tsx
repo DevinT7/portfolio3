@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CopyEmail } from "@/components/CopyEmail";
 import { ScrollEffects } from "@/components/ScrollEffects";
+import { HeroScroll } from "@/components/HeroScroll";
 import { Sheet } from "@/components/Sheet";
 import { Ski, SkiButton } from "@/components/Ski";
 import { F1, F1Button } from "@/components/F1";
@@ -44,6 +45,7 @@ export default function Home() {
           Skip to work
         </a>
         <ScrollEffects />
+        <HeroScroll />
         <NavOrigin />
         <Intro name={site.name} />
 
