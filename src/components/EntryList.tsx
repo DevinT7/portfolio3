@@ -1,6 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import type { Entry } from "@/content/site";
 
 /**
@@ -22,9 +25,30 @@ export function EntryList({
   size?: keyof typeof SIZES;
 }) {
   const [active, setActive] = useState<number | null>(null);
+  const rule = useRef<SVGLineElement>(null);
+
+  // An accent rule draws itself across the top of the list as it scrolls into view.
+  useEffect(() => {
+    const line = rule.current;
+    if (!line) return;
+    gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      gsap.fromTo(
+        line,
+        { drawSVG: "0%", opacity: 1 },
+        { drawSVG: "100%", duration: 1.1, ease: "power2.inOut", scrollTrigger: { trigger: line, start: "top 88%", once: true } },
+      );
+    });
+    // With reduced motion the rule simply isn't shown; the hairline borders carry the structure.
+    return () => mm.revert();
+  }, []);
 
   return (
-    <ul className="border-b border-line" onPointerLeave={() => setActive(null)}>
+    <ul className="relative border-b border-line" onPointerLeave={() => setActive(null)}>
+      <svg aria-hidden className="pointer-events-none absolute top-0 left-0 h-0.5 w-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 100 1">
+        <line ref={rule} x1="0" y1="0" x2="100" y2="0" stroke="var(--accent)" strokeWidth="2" vectorEffect="non-scaling-stroke" style={{ opacity: 0 }} />
+      </svg>
       {items.map((w, i) => {
         const dim = active !== null && active !== i;
         return (
