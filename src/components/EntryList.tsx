@@ -26,6 +26,7 @@ export function EntryList({
 }) {
   const [active, setActive] = useState<number | null>(null);
   const rule = useRef<SVGLineElement>(null);
+  const list = useRef<HTMLUListElement>(null);
 
   // An accent rule draws itself across the top of the list as it scrolls into view.
   useEffect(() => {
@@ -44,8 +45,54 @@ export function EntryList({
     return () => mm.revert();
   }, []);
 
+  // Rows brighten as they cross the middle of the screen, then dim. The first time a row gets there, its number counts up to the value.
+  useEffect(() => {
+    const ul = list.current;
+    if (!ul) return;
+    gsap.registerPlugin(ScrollTrigger);
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const restore: (() => void)[] = [];
+      ul.querySelectorAll<HTMLElement>("li").forEach((li) => {
+        const name = li.querySelector<HTMLElement>(".spot");
+        if (name) {
+          gsap
+            .timeline({
+              defaults: { ease: "none" },
+              scrollTrigger: { trigger: li, start: "top 92%", end: "bottom 8%", scrub: 0.5 },
+            })
+            .fromTo(name, { opacity: 0.22 }, { opacity: 1, duration: 0.38 })
+            .to(name, { duration: 0.24 })
+            .to(name, { opacity: 0.22, duration: 0.38 });
+        }
+
+        const stat = li.querySelector<HTMLElement>("[data-stat]");
+        const text = stat?.textContent ?? "";
+        const m = text.match(/\d+(\.\d+)?/);
+        if (!stat || !m || parseFloat(m[0]) < 2) return;
+        const target = parseFloat(m[0]);
+        const places = m[1] ? m[1].length - 1 : 0;
+        const before = text.slice(0, m.index);
+        const after = text.slice((m.index ?? 0) + m[0].length);
+        restore.push(() => (stat.textContent = text));
+        const count = { v: 0 };
+        const tween = gsap.to(count, {
+          v: target,
+          duration: 1.1,
+          ease: "power2.out",
+          paused: true,
+          onUpdate: () => (stat.textContent = before + count.v.toFixed(places) + after),
+          onComplete: () => (stat.textContent = text),
+        });
+        ScrollTrigger.create({ trigger: li, start: "top 72%", once: true, onEnter: () => tween.play() });
+      });
+      return () => restore.forEach((f) => f());
+    });
+    return () => mm.revert();
+  }, []);
+
   return (
-    <ul className="relative border-b border-line" onPointerLeave={() => setActive(null)}>
+    <ul ref={list} className="relative border-b border-line" onPointerLeave={() => setActive(null)}>
       <svg aria-hidden className="pointer-events-none absolute top-0 left-0 h-0.5 w-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 100 1">
         <line ref={rule} x1="0" y1="0" x2="100" y2="0" stroke="var(--accent)" strokeWidth="2" vectorEffect="non-scaling-stroke" style={{ opacity: 0 }} />
       </svg>
@@ -66,7 +113,7 @@ export function EntryList({
                 {w.name}
               </span>
               <span className="col-start-1 row-start-2 text-muted md:col-start-auto md:row-start-auto">{w.what}</span>
-              <span className="text-right font-mono text-sm">{w.stat}</span>
+              <span data-stat className="text-right font-mono text-sm">{w.stat}</span>
             </a>
           </li>
         );

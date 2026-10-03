@@ -1,6 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import { MAP, MAP_ROWS } from "@/content/world-dots";
 
 type Place = { name: string; lat: number; lon: number };
@@ -76,6 +79,38 @@ export function TravelMap({
   const pins = useMemo(() => spread(places), [places]);
   const focus = selected !== null ? { x: pins[selected].x, y: pins[selected].y } : free;
   const shown = active ?? selected;
+  const root = useRef<HTMLDivElement>(null);
+
+  // Flight arcs from home to every other place: a quadratic curve lifted toward the north.
+  const arcs = useMemo(
+    () =>
+      pins.slice(1).map((p, i) => {
+        const h = pins[0];
+        const mx = (h.x + p.x) / 2;
+        const my = (h.y + p.y) / 2 - Math.hypot(p.x - h.x, p.y - h.y) * 0.28;
+        return { key: places[i + 1].name, d: `M${h.x} ${h.y}Q${mx} ${my} ${p.x} ${p.y}` };
+      }),
+    [pins, places],
+  );
+
+  // As the map scrolls into view the arcs draw out from home and the pins pulse in, one by one.
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
+    const mm = gsap.matchMedia(el);
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      gsap
+        .timeline({ scrollTrigger: { trigger: el, start: "top 80%", once: true } })
+        .fromTo(".arc", { drawSVG: "0%", opacity: 0.7 }, { drawSVG: "100%", opacity: 0.7, duration: 1.4, ease: "power2.inOut", stagger: 0.09 }, 0)
+        .from(".pin", { opacity: 0, duration: 0.3, stagger: 0.09 }, 0)
+        .fromTo(".pin-ring", { scale: 0.4, opacity: 0.8 }, { scale: 2.8, opacity: 0, duration: 0.9, ease: "power2.out", stagger: 0.09 }, 0);
+    });
+    mm.add("(prefers-reduced-motion: reduce)", () => {
+      gsap.set(".arc", { opacity: 0.7 });
+    });
+    return () => mm.revert();
+  }, [arcs]);
 
   const z = focus ? ZOOM : 1;
   // Translate (in % of the layer) so the focus point sits in the middle, clamped to the edges.
@@ -93,7 +128,7 @@ export function TravelMap({
   };
 
   return (
-    <div onPointerLeave={() => setActive(null)}>
+    <div ref={root} onPointerLeave={() => setActive(null)}>
       <div className="relative">
         <div
           className={`relative w-full overflow-hidden rounded-[14px] ${focus ? "cursor-zoom-out" : "cursor-zoom-in"}`}
@@ -114,6 +149,9 @@ export function TravelMap({
                   </g>
                 ) : null,
               )}
+              {arcs.map((a) => (
+                <path key={a.key} className="arc" d={a.d} fill="none" stroke="var(--accent)" strokeWidth={0.22} strokeLinecap="round" style={{ opacity: 0 }} />
+              ))}
             </svg>
 
             <ul>
@@ -140,8 +178,9 @@ export function TravelMap({
                         onSelect(i);
                         setActive(i);
                       }}
-                      className="absolute top-0 left-0 grid size-4 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full"
+                      className="pin absolute top-0 left-0 grid size-4 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full"
                     >
+                      <span aria-hidden className="pin-ring pointer-events-none absolute size-4 rounded-full border border-accent opacity-0" />
                       {home && <span className="absolute size-3 animate-ping rounded-full bg-accent opacity-40 motion-reduce:hidden" />}
                       <span
                         className={`relative rounded-full bg-accent ring-[1.5px] ring-bg transition-transform duration-300 ${home ? "size-2.5" : "size-1.5"} ${on ? "scale-[1.8]" : ""}`}
