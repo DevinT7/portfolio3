@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import { MAP, MAP_ROWS } from "@/content/world-dots";
 
@@ -93,24 +92,52 @@ export function TravelMap({
     [pins, places],
   );
 
-  // As the map scrolls into view the arcs draw out from home and the pins pulse in, one by one.
+  // Once the map is properly on screen (not just peeking in), home pulses and the trips play out
+  // one by one, nearest first: each arc draws out from home and its pin pops in as the line lands.
   useEffect(() => {
     const el = root.current;
     if (!el) return;
-    gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
+    gsap.registerPlugin(DrawSVGPlugin);
     const mm = gsap.matchMedia(el);
     mm.add("(prefers-reduced-motion: no-preference)", () => {
-      gsap
-        .timeline({ scrollTrigger: { trigger: el, start: "top 80%", once: true } })
-        .fromTo(".arc", { drawSVG: "0%", opacity: 0.7 }, { drawSVG: "100%", opacity: 0.7, duration: 1.4, ease: "power2.inOut", stagger: 0.09 }, 0)
-        .from(".pin", { opacity: 0, duration: 0.3, stagger: 0.09 }, 0)
-        .fromTo(".pin-ring", { scale: 0.4, opacity: 0.8 }, { scale: 2.8, opacity: 0, duration: 0.9, ease: "power2.out", stagger: 0.09 }, 0);
+      const arcEls = gsap.utils.toArray<SVGPathElement>(".arc", el);
+      const pinEls = gsap.utils.toArray<HTMLElement>(".pin", el);
+      const ringEls = gsap.utils.toArray<HTMLElement>(".pin-ring", el);
+      const h = pins[0];
+      const order = arcEls
+        .map((_, i) => i)
+        .sort((a, b) => Math.hypot(pins[a + 1].x - h.x, pins[a + 1].y - h.y) - Math.hypot(pins[b + 1].x - h.x, pins[b + 1].y - h.y));
+
+      gsap.set(arcEls, { drawSVG: "0%", opacity: 0.7 });
+      gsap.set(pinEls.slice(1), { opacity: 0 });
+
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo(ringEls[0], { scale: 0.4, opacity: 0.8 }, { scale: 3.2, opacity: 0, duration: 1, ease: "power2.out" }, 0);
+      order.forEach((ai, k) => {
+        const t = 0.5 + k * 0.12;
+        tl.to(arcEls[ai], { drawSVG: "100%", duration: 0.9, ease: "power2.out" }, t)
+          .to(pinEls[ai + 1], { opacity: 1, duration: 0.25 }, t + 0.7)
+          .fromTo(ringEls[ai + 1], { scale: 0.4, opacity: 0.8 }, { scale: 2.8, opacity: 0, duration: 0.8, ease: "power2.out" }, t + 0.7);
+      });
+
+      // An observer rather than a ScrollTrigger: the photos above the map load lazily and shift
+      // the layout, which leaves a ScrollTrigger's start position stale. Plays once, when ~40% shows.
+      const io = new IntersectionObserver(
+        ([e]) => {
+          if (!e.isIntersecting) return;
+          io.disconnect();
+          tl.play();
+        },
+        { threshold: 0.4 },
+      );
+      io.observe(el);
+      return () => io.disconnect();
     });
     mm.add("(prefers-reduced-motion: reduce)", () => {
       gsap.set(".arc", { opacity: 0.7 });
     });
     return () => mm.revert();
-  }, [arcs]);
+  }, [arcs, pins]);
 
   const z = focus ? ZOOM : 1;
   // Translate (in % of the layer) so the focus point sits in the middle, clamped to the edges.

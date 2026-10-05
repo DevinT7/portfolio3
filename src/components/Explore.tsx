@@ -91,6 +91,7 @@ export function Explore({ photos, places }: { photos: Photo[]; places: Place[] }
         />
       )}
 
+
       <section aria-labelledby="map-label" className="mt-16 md:mt-24">
         <h2 id="map-label" className="label rise mb-3" data-reveal>
           Been to · {places.length}
