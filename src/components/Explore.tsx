@@ -2,6 +2,8 @@
 
 import { useRef, useState } from "react";
 import { TravelMap } from "./TravelMap";
+import { PhotoViewer } from "./PhotoViewer";
+import { Tilt } from "@/components/ui/tilt";
 
 type Place = { name: string; lat: number; lon: number };
 type Photo = { src: string; alt: string; caption: string; place: string; w: number; h: number };
@@ -10,10 +12,12 @@ const at = (i: number) => ({ "--i": i }) as React.CSSProperties;
 
 /**
  * The photo grid and the travel map, linked. Click a pin (or a place name) and that
- * place's photos open under the map; click a photo and the map flies to where it was taken.
+ * place's photos open under the map. Click a photo and it opens full size (see PhotoViewer),
+ * with a link that flies the map to where it was taken.
  */
 export function Explore({ photos, places }: { photos: Photo[]; places: Place[] }) {
   const [sel, setSel] = useState<number | null>(null);
+  const [viewing, setViewing] = useState<number | null>(null);
   const map = useRef<HTMLDivElement>(null);
 
   const showOnMap = (p: Photo) => {
@@ -43,11 +47,12 @@ export function Explore({ photos, places }: { photos: Photo[]; places: Place[] }
               return (
                 <li key={p.src} className={`rise ${wide ? "lg:col-span-3" : ""}`} data-reveal style={at(i)}>
                   <figure>
+                    <Tilt className="tilt" rotationFactor={5} springOptions={{ stiffness: 220, damping: 22 }}>
                     <button
                       type="button"
-                      onClick={() => showOnMap(p)}
-                      aria-label={`${p.caption}: show on the map`}
-                      className="group block w-full cursor-pointer rounded-[20px] text-left outline-offset-4"
+                      onClick={() => setViewing(photos.indexOf(p))}
+                      aria-label={`${p.caption}: view larger`}
+                      className="group block w-full cursor-zoom-in rounded-[20px] text-left outline-offset-4"
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
@@ -56,12 +61,14 @@ export function Explore({ photos, places }: { photos: Photo[]; places: Place[] }
                         width={p.w}
                         height={p.h}
                         loading="lazy"
+                        data-photo={p.src}
                         className={`w-full rounded-[20px] bg-line object-cover ${wide ? "lg:aspect-[21/9]" : shape}`}
                       />
                       <figcaption className="label mt-2 transition-colors group-hover:text-accent">
-                        {p.caption} <span aria-hidden className="opacity-0 transition-opacity group-hover:opacity-100">↓ Map</span>
+                        {p.caption}
                       </figcaption>
                     </button>
+                    </Tilt>
                   </figure>
                 </li>
               );
@@ -69,6 +76,20 @@ export function Explore({ photos, places }: { photos: Photo[]; places: Place[] }
           </ul>
         ))}
       </section>
+
+      {viewing !== null && (
+        <PhotoViewer
+          photos={photos}
+          index={viewing}
+          canMap={(p) => places.some((pl) => pl.name === p.place)}
+          onNav={setViewing}
+          onClose={() => setViewing(null)}
+          onMap={(p) => {
+            setViewing(null);
+            showOnMap(p);
+          }}
+        />
+      )}
 
       <section aria-labelledby="map-label" className="mt-16 md:mt-24">
         <h2 id="map-label" className="label rise mb-3" data-reveal>

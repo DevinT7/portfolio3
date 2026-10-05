@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ScrollEffects } from "@/components/ScrollEffects";
 import { NavOrigin } from "@/components/NavOrigin";
 import { PageTransition } from "@/components/PageTransition";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { SiteDock } from "@/components/SiteDock";
 import { Explore } from "@/components/Explore";
 import { site } from "@/content/site";
 
@@ -17,23 +17,23 @@ export default function About() {
 
   return (
     <PageTransition>
-    <div className="mx-auto flex min-h-dvh max-w-[1240px] flex-col px-4 md:px-8">
+    <div id="page" className="relative mx-auto flex min-h-dvh max-w-[1240px] flex-col px-4 md:px-8">
       <ScrollEffects />
       <NavOrigin />
 
       <header
-        className="rise flex h-16 items-center justify-between md:h-20"
+        className="rise flex h-20 items-center justify-between"
         data-reveal
       >
         <Link
           href="/"
           transitionTypes={["nav-back"]}
-          className="label text-fg transition-colors hover:text-accent"
+          className="label inline-block origin-left text-fg transition-[color,transform] duration-300 ease-[var(--ease-out)] hover:scale-105 hover:text-accent"
         >
           ← {site.name}
         </Link>
-        <ThemeToggle />
       </header>
+      <SiteDock current="about" />
 
       <main className="flex-1">
         <section className="grid gap-8 pt-10 pb-12 md:pt-16 md:pb-16 lg:grid-cols-12">
@@ -67,7 +67,7 @@ export default function About() {
         <Link
           href="/"
           transitionTypes={["nav-back"]}
-          className="label text-fg transition-colors hover:text-accent"
+          className="label inline-block origin-left text-fg transition-[color,transform] duration-300 ease-[var(--ease-out)] hover:scale-105 hover:text-accent"
         >
           ← Back
         </Link>

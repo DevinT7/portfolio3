@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { CopyEmail } from "@/components/CopyEmail";
 import { ScrollEffects } from "@/components/ScrollEffects";
 import { HeroScroll } from "@/components/HeroScroll";
@@ -7,8 +6,6 @@ import { Ski, SkiButton } from "@/components/Ski";
 import { F1, F1Button } from "@/components/F1";
 import { Ask } from "@/components/Ask";
 import { PageTransition } from "@/components/PageTransition";
-import { ResumeViewer } from "@/components/ResumeViewer";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { GithubActivity } from "@/components/GithubActivity";
 import { LapRail } from "@/components/LapRail";
 import { Wipe } from "@/components/Wipe";
@@ -17,7 +14,7 @@ import { Thumb } from "@/components/Thumb";
 import { Intro } from "@/components/Intro";
 import { NavOrigin } from "@/components/NavOrigin";
 import { Tilt } from "@/components/ui/tilt";
-import { Dock, DockItem, dockBtn, IconFile, IconGithub, IconLinkedin, IconMail, IconTheme, IconUser } from "@/components/Dock";
+import { SiteDock } from "@/components/SiteDock";
 import { site } from "@/content/site";
 import { findMedia } from "@/lib/media";
 
@@ -29,7 +26,6 @@ const facts = [
   ["Now", site.now],
   ["Before", site.before],
 ];
-const external = site.links;
 
 export default function Home() {
   const withMedia = <T extends { id: string }>(list: T[], offset: number) =>
@@ -53,35 +49,7 @@ export default function Home() {
 
         <div className="h-20" />
 
-        <Dock>
-          <DockItem label="About">
-            <Link href="/about" transitionTypes={["nav-forward"]} aria-label="About" className={dockBtn}>
-              <IconUser />
-            </Link>
-          </DockItem>
-          <DockItem label="Email">
-            <a href={`mailto:${site.email}`} aria-label="Email" className={dockBtn}>
-              <IconMail />
-            </a>
-          </DockItem>
-          {external.map((l) => (
-            <DockItem key={l.label} label={l.label}>
-              <a href={l.href} target="_blank" rel="noopener" aria-label={l.label} className={dockBtn}>
-                {l.label === "GitHub" ? <IconGithub /> : <IconLinkedin />}
-              </a>
-            </DockItem>
-          ))}
-          <DockItem label="Résumé">
-            <ResumeViewer href={site.resume} filename="Devin-Thenuwara-Resume.pdf" className={dockBtn}>
-              <IconFile />
-            </ResumeViewer>
-          </DockItem>
-          <DockItem label="Theme">
-            <ThemeToggle className={dockBtn}>
-              <IconTheme />
-            </ThemeToggle>
-          </DockItem>
-        </Dock>
+        <SiteDock current="home" />
 
         <main className="flex-1">
           <section className="grid gap-8 pt-8 pb-10 md:pt-12 md:pb-12 lg:grid-cols-12 lg:items-stretch">
