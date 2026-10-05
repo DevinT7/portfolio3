@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Magnetic } from "@/components/ui/magnetic";
+import { Loader } from "@/components/ui/loader";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -80,13 +82,15 @@ export function Ask() {
 
   return (
     <>
+    <div className={`fixed right-4 bottom-4 z-40 transition-[opacity,scale] duration-300 ease-[var(--ease-out)] sm:right-6 sm:bottom-6 ${open ? "pointer-events-none scale-90 opacity-0" : ""}`}>
+      <Magnetic intensity={0.3} range={120}>
     <button
       type="button"
       onClick={() => setOpen(true)}
       aria-label="Ask me anything"
       aria-hidden={open}
       tabIndex={open ? -1 : 0}
-      className={`group fixed right-4 bottom-4 z-40 grid size-14 place-items-center rounded-full bg-fg text-bg shadow-lg transition-[opacity,scale,background-color] duration-300 ease-[var(--ease-out)] hover:bg-accent hover:scale-105 sm:right-6 sm:bottom-6 ${open ? "pointer-events-none scale-90 opacity-0" : ""}`}
+      className={`group relative grid size-14 place-items-center rounded-full bg-fg text-bg shadow-lg transition-[background-color,scale] duration-300 ease-[var(--ease-out)] hover:bg-accent hover:scale-105`}
     >
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
         <path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z" />
@@ -95,6 +99,8 @@ export function Ask() {
         Ask me
       </span>
     </button>
+      </Magnetic>
+    </div>
     <div
       role="dialog"
       aria-label="Ask Devin"
@@ -125,12 +131,12 @@ export function Ask() {
           </div>
         )}
         {msgs.map((m, i) => (
-          <p
+          <div
             key={i}
             className={m.role === "user" ? "ml-10 rounded-2xl bg-fg px-3.5 py-2 text-sm text-bg" : "mr-6 text-[0.95rem] leading-relaxed whitespace-pre-wrap"}
           >
-            {m.content || <span className="label">…</span>}
-          </p>
+            {m.content || <Loader variant="typing" size="sm" className="py-1.5" />}
+          </div>
         ))}
       </div>
 

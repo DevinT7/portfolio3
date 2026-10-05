@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import type { ReactNode } from "react";
 
 /**
  * The Résumé link in the header. Opens a preview of the PDF in a modal, with Download and Open
@@ -12,9 +13,13 @@ import { createPortal } from "react-dom";
 export function ResumeViewer({
   href,
   filename,
+  className = "label text-fg transition-colors hover:text-accent",
+  children = "Résumé",
 }: {
   href: string;
   filename: string;
+  className?: string;
+  children?: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false); // portal exists once the button has been used
@@ -102,9 +107,10 @@ export function ResumeViewer({
           requestAnimationFrame(() => setOpen(true));
         }}
         aria-haspopup="dialog"
-        className="label text-fg transition-colors hover:text-accent"
+        aria-label="Résumé"
+        className={className}
       >
-        Résumé
+        {children}
       </button>
 
       {mounted &&

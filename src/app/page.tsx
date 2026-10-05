@@ -16,6 +16,8 @@ import { EntryList } from "@/components/EntryList";
 import { Thumb } from "@/components/Thumb";
 import { Intro } from "@/components/Intro";
 import { NavOrigin } from "@/components/NavOrigin";
+import { Tilt } from "@/components/ui/tilt";
+import { Dock, DockItem, dockBtn, IconFile, IconGithub, IconLinkedin, IconMail, IconTheme, IconUser } from "@/components/Dock";
 import { site } from "@/content/site";
 import { findMedia } from "@/lib/media";
 
@@ -40,7 +42,7 @@ export default function Home() {
   return (
     <>
       <PageTransition>
-      <div id="page" className="mx-auto flex min-h-dvh max-w-[1240px] flex-col px-4 md:px-8">
+      <div id="page" className="relative mx-auto flex min-h-dvh max-w-[1240px] flex-col px-4 md:px-8">
         <a href="#work-label" className="label fixed top-2 left-2 z-[70] -translate-y-16 bg-fg px-3 py-2 !text-bg focus:translate-y-0">
           Skip to work
         </a>
@@ -49,36 +51,37 @@ export default function Home() {
         <NavOrigin />
         <Intro name={site.name} />
 
-        <header className="rise flex h-16 items-center justify-end md:h-20 md:justify-between" data-reveal>
-          <span />
-          <nav aria-label="Links">
-            <ul className="flex items-baseline gap-4 md:gap-6">
-              <li>
-                <Link href="/about" transitionTypes={["nav-forward"]} className="label text-fg transition-colors hover:text-accent">
-                  About
-                </Link>
-              </li>
-              <li>
-                <a href={`mailto:${site.email}`} className="label text-fg transition-colors hover:text-accent">
-                  Email
-                </a>
-              </li>
-              {external.map((l) => (
-                <li key={l.label}>
-                  <a href={l.href} target="_blank" rel="noopener" className="label text-fg transition-colors hover:text-accent">
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-              <li>
-                <ResumeViewer href={site.resume} filename="Devin-Thenuwara-Resume.pdf" />
-              </li>
-              <li>
-                <ThemeToggle />
-              </li>
-            </ul>
-          </nav>
-        </header>
+        <div className="h-20" />
+
+        <Dock>
+          <DockItem label="About">
+            <Link href="/about" transitionTypes={["nav-forward"]} aria-label="About" className={dockBtn}>
+              <IconUser />
+            </Link>
+          </DockItem>
+          <DockItem label="Email">
+            <a href={`mailto:${site.email}`} aria-label="Email" className={dockBtn}>
+              <IconMail />
+            </a>
+          </DockItem>
+          {external.map((l) => (
+            <DockItem key={l.label} label={l.label}>
+              <a href={l.href} target="_blank" rel="noopener" aria-label={l.label} className={dockBtn}>
+                {l.label === "GitHub" ? <IconGithub /> : <IconLinkedin />}
+              </a>
+            </DockItem>
+          ))}
+          <DockItem label="Résumé">
+            <ResumeViewer href={site.resume} filename="Devin-Thenuwara-Resume.pdf" className={dockBtn}>
+              <IconFile />
+            </ResumeViewer>
+          </DockItem>
+          <DockItem label="Theme">
+            <ThemeToggle className={dockBtn}>
+              <IconTheme />
+            </ThemeToggle>
+          </DockItem>
+        </Dock>
 
         <main className="flex-1">
           <section className="grid gap-8 pt-8 pb-10 md:pt-12 md:pb-12 lg:grid-cols-12 lg:items-stretch">
@@ -105,9 +108,11 @@ export default function Home() {
             </div>
 
             <figure className="hero-photo rise mx-auto w-full max-w-[280px] lg:col-span-3 lg:col-start-10 lg:mx-0 lg:max-w-none" data-reveal style={{ "--d": "400ms" } as React.CSSProperties}>
-              <div className="aspect-[4/5] overflow-hidden rounded-[20px]">
-                <Thumb found={photo} name="Photo" i={2} position="50% 85%" alt={site.name} />
-              </div>
+              <Tilt className="tilt" rotationFactor={6} springOptions={{ stiffness: 200, damping: 20 }}>
+                <div className="aspect-[4/5] overflow-hidden rounded-[20px]">
+                  <Thumb found={photo} name="Photo" i={2} position="50% 85%" alt={site.name} />
+                </div>
+              </Tilt>
             </figure>
           </section>
 

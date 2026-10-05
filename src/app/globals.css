@@ -186,3 +186,17 @@ html[data-nav] .rise { opacity: 1; transform: none; transition: none; }
 @keyframes cursor-in { from { scale: 0.6; opacity: 0; } }
 .cursor-in > * { animation: cursor-in 0.35s var(--ease-out) both; transform-origin: 0 0; }
 @media (prefers-reduced-motion: reduce) { .cursor-in > * { animation: none; } }
+
+/* Copy confirmation (CopyEmail.tsx): label blur-swap and a sweeping bar. */
+.copy-swap { transition: opacity 0.35s var(--ease-out), filter 0.35s var(--ease-out), scale 0.35s var(--ease-out); }
+.copy-swap.is-out { opacity: 0; filter: blur(4px); scale: 0.95; }
+.copy-sweep { transform-origin: left; animation: copy-sweep var(--hold, 1800ms) linear both; }
+@keyframes copy-sweep { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .copy-swap { transition: none; }
+  .copy-sweep { animation: none; transform: none; }
+}
+
+/* prompt-kit Loader "typing" (ui/loader.tsx), and Tilt (ui/tilt.tsx) switched off for reduced motion. */
+@keyframes typing { 0%, 100% { transform: translateY(0); opacity: 0.5; } 50% { transform: translateY(-3px); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .tilt { transform: none !important; } }
