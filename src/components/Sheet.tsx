@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import type { Entry } from "@/content/site";
 import type { Found } from "@/lib/media";
 import { Thumb } from "./Thumb";
@@ -11,12 +12,29 @@ type Props = {
 
 /**
  * Side panel for a project (#ibm, #convergent, …). Driven by the URL hash so
- * every panel has a shareable link and the back button closes it.
+ * every panel has a shareable link and the back button closes it. The panel opens out of the
+ * row that opened it and closes back into it: it is clipped to that row's band and the clip
+ * eases open (the Morphing Dialog idea from motion-primitives). `clip` is measured once on open
+ * and reused on close, so flipping between projects doesn't re-run the morph. Motion's shared
+ * `layoutId` was tried first but mis-measures a `fixed` panel on a scrolled page.
  */
+
+const PANEL_W = 544; // max-w-[34rem]
+const OPEN = "inset(0px 0px 0px 0px)";
+
+/** clip-path that cuts the (right-aligned, full-height) panel down to a row's rectangle. */
+function clipTo(id: string) {
+  const row = document.querySelector(`ul a[href="#${CSS.escape(id)}"]`)?.closest("li")?.getBoundingClientRect();
+  if (!row) return "inset(0px 0px 0px 100%)";
+  const left = window.innerWidth - Math.min(PANEL_W, window.innerWidth);
+  return `inset(${row.top}px ${window.innerWidth - row.right}px ${window.innerHeight - row.bottom}px ${row.left - left}px)`;
+}
 export function Sheet({ entries }: Props) {
   const [key, setKey] = useState<string | null>(null);
   const [shown, setShown] = useState<string | null>(null); // last opened, kept while closing
   const [zoom, setZoom] = useState<{ id: string; i: number } | null>(null); // screenshot open full size
+  const [clip, setClip] = useState(OPEN);
+  const wasOpen = useRef(false);
   const panel = useRef<HTMLDivElement>(null);
   const opener = useRef<HTMLElement | null>(null);
   const pushed = useRef(false); // opened by an in-page click, so Back is the right way to close
@@ -30,7 +48,9 @@ export function Sheet({ entries }: Props) {
         pushed.current = !!e;
         opener.current = document.activeElement as HTMLElement;
         setShown(next);
+        if (!wasOpen.current) setClip(clipTo(next));
       }
+      wasOpen.current = !!next;
       setKey(next);
     };
     sync();
@@ -110,19 +130,42 @@ export function Sheet({ entries }: Props) {
   }, [open, prev, next, go]);
 
   return (
+    <MotionConfig reducedMotion="user">
     <div className={`fixed inset-0 z-50 ${open ? "" : "pointer-events-none"}`} aria-hidden={!open}>
       <div
         onClick={close}
-        className={`absolute inset-0 bg-black/30 backdrop-blur-[2px] transition-opacity duration-500 ${open ? "opacity-100" : "opacity-0"}`}
+        className={`absolute inset-0 bg-black/30 backdrop-blur-[2px] transition-opacity ${open ? "opacity-100 duration-500" : "opacity-0 duration-700"}`}
       />
-      <div
-        ref={panel}
-        role="dialog"
-        aria-modal="true"
-        aria-label={w?.name}
-        tabIndex={-1}
-        className={`absolute inset-y-0 right-0 flex w-full max-w-[34rem] flex-col overflow-y-auto bg-bg outline-none transition-[translate,box-shadow] duration-600 ease-[var(--ease-out)] ${open ? "translate-x-0 shadow-2xl" : "translate-x-full shadow-none"}`}
-      >
+      <AnimatePresence>
+        {open && w && (
+          <motion.div
+            key="panel"
+            ref={panel}
+            initial={{ clipPath: clip }}
+            animate={{ clipPath: OPEN }}
+            exit={{
+              clipPath: clip,
+              opacity: 0,
+              // Close in two beats: the box eases back toward its row, then dissolves into it.
+              transition: {
+                clipPath: { duration: 0.7, ease: [0.65, 0, 0.35, 1] },
+                opacity: { duration: 0.3, delay: 0.4, ease: "easeIn" },
+              },
+            }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            role="dialog"
+            aria-modal="true"
+            aria-label={w.name}
+            tabIndex={-1}
+            className="absolute inset-y-0 right-0 w-full max-w-[34rem] overflow-y-auto bg-bg shadow-2xl outline-none"
+          >
+            {/* Contents wait for the box to mostly arrive, so they aren't stretched mid-morph. */}
+            <motion.div
+              className="flex min-h-full flex-col"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, transition: { delay: 0.25, duration: 0.3 } }}
+              exit={{ opacity: 0, transition: { duration: 0.2 } }}
+            >
         <div className="sticky top-0 z-10 flex h-16 items-center justify-between bg-bg px-6 md:h-20 md:px-8">
           <span className="label">{w && `${w.role} · ${w.when}`}</span>
           <button type="button" onClick={close} className="label -mr-3 h-11 px-3 text-fg hover:text-accent">
@@ -186,7 +229,10 @@ export function Sheet({ entries }: Props) {
           </article>
         )}
 
-      </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {zi !== null && (
         <div role="dialog" aria-modal="true" aria-label="Screenshot viewer" className="viewer-in absolute inset-0 z-10 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm" onClick={() => setZoom(null)}>
@@ -211,5 +257,6 @@ export function Sheet({ entries }: Props) {
         </div>
       )}
     </div>
+    </MotionConfig>
   );
 }

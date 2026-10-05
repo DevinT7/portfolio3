@@ -1,11 +1,14 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
+import { Magnetic } from "@/components/ui/magnetic";
+import { TextScramble } from "@/components/ui/text-scramble";
 
 /**
  * Top-right dock for the header links, after Watermelon's Dock: icons swell as the pointer
  * nears them and settle back on leave. Mouse only; touch gets plain buttons. Transform only, so
- * neighbours never move. The tooltip is each item's `label`.
+ * neighbours never move. Each icon also leans toward the pointer (Magnetic), and the tooltip
+ * scrambles in letter by letter (Text Scramble), both from motion-primitives.
  */
 export function Dock({ children }: { children: ReactNode }) {
   const list = useRef<HTMLUListElement>(null);
@@ -38,14 +41,21 @@ export function Dock({ children }: { children: ReactNode }) {
 
 /** Wrap a link or button. Give it `dockBtn` and an aria-label. */
 export function DockItem({ label, children }: { label: string; children: ReactNode }) {
+  const [hot, setHot] = useState(false);
   return (
-    <li data-dock className="group relative">
-      <div className="origin-top scale-[var(--s,1)] transition-[scale] duration-200 ease-[var(--ease-out)]">{children}</div>
+    <li data-dock className="group relative" onPointerEnter={() => setHot(true)} onPointerLeave={() => setHot(false)} onFocus={() => setHot(true)} onBlur={() => setHot(false)}>
+      <div className="origin-top scale-[var(--s,1)] transition-[scale] duration-200 ease-[var(--ease-out)]">
+        <Magnetic intensity={0.35} range={64} springOptions={{ stiffness: 180, damping: 14, mass: 0.15 }}>
+          {children}
+        </Magnetic>
+      </div>
       <span
         aria-hidden
         className="label pointer-events-none absolute top-full left-1/2 mt-3 -translate-x-1/2 -translate-y-1 rounded-md bg-fg px-2 py-1 whitespace-nowrap !text-bg opacity-0 transition-[opacity,translate] duration-200 group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:translate-y-0 group-hover:opacity-100"
       >
-        {label}
+        <TextScramble as="span" trigger={hot} duration={0.45} speed={0.03} characterSet="ABCDEFGHIJKLMNOPQRSTUVWXYZ" className="!text-bg">
+          {label}
+        </TextScramble>
       </span>
     </li>
   );

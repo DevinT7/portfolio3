@@ -7,7 +7,7 @@ import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import type { Entry } from "@/content/site";
 
 /**
- * A list of entries (work or leadership). Hovering a row dims the others and nudges its name. Clicking opens the project panel
+ * A list of entries (work or leadership). Names are solid black; hovering a row softens the others and nudges its name. Clicking opens the project panel
  * (see <Sheet />) via the URL hash.
  */
 const SIZES = {
@@ -45,7 +45,7 @@ export function EntryList({
     return () => mm.revert();
   }, []);
 
-  // Rows brighten as they cross the middle of the screen, then dim. The first time a row gets there, its number counts up to the value.
+  // The first time a row reaches the middle of the screen, its number counts up to the value. (Names stay solid; only hover dims the other rows.)
   useEffect(() => {
     const ul = list.current;
     if (!ul) return;
@@ -54,18 +54,6 @@ export function EntryList({
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       const restore: (() => void)[] = [];
       ul.querySelectorAll<HTMLElement>("li").forEach((li) => {
-        const name = li.querySelector<HTMLElement>(".spot");
-        if (name) {
-          gsap
-            .timeline({
-              defaults: { ease: "none" },
-              scrollTrigger: { trigger: li, start: "top 92%", end: "bottom 8%", scrub: 0.5 },
-            })
-            .fromTo(name, { opacity: 0.22 }, { opacity: 1, duration: 0.38 })
-            .to(name, { duration: 0.24 })
-            .to(name, { opacity: 0.22, duration: 0.38 });
-        }
-
         const stat = li.querySelector<HTMLElement>("[data-stat]");
         const text = stat?.textContent ?? "";
         const m = text.match(/\d+(\.\d+)?/);
@@ -109,7 +97,7 @@ export function EntryList({
               className={`group grid grid-cols-[1fr_auto] items-baseline gap-x-6 py-4 transition-opacity duration-500 outline-offset-4 md:grid-cols-[4rem_1fr_1fr_9rem] ${SIZES[size].pad} ${dim ? "opacity-30" : ""}`}
             >
               <span className="label hidden md:block">{w.year}</span>
-              <span className={`spot display ${SIZES[size].name} transition-transform duration-500 ease-[var(--ease-out)] group-hover:translate-x-3 group-focus-visible:translate-x-3`}>
+              <span className={`display ${SIZES[size].name} transition-transform duration-500 ease-[var(--ease-out)] group-hover:translate-x-3 group-focus-visible:translate-x-3`}>
                 {w.name}
               </span>
               <span className="col-start-1 row-start-2 text-muted md:col-start-auto md:row-start-auto">{w.what}</span>
