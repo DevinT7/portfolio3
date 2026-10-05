@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
+import { Spotlight } from "@/components/ui/spotlight";
 import type { Entry } from "@/content/site";
 
 /**
@@ -94,8 +95,9 @@ export function EntryList({
               onFocus={(e) => e.currentTarget.matches(":focus-visible") && setActive(i)}
               onBlur={() => setActive(null)}
               onClick={() => setActive(null)}
-              className={`group grid grid-cols-[1fr_auto] items-baseline gap-x-6 py-4 transition-opacity duration-500 outline-offset-4 md:grid-cols-[4rem_1fr_1fr_9rem] ${SIZES[size].pad} ${dim ? "opacity-30" : ""}`}
+              className={`group isolate grid grid-cols-[1fr_auto] items-baseline gap-x-6 py-4 transition-opacity duration-500 outline-offset-4 md:grid-cols-[4rem_1fr_1fr_9rem] ${SIZES[size].pad} ${dim ? "opacity-30" : ""}`}
             >
+              <Spotlight size={360} className="-z-10" />
               <span className="label hidden md:block">{w.year}</span>
               <span className={`display ${SIZES[size].name} transition-transform duration-500 ease-[var(--ease-out)] group-hover:translate-x-3 group-focus-visible:translate-x-3`}>
                 {w.name}

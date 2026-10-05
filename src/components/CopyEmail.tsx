@@ -3,8 +3,8 @@
 import { useRef, useState } from "react";
 
 /**
- * Click to copy. After Watermelon's Inline Toast: the label blur-swaps to a checkmark and an
- * accent bar sweeps under the address for the length of the confirmation.
+ * Click to copy. Hover pops the whole row slightly (the label scales with the address so they never overlap). After Watermelon's Inline Toast: on click the
+ * label blur-swaps to a checkmark and an accent bar sweeps under the address.
  */
 const HOLD = 1800;
 
@@ -28,12 +28,10 @@ export function CopyEmail({ email }: { email: string }) {
     <button
       type="button"
       onClick={copy}
-      className="group inline-flex items-baseline gap-3 text-left text-[clamp(1.25rem,2.6vw,2rem)] font-medium tracking-tight"
+      className="group inline-flex origin-left items-baseline gap-3 text-left text-[clamp(1.25rem,2.6vw,2rem)] font-medium tracking-tight transition-transform duration-300 ease-[var(--ease-out)] hover:scale-[1.04] focus-visible:scale-[1.04]"
     >
       <span className="relative">
-        <span className="bg-[linear-gradient(var(--accent),var(--accent))] bg-[length:0%_0.12em] bg-left-bottom bg-no-repeat transition-[background-size] duration-500 ease-[var(--ease-out)] group-hover:bg-[length:100%_0.12em]">
-          {email}
-        </span>
+        {email}
         {copied && <span aria-hidden className="copy-sweep absolute inset-x-0 -bottom-1 h-0.5 bg-accent" style={{ "--hold": `${HOLD}ms` } as React.CSSProperties} />}
       </span>
       <span className="label relative inline-grid" aria-live="polite">
