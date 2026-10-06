@@ -19,6 +19,9 @@ type Props = {
  * `layoutId` was tried first but mis-measures a `fixed` panel on a scrolled page.
  */
 
+/** "slide": panel glides in from the right and back out the same way. "morph": grows out of its row. */
+const VARIANT: "slide" | "morph" = "slide";
+
 const PANEL_W = 544; // max-w-[34rem]
 const OPEN = "inset(0px 0px 0px 0px)";
 
@@ -140,19 +143,28 @@ export function Sheet({ entries }: Props) {
           <motion.div
             key="panel"
             ref={panel}
-            initial={{ clipPath: clip }}
-            animate={{ clipPath: OPEN }}
-            exit={{
-              clipPath: clip,
-              opacity: 0,
-              // Mirror of the open: contents stay put while the clip closes onto the row
-              // (ease reversed), and the whole panel fades over the last stretch.
-              transition: {
-                clipPath: { duration: 0.55, ease: [0.7, 0, 0.84, 0] },
-                opacity: { duration: 0.25, delay: 0.3, ease: "easeIn" },
-              },
-            }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            {...(VARIANT === "slide"
+              ? {
+                  initial: { x: "100%" },
+                  animate: { x: 0 },
+                  exit: { x: "100%" },
+                  transition: { type: "spring", stiffness: 380, damping: 40, mass: 1 },
+                }
+              : {
+                  initial: { clipPath: clip },
+                  animate: { clipPath: OPEN },
+                  exit: {
+                    clipPath: clip,
+                    opacity: 0,
+                    // Mirror of the open: contents stay put while the clip closes onto the row
+                    // (ease reversed), and the whole panel fades over the last stretch.
+                    transition: {
+                      clipPath: { duration: 0.55, ease: [0.7, 0, 0.84, 0] },
+                      opacity: { duration: 0.25, delay: 0.3, ease: "easeIn" },
+                    },
+                  },
+                  transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+                })}
             role="dialog"
             aria-modal="true"
             aria-label={w.name}
@@ -162,7 +174,7 @@ export function Sheet({ entries }: Props) {
             {/* Contents wait for the box to mostly arrive, so they aren't stretched mid-morph. */}
             <motion.div
               className="flex min-h-full flex-col"
-              initial={{ opacity: 0 }}
+              initial={{ opacity: VARIANT === "morph" ? 0 : 1 }}
               animate={{ opacity: 1, transition: { delay: 0.25, duration: 0.3 } }}
             >
         <div className="sticky top-0 z-10 flex h-16 items-center justify-between bg-bg px-6 md:h-20 md:px-8">
