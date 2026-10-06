@@ -34,7 +34,6 @@ export function Sheet({ entries }: Props) {
   const [shown, setShown] = useState<string | null>(null); // last opened, kept while closing
   const [zoom, setZoom] = useState<{ id: string; i: number } | null>(null); // screenshot open full size
   const [clip, setClip] = useState(OPEN);
-  const wasOpen = useRef(false);
   const panel = useRef<HTMLDivElement>(null);
   const opener = useRef<HTMLElement | null>(null);
   const pushed = useRef(false); // opened by an in-page click, so Back is the right way to close
@@ -48,9 +47,9 @@ export function Sheet({ entries }: Props) {
         pushed.current = !!e;
         opener.current = document.activeElement as HTMLElement;
         setShown(next);
-        if (!wasOpen.current) setClip(clipTo(next));
+        // Re-measure for whichever project is showing, so close returns to *its* row.
+        setClip(clipTo(next));
       }
-      wasOpen.current = !!next;
       setKey(next);
     };
     sync();
@@ -134,7 +133,7 @@ export function Sheet({ entries }: Props) {
     <div className={`fixed inset-0 z-50 ${open ? "" : "pointer-events-none"}`} aria-hidden={!open}>
       <div
         onClick={close}
-        className={`absolute inset-0 bg-black/30 backdrop-blur-[2px] transition-opacity ${open ? "opacity-100 duration-500" : "opacity-0 duration-700"}`}
+        className={`absolute inset-0 bg-black/30 backdrop-blur-[2px] transition-opacity ${open ? "opacity-100 duration-500" : "opacity-0 duration-500"}`}
       />
       <AnimatePresence>
         {open && w && (
@@ -146,10 +145,11 @@ export function Sheet({ entries }: Props) {
             exit={{
               clipPath: clip,
               opacity: 0,
-              // Close in two beats: the box eases back toward its row, then dissolves into it.
+              // Mirror of the open: contents stay put while the clip closes onto the row
+              // (ease reversed), and the whole panel fades over the last stretch.
               transition: {
-                clipPath: { duration: 0.7, ease: [0.65, 0, 0.35, 1] },
-                opacity: { duration: 0.3, delay: 0.4, ease: "easeIn" },
+                clipPath: { duration: 0.55, ease: [0.7, 0, 0.84, 0] },
+                opacity: { duration: 0.25, delay: 0.3, ease: "easeIn" },
               },
             }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
@@ -164,7 +164,6 @@ export function Sheet({ entries }: Props) {
               className="flex min-h-full flex-col"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1, transition: { delay: 0.25, duration: 0.3 } }}
-              exit={{ opacity: 0, transition: { duration: 0.2 } }}
             >
         <div className="sticky top-0 z-10 flex h-16 items-center justify-between bg-bg px-6 md:h-20 md:px-8">
           <span className="label">{w && `${w.role} · ${w.when}`}</span>
