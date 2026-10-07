@@ -126,9 +126,11 @@ export default function Home() {
 
         <footer className="rise flex flex-col gap-6 py-16 md:flex-row md:items-end md:justify-between md:py-24" data-reveal>
           <CopyEmail email={site.email} />
-          <div className="flex items-center gap-6">
-            <SkiButton />
-            <F1Button />
+          <div className="flex flex-col gap-1 md:items-end">
+            <div className="flex items-center gap-6">
+              <SkiButton />
+              <F1Button />
+            </div>
             <p className="label">© {new Date().getFullYear()}</p>
           </div>
         </footer>
