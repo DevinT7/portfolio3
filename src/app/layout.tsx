@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, IBM_Plex_Mono, Source_Serif_4 } from "next/font/google";
+import { Schibsted_Grotesk, IBM_Plex_Mono, Source_Serif_4 } from "next/font/google";
 import { Presence } from "@/components/Presence";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const grotesk = Schibsted_Grotesk({
+  variable: "--font-grotesk",
   subsets: ["latin"],
   display: "swap",
 });
@@ -32,8 +32,8 @@ try{
   d.setAttribute('data-theme',t);
 }catch(e){}
 try{
-  intro=!sessionStorage.getItem('intro')&&!location.hash&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
-  sessionStorage.setItem('intro','1');
+  intro=!localStorage.getItem('intro')&&!location.hash&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
+  localStorage.setItem('intro','1');
 }catch(e){}
 if(intro)d.classList.add('intro');
 setTimeout(function(){
@@ -64,12 +64,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${inter.variable} ${sourceSerif.variable} ${plexMono.variable} antialiased`}
+      className={`${grotesk.variable} ${sourceSerif.variable} ${plexMono.variable} antialiased`}
     >
       <head>
         {/* Runs before first paint:
             - `js` opts into reveal animations (nothing is hidden without JS)
-            - `intro` plays the name intro on the first visit of a session, unless the visitor
+            - `intro` plays the name intro on a visitor's first visit ever, unless the visitor
               prefers reduced motion or arrived on a deep link like /#ibm
             - failsafe: if the app is slow to hydrate, show everything anyway */}
         <script dangerouslySetInnerHTML={{ __html: BOOT }} />

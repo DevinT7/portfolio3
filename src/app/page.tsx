@@ -1,3 +1,4 @@
+import { LocalTime } from "@/components/LocalTime";
 import { CopyEmail } from "@/components/CopyEmail";
 import { ScrollEffects } from "@/components/ScrollEffects";
 import { HeroScroll } from "@/components/HeroScroll";
@@ -18,13 +19,17 @@ import { SiteDock } from "@/components/SiteDock";
 import { site } from "@/content/site";
 import { findMedia } from "@/lib/media";
 
-const facts = [
+const facts: [string, React.ReactNode][] = [
   ["Role", site.role],
   ["School", site.school],
-  ["Based", site.base],
-  ["Status", site.status],
-  ["Now", site.now],
-  ["Before", site.before],
+  ["Austin", <LocalTime key="t" />],
+  [
+    "Status",
+    <span key="s" className="inline-flex items-center gap-2">
+      <span aria-hidden className="size-2 rounded-full bg-accent" />
+      {site.status}
+    </span>,
+  ],
 ];
 
 export default function Home() {
@@ -67,7 +72,7 @@ export default function Home() {
 
               <dl className="hero-facts grid grid-cols-1 border-t border-line sm:grid-cols-2">
                 {facts.map(([k, v], i) => (
-                  <div key={k} className={`rise items-baseline gap-6 border-b border-line py-3 ${i >= 4 ? "hidden sm:flex sm:border-b-0" : i === 3 ? "flex border-b-0 sm:border-b" : "flex"}`} data-reveal style={{ "--i": i, "--d": "400ms" } as React.CSSProperties}>
+                  <div key={k} className="rise flex items-baseline gap-6 border-b border-line py-3" data-reveal style={{ "--i": i, "--d": "400ms" } as React.CSSProperties}>
                     <dt className="label w-16 shrink-0">{k}</dt>
                     <dd className="text-lg">{v}</dd>
                   </div>

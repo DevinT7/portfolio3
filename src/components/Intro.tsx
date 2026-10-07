@@ -7,7 +7,7 @@ const HOLD_MS = 1250; // orange screen + name wipe
 const LIFT_MS = 900;
 
 /**
- * First-visit intro. The inline script in layout.tsx decides whether it runs and adds
+ * First-visit intro (once ever per browser, via localStorage). The inline script in layout.tsx decides whether it runs and adds
  * `html.intro` before first paint, so the curtain is up before anything else shows.
  * The name wipes in, then the curtain lifts and the homepage reveals start underneath.
  * Any click, key, scroll or touch lifts it early.
