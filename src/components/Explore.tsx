@@ -40,12 +40,12 @@ export function Explore({ photos, places }: { photos: Photo[]; places: Place[] }
           { list: portraits, cols: portraits.length % 4 === 0 ? "sm:grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-3", shape: "aspect-[3/4]" },
           { list: photos.filter((p) => p.h <= p.w), cols: "sm:grid-cols-2 lg:grid-cols-3", shape: "aspect-[4/3]" },
         ].map(({ list, cols, shape }) => (
-          <ul key={cols} className={`grid grid-cols-1 gap-4 ${cols}`}>
+          <ul key={cols} className={`grid grid-cols-2 gap-x-3 gap-y-4 md:gap-4 ${cols}`}>
             {list.map((p, i) => {
               // A lone last photo on the desktop row becomes a wide banner instead of leaving a gap.
               const wide = cols.includes("lg:grid-cols-3") && list.length % 3 === 1 && i === list.length - 1;
               return (
-                <li key={p.src} className={`rise ${wide ? "lg:col-span-3" : ""}`} data-reveal style={at(i)}>
+                <li key={p.src} className={`rise ${wide ? "lg:col-span-3" : ""} ${list.length % 2 === 1 && i === list.length - 1 ? "col-span-2 sm:col-span-1" : ""}`} data-reveal style={at(i)}>
                   <figure>
                     <Tilt className="tilt" rotationFactor={5} springOptions={{ stiffness: 220, damping: 22 }}>
                     <button
@@ -62,7 +62,7 @@ export function Explore({ photos, places }: { photos: Photo[]; places: Place[] }
                         height={p.h}
                         loading="lazy"
                         data-photo={p.src}
-                        className={`w-full rounded-[20px] bg-line object-cover ${wide ? "lg:aspect-[21/9]" : shape}`}
+                        className={`w-full rounded-[20px] bg-line object-cover ${wide ? "lg:aspect-[21/9]" : shape} ${list.length % 2 === 1 && i === list.length - 1 ? "max-sm:aspect-[16/9]" : ""}`}
                       />
                       <figcaption className="label mt-2 transition-colors group-hover:text-accent">
                         {p.caption}

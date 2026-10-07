@@ -25,12 +25,12 @@ export function Dock({ children }: { children: ReactNode }) {
   };
 
   return (
-    <nav aria-label="Links" className="absolute top-4 right-4 z-40 md:top-6 md:right-8">
+    <nav aria-label="Links" className="absolute inset-x-4 top-4 z-40 md:inset-x-auto md:top-6 md:right-8">
       <ul
         ref={list}
         onPointerMove={(e) => e.pointerType === "mouse" && swell(e.clientX)}
         onPointerLeave={() => swell(null)}
-        className="flex items-start gap-3 rounded-3xl border border-line bg-bg/85 px-3 py-2 shadow-sm backdrop-blur-md"
+        className="flex items-start justify-between gap-2 rounded-3xl md:justify-start md:gap-3 border border-line bg-bg/85 px-3 py-2 shadow-sm backdrop-blur-md"
       >
         {children}
       </ul>

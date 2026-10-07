@@ -28,7 +28,7 @@ export default function About() {
         <Link
           href="/"
           transitionTypes={["nav-back"]}
-          className="label inline-block origin-left text-fg transition-[color,transform] duration-300 ease-[var(--ease-out)] hover:scale-105 hover:text-accent"
+          className="label hidden origin-left text-fg transition-[color,transform] duration-300 ease-[var(--ease-out)] hover:scale-105 hover:text-accent md:inline-block"
         >
           ← {site.name}
         </Link>
