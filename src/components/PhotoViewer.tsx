@@ -84,17 +84,19 @@ export function PhotoViewer({
       setTimeout(onClose, 250);
       return;
     }
-    // Shrink toward the thumbnail, then dissolve into it over the last part.
-    const a = el.animate(
-      [
-        { ...REST, opacity: 1 },
-        { ...pose(from, to), opacity: 1, offset: 0.7 },
-        { ...pose(from, to), opacity: 0 },
-      ],
-      { duration: 650, easing: "cubic-bezier(0.65, 0, 0.35, 1)", fill: "forwards" },
-    );
+    // Shrink onto the thumbnail; it stays hidden until we unmount, so it only reappears on landing.
+    const a = el.animate([REST, pose(from, to)], { duration: 650, easing: EASE, fill: "forwards" });
     a.finished.then(onClose, onClose);
   }, [index, photos, onClose]);
+
+  // Hide the grid thumbnail of the photo being viewed, so it isn't visible underneath until we land.
+  useEffect(() => {
+    const t = document.querySelector<HTMLElement>(`img[data-photo="${CSS.escape(p.src)}"]`);
+    if (t) t.style.visibility = "hidden";
+    return () => {
+      if (t) t.style.visibility = "";
+    };
+  }, [p.src]);
 
   useEffect(() => {
     root.current?.focus({ preventScroll: true });
