@@ -8,9 +8,6 @@ import { Tilt } from "@/components/ui/tilt";
 type Place = { name: string; lat: number; lon: number };
 type Photo = { src: string; alt: string; caption: string; place: string; w: number; h: number; date?: string };
 
-const coords = (p?: Place) =>
-  p ? `${Math.abs(p.lat).toFixed(2)}°${p.lat >= 0 ? "N" : "S"} ${Math.abs(p.lon).toFixed(2)}°${p.lon >= 0 ? "E" : "W"}` : "";
-
 const at = (i: number) => ({ "--i": i }) as React.CSSProperties;
 
 /**
@@ -102,9 +99,7 @@ export function Explore({ photos, places }: { photos: Photo[]; places: Place[] }
                       />
                       <figcaption className="label mt-2 flex flex-wrap justify-between gap-x-3 transition-colors group-hover:text-accent">
                         <span>{p.caption}</span>
-                        <span className="tabular-nums opacity-70">
-                          {[coords(places.find((pl) => pl.name === p.place)), p.date].filter(Boolean).join(" · ")}
-                        </span>
+                        {p.date && <span className="tabular-nums opacity-70">{p.date}</span>}
                       </figcaption>
                     </button>
                     </Tilt>
