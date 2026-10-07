@@ -6,7 +6,7 @@ import { PhotoViewer } from "./PhotoViewer";
 import { Tilt } from "@/components/ui/tilt";
 
 type Place = { name: string; lat: number; lon: number };
-type Photo = { src: string; alt: string; caption: string; place: string; w: number; h: number };
+type Photo = { src: string; alt: string; caption: string; place: string; w: number; h: number; date?: string };
 
 const at = (i: number) => ({ "--i": i }) as React.CSSProperties;
 
@@ -33,66 +33,7 @@ export function Explore({ photos, places }: { photos: Photo[]; places: Place[] }
 
   return (
     <>
-      <section aria-label="Photos" className="flex flex-col gap-4">
-        {/* Portraits and landscapes each get one shared shape so rows line up. */}
-        {[
-          // Four portraits sit in a 2x2 / 4-up grid; otherwise three across.
-          { list: portraits, cols: portraits.length % 4 === 0 ? "sm:grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-3", shape: "aspect-[3/4]" },
-          { list: photos.filter((p) => p.h <= p.w), cols: "sm:grid-cols-2 lg:grid-cols-3", shape: "aspect-[4/3]" },
-        ].map(({ list, cols, shape }) => (
-          <ul key={cols} className={`grid grid-cols-2 gap-x-3 gap-y-4 md:gap-4 ${cols}`}>
-            {list.map((p, i) => {
-              // A lone last photo on the desktop row becomes a wide banner instead of leaving a gap.
-              const wide = cols.includes("lg:grid-cols-3") && list.length % 3 === 1 && i === list.length - 1;
-              return (
-                <li key={p.src} className={`rise ${wide ? "lg:col-span-3" : ""} ${list.length % 2 === 1 && i === list.length - 1 ? "col-span-2 sm:col-span-1" : ""}`} data-reveal style={at(i)}>
-                  <figure>
-                    <Tilt className="tilt" rotationFactor={5} springOptions={{ stiffness: 220, damping: 22 }}>
-                    <button
-                      type="button"
-                      onClick={() => setViewing(photos.indexOf(p))}
-                      aria-label={`${p.caption}: view larger`}
-                      className="group block w-full cursor-zoom-in rounded-[20px] text-left outline-offset-4"
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={p.src}
-                        alt={p.alt}
-                        width={p.w}
-                        height={p.h}
-                        loading="lazy"
-                        data-photo={p.src}
-                        className={`w-full rounded-[20px] bg-line object-cover ${wide ? "lg:aspect-[21/9]" : shape} ${list.length % 2 === 1 && i === list.length - 1 ? "max-sm:aspect-[16/9]" : ""}`}
-                      />
-                      <figcaption className="label mt-2 transition-colors group-hover:text-accent">
-                        {p.caption}
-                      </figcaption>
-                    </button>
-                    </Tilt>
-                  </figure>
-                </li>
-              );
-            })}
-          </ul>
-        ))}
-      </section>
-
-      {viewing !== null && (
-        <PhotoViewer
-          photos={photos}
-          index={viewing}
-          canMap={(p) => places.some((pl) => pl.name === p.place)}
-          onNav={setViewing}
-          onClose={() => setViewing(null)}
-          onMap={(p) => {
-            setViewing(null);
-            showOnMap(p);
-          }}
-        />
-      )}
-
-
-      <section aria-labelledby="map-label" className="mt-16 md:mt-24">
+      <section aria-labelledby="map-label" className="mb-16 md:mb-24">
         <h2 id="map-label" className="label rise mb-3" data-reveal>
           Been to · {places.length}
         </h2>
@@ -124,6 +65,67 @@ export function Explore({ photos, places }: { photos: Photo[]; places: Place[] }
           </div>
         </div>
       </section>
+
+      <section aria-label="Photos" className="flex flex-col gap-4">
+        {/* Portraits and landscapes each get one shared shape so rows line up. */}
+        {[
+          // Four portraits sit in a 2x2 / 4-up grid; otherwise three across.
+          { list: portraits, cols: portraits.length % 4 === 0 ? "sm:grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-3", shape: "aspect-[3/4]" },
+          { list: photos.filter((p) => p.h <= p.w), cols: "sm:grid-cols-2 lg:grid-cols-3", shape: "aspect-[4/3]" },
+        ].map(({ list, cols, shape }) => (
+          <ul key={cols} className={`grid grid-cols-2 gap-x-3 gap-y-4 md:gap-4 ${cols}`}>
+            {list.map((p, i) => {
+              // A lone last photo on the desktop row becomes a wide banner instead of leaving a gap.
+              const wide = cols.includes("lg:grid-cols-3") && list.length % 3 === 1 && i === list.length - 1;
+              return (
+                <li key={p.src} className={`rise ${wide ? "lg:col-span-3" : ""} ${list.length % 2 === 1 && i === list.length - 1 ? "col-span-2 sm:col-span-1" : ""}`} data-reveal style={at(i)}>
+                  <figure>
+                    <Tilt className="tilt" rotationFactor={5} springOptions={{ stiffness: 220, damping: 22 }}>
+                    <button
+                      type="button"
+                      onClick={() => setViewing(photos.indexOf(p))}
+                      aria-label={`${p.caption}: view larger`}
+                      className="group block w-full cursor-zoom-in rounded-[20px] text-left outline-offset-4"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={p.src}
+                        alt={p.alt}
+                        width={p.w}
+                        height={p.h}
+                        loading="lazy"
+                        data-photo={p.src}
+                        className={`w-full rounded-[20px] bg-line object-cover ${wide ? "lg:aspect-[21/9]" : shape} ${list.length % 2 === 1 && i === list.length - 1 ? "max-sm:aspect-[16/9]" : ""}`}
+                      />
+                      <figcaption className="label mt-2 flex flex-wrap justify-between gap-x-3 transition-colors group-hover:text-accent">
+                        <span>{p.caption}</span>
+                        {p.date && <span className="tabular-nums opacity-70">{p.date}</span>}
+                      </figcaption>
+                    </button>
+                    </Tilt>
+                  </figure>
+                </li>
+              );
+            })}
+          </ul>
+        ))}
+      </section>
+
+      {viewing !== null && (
+        <PhotoViewer
+          photos={photos}
+          index={viewing}
+          canMap={(p) => places.some((pl) => pl.name === p.place)}
+          onNav={setViewing}
+          onClose={() => setViewing(null)}
+          onMap={(p) => {
+            setViewing(null);
+            showOnMap(p);
+          }}
+        />
+      )}
+
+
     </>
   );
 }
