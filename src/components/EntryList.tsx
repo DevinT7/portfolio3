@@ -98,12 +98,12 @@ export function EntryList({
               className={`group isolate grid grid-cols-[1fr_auto] items-baseline gap-x-6 py-4 transition-opacity duration-500 outline-offset-4 md:grid-cols-[4rem_1fr_1fr_9rem] ${SIZES[size].pad} ${dim ? "opacity-30" : ""}`}
             >
               <Spotlight size={360} className="-z-10" />
-              <span className="label hidden md:block">{w.year}</span>
+              <span className="label hidden tabular-nums md:block">{String(i + 1).padStart(2, "0")}</span>
               <span className={`display ${SIZES[size].name} transition-transform duration-500 ease-[var(--ease-out)] group-hover:translate-x-3 group-focus-visible:translate-x-3`}>
                 {w.name}
               </span>
               <span className="col-start-1 row-start-2 text-muted md:col-start-auto md:row-start-auto">{w.what}</span>
-              <span data-stat className="text-right font-mono text-sm">{w.stat}</span>
+              <span data-stat className="text-right font-mono text-sm tabular-nums">{w.stat}</span>
             </a>
           </li>
         );
