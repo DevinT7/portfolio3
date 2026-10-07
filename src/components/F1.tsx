@@ -225,7 +225,7 @@ export function F1Button() {
       onClick={() => window.dispatchEvent(new Event("f1:start"))}
       className="label inline-flex h-11 items-center gap-2 text-fg transition-colors hover:text-accent"
     >
-      Lights out <kbd className="rounded border border-line px-1.5 py-0.5 font-mono text-[0.65rem]">f1</kbd>
+      Lights out <kbd className="rounded border border-line px-1.5 py-0.5 font-mono text-[0.65rem] pointer-coarse:hidden">f1</kbd>
     </button>
   );
 }

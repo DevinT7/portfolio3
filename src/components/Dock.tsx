@@ -58,7 +58,7 @@ export function DockItem({ label, children }: { label: string; children: ReactNo
 }
 
 export const dockBtn =
-  "grid size-10 place-items-center rounded-xl bg-fg/5 text-fg transition-colors hover:bg-accent hover:text-bg";
+  "grid size-11 place-items-center md:size-10 rounded-xl bg-fg/5 text-fg transition-colors hover:bg-accent hover:text-bg";
 
 const svg = { width: 20, height: 20, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.6, strokeLinecap: "round", strokeLinejoin: "round", "aria-hidden": true } as const;
 

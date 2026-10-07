@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 /**
  * "Ski the page": a tiny skier carves down the site while it auto-scrolls. Steer with the
  * mouse, arrow keys or a finger; dodge the trees; reach the footer. Starts from the footer
- * button (a `ski:start` event) or the S key. Esc quits.
+ * button (a `ski:start` event) or typing "ski". Esc quits.
  */
 
 type Phase = "idle" | "run" | "crash" | "done";
@@ -333,13 +333,18 @@ export function Ski() {
     });
   }, []);
 
-  // Triggers: footer button event, S key; Esc quits.
+  // Triggers: footer button event, typing "ski"; Esc quits.
   useEffect(() => {
     const onStart = () => start();
+    let typed = "";
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape" && game.current) return exit();
+      if (e.metaKey || e.ctrlKey || e.altKey || e.key.length !== 1) return;
       const typing = e.target instanceof HTMLElement && e.target.closest("input, textarea, [contenteditable]");
-      if ((e.key === "s" || e.key === "S") && !e.metaKey && !e.ctrlKey && !e.altKey && !typing && !game.current && !location.hash) {
+      if (typing) return;
+      typed = (typed + e.key.toLowerCase()).slice(-3);
+      if (typed === "ski" && !game.current && !location.hash) {
+        typed = "";
         start();
       }
     };
@@ -405,7 +410,7 @@ export function SkiButton() {
       onClick={() => window.dispatchEvent(new Event("ski:start"))}
       className="label inline-flex h-11 items-center gap-2 text-fg transition-colors hover:text-accent"
     >
-      Ski the page <kbd className="rounded border border-line px-1.5 py-0.5 font-mono text-[0.65rem]">S</kbd>
+      Ski the page <kbd className="rounded border border-line px-1.5 py-0.5 font-mono text-[0.65rem] pointer-coarse:hidden">ski</kbd>
     </button>
   );
 }
