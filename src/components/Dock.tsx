@@ -8,10 +8,31 @@ import { Magnetic } from "@/components/ui/magnetic";
  * nears them and settle back on leave. Mouse only; touch gets plain buttons. Transform only, so
  * neighbours never move. Each icon also leans toward the pointer (Magnetic, from
  * motion-primitives).
+ *
+ * Touch: press-and-hold an icon, or slide along the bar, to see its label (the same tooltip hover
+ * shows). A hold never activates the link.
  */
 export function Dock({ children }: { children: ReactNode }) {
   const list = useRef<HTMLUListElement>(null);
   const raf = useRef(0);
+  const hold = useRef(0);
+  const held = useRef(false);
+  const origin = useRef({ x: 0, y: 0 });
+
+  /** Shows the label of the icon under (x, y); no arguments clears it. */
+  const tipAt = (x?: number, y?: number) => {
+    const hit = x === undefined || y === undefined ? null : document.elementFromPoint(x, y)?.closest<HTMLElement>("[data-dock]");
+    list.current?.querySelectorAll<HTMLElement>("[data-dock]").forEach((el) => {
+      if (el === hit) el.setAttribute("data-tip", "");
+      else el.removeAttribute("data-tip");
+    });
+  };
+  const release = () => {
+    clearTimeout(hold.current);
+    tipAt();
+    // The click that follows a hold lands right after this; swallow it, then forget.
+    setTimeout(() => (held.current = false), 400);
+  };
 
   const swell = (x: number | null) => {
     cancelAnimationFrame(raf.current);
@@ -28,9 +49,30 @@ export function Dock({ children }: { children: ReactNode }) {
     <nav aria-label="Links" className="absolute inset-x-4 top-4 z-40 md:inset-x-auto md:top-6 md:right-8">
       <ul
         ref={list}
-        onPointerMove={(e) => e.pointerType === "mouse" && swell(e.clientX)}
-        onPointerLeave={() => swell(null)}
-        className="flex items-start justify-between gap-2 rounded-3xl md:justify-start md:gap-3 border border-line bg-bg/85 px-3 py-2 shadow-sm backdrop-blur-md"
+        onPointerDown={(e) => {
+          if (e.pointerType === "mouse") return;
+          held.current = false;
+          origin.current = { x: e.clientX, y: e.clientY };
+          hold.current = window.setTimeout(() => {
+            held.current = true;
+            tipAt(origin.current.x, origin.current.y);
+          }, 350);
+        }}
+        onPointerMove={(e) => {
+          if (e.pointerType === "mouse") return swell(e.clientX);
+          if (held.current) tipAt(e.clientX, e.clientY);
+          else if (Math.hypot(e.clientX - origin.current.x, e.clientY - origin.current.y) > 10) clearTimeout(hold.current);
+        }}
+        onPointerUp={(e) => e.pointerType !== "mouse" && release()}
+        onPointerCancel={release}
+        onPointerLeave={(e) => e.pointerType === "mouse" && swell(null)}
+        onClickCapture={(e) => {
+          if (!held.current) return;
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onContextMenu={(e) => held.current && e.preventDefault()}
+        className="flex items-start justify-between gap-1 rounded-3xl border border-line bg-bg/85 px-2 py-2 shadow-sm backdrop-blur-md select-none [-webkit-touch-callout:none] max-md:touch-none md:justify-start md:gap-3 md:px-3"
       >
         {children}
       </ul>
@@ -49,7 +91,7 @@ export function DockItem({ label, children }: { label: string; children: ReactNo
       </div>
       <span
         aria-hidden
-        className="label pointer-events-none absolute top-full left-1/2 mt-3 -translate-x-1/2 -translate-y-1 rounded-md bg-fg px-2 py-1 whitespace-nowrap !text-bg opacity-0 transition-[opacity,translate] duration-200 group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:translate-y-0 group-hover:opacity-100"
+        className="label pointer-events-none absolute top-full left-1/2 mt-3 -translate-x-1/2 -translate-y-1 rounded-md bg-fg px-2 py-1 whitespace-nowrap !text-bg opacity-0 transition-[opacity,translate] duration-200 group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:translate-y-0 group-hover:opacity-100 group-data-[tip]:translate-y-0 group-data-[tip]:opacity-100"
       >
         {label}
       </span>

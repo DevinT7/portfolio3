@@ -44,7 +44,7 @@ export default function Home() {
     <>
       <PageTransition>
       <div id="page" className="relative mx-auto flex min-h-dvh max-w-[1240px] flex-col px-4 md:px-8">
-        <a href="#work-label" className="label fixed top-2 left-2 z-[70] -translate-y-16 bg-fg px-3 py-2 !text-bg focus:translate-y-0">
+        <a href="#work-label" className="label fixed top-2 left-2 z-[70] inline-flex min-h-11 -translate-y-16 items-center bg-fg px-3 !text-bg focus:translate-y-0">
           Skip to work
         </a>
         <ScrollEffects />

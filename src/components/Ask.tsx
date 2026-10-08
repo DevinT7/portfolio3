@@ -20,6 +20,8 @@ export function Ask() {
   const log = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const abort = useRef<AbortController | null>(null);
+  // Phones: the panel is a full-screen sheet sized to the visual viewport, so the keyboard never covers the input.
+  const [vv, setVv] = useState<{ top: number; height: number } | null>(null);
 
   useEffect(() => {
     const show = () => setOpen(true);
@@ -34,6 +36,26 @@ export function Ask() {
 
   useEffect(() => {
     if (open) input.current?.focus({ preventScroll: true });
+  }, [open]);
+
+  useEffect(() => {
+    const v = window.visualViewport;
+    if (!open || !v) return;
+    const isPhone = () => window.matchMedia("(max-width: 639px)").matches;
+    const sync = () => setVv(isPhone() ? { top: v.offsetTop, height: v.height } : null);
+    sync();
+    // The page behind a full-screen sheet shouldn't scroll.
+    const root = document.documentElement;
+    const prev = root.style.overflow;
+    if (isPhone()) root.style.overflow = "hidden";
+    v.addEventListener("resize", sync);
+    v.addEventListener("scroll", sync);
+    return () => {
+      v.removeEventListener("resize", sync);
+      v.removeEventListener("scroll", sync);
+      root.style.overflow = prev;
+      setVv(null);
+    };
   }, [open]);
 
   useEffect(() => {
@@ -106,7 +128,8 @@ export function Ask() {
       aria-label="Ask Devin"
       aria-hidden={!open}
       inert={!open}
-      className={`fixed right-0 bottom-0 z-40 flex h-[min(34rem,80dvh)] w-full flex-col border border-line bg-bg shadow-2xl transition-[translate,opacity] duration-500 ease-[var(--ease-out)] sm:right-6 sm:bottom-6 sm:w-[24rem] sm:rounded-[20px] ${open ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-6 opacity-0"}`}
+      style={vv ? { top: vv.top, height: vv.height } : undefined}
+      className={`fixed inset-x-0 top-0 z-40 flex h-dvh w-full flex-col border-line bg-bg transition-[translate,opacity] duration-500 ease-[var(--ease-out)] sm:inset-x-auto sm:top-auto sm:right-6 sm:bottom-6 sm:h-[min(34rem,80dvh)] sm:w-[24rem] sm:rounded-[20px] sm:border sm:shadow-2xl ${open ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-6 opacity-0"}`}
     >
       <div className="flex h-12 shrink-0 items-center justify-between border-b border-line px-4">
         <span className="label">Ask me</span>
@@ -115,7 +138,7 @@ export function Ask() {
         </button>
       </div>
 
-      <div ref={log} className="flex-1 space-y-4 overflow-y-auto px-4 py-4" aria-live="polite">
+      <div ref={log} className="flex-1 space-y-4 overflow-y-auto overscroll-contain px-4 py-4" aria-live="polite">
         {msgs.length === 0 && (
           <div className="flex flex-col items-start gap-2">
             {STARTERS.map((s) => (
@@ -123,7 +146,7 @@ export function Ask() {
                 key={s}
                 type="button"
                 onClick={() => send(s)}
-                className="rounded-full border border-line px-3 py-1.5 text-left text-sm transition-colors hover:border-accent hover:text-accent"
+                className="rounded-full border border-line px-3 py-1.5 text-left text-sm transition-colors max-sm:py-3 hover:border-accent hover:text-accent"
               >
                 {s}
               </button>
@@ -154,7 +177,7 @@ export function Ask() {
           maxLength={600}
           placeholder="Ask anything"
           aria-label="Your question"
-          className="h-12 min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted"
+          className="h-12 min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-muted sm:text-sm"
         />
         <button type="submit" disabled={busy || !text.trim()} className="label h-11 px-2 text-fg hover:text-accent disabled:opacity-30">
           Send

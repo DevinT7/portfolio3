@@ -28,7 +28,7 @@ export function CopyEmail({ email }: { email: string }) {
     <button
       type="button"
       onClick={copy}
-      className="group inline-flex origin-left items-baseline gap-3 text-left text-[clamp(1.25rem,2.6vw,2rem)] font-medium tracking-tight transition-transform duration-300 ease-[var(--ease-out)] hover:scale-[1.04] focus-visible:scale-[1.04]"
+      className="group -my-2 inline-flex origin-left items-baseline gap-3 py-2 text-left text-[clamp(1.25rem,2.6vw,2rem)] font-medium tracking-tight transition-transform duration-300 ease-[var(--ease-out)] hover:scale-[1.04] focus-visible:scale-[1.04]"
     >
       <span className="relative">
         {email}
