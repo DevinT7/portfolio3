@@ -158,17 +158,19 @@ html.intro .curtain {
    runs on the compositor: the old page fades out, the new one fades in while settling a short
    way in the direction of travel. While a transition is in flight <html> has `data-nav`, which
    lets the arriving page show at once instead of replaying its own reveals under the fade.
-   Block wipes are exempt: they still play, so the name is revealed by the sweep. */
+   The old page is fully gone before the new one starts, and wipes are skipped, so nothing overlaps. */
 @keyframes vt-out { to { opacity: 0; } }
 @keyframes vt-in-fwd { from { opacity: 0; translate: 0 2.5vh; } }
 @keyframes vt-in-back { from { opacity: 0; translate: 0 -2.5vh; } }
 ::view-transition-old(.nav-forward), ::view-transition-old(.nav-back) {
-  animation: 200ms ease-in both vt-out;
+  animation: 160ms ease-in both vt-out;
   mix-blend-mode: normal;
 }
-::view-transition-new(.nav-forward) { animation: 420ms var(--ease-out) 120ms both vt-in-fwd; mix-blend-mode: normal; }
-::view-transition-new(.nav-back) { animation: 420ms var(--ease-out) 120ms both vt-in-back; mix-blend-mode: normal; }
+::view-transition-new(.nav-forward) { animation: 320ms var(--ease-out) 160ms both vt-in-fwd; mix-blend-mode: normal; }
+::view-transition-new(.nav-back) { animation: 320ms var(--ease-out) 160ms both vt-in-back; mix-blend-mode: normal; }
 html[data-nav] .rise { opacity: 1; transform: none; transition: none; }
+html[data-nav] .wipe > .wipe-text, .js .wipe.is-set > .wipe-text { opacity: 1; animation: none; }
+html[data-nav] .wipe::after, .js .wipe.is-set::after { display: none; }
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }

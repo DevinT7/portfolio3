@@ -24,7 +24,7 @@ export function ScrollEffects() {
       // so mark it revealed now rather than waiting for the observer.
       const arriving = document.documentElement.hasAttribute("data-nav");
       document.querySelectorAll("[data-reveal]").forEach((el) => {
-        if (arriving && el.getBoundingClientRect().top < window.innerHeight) el.classList.add("is-in");
+        if (arriving && el.getBoundingClientRect().top < window.innerHeight) el.classList.add("is-in", "is-set");
         else io.observe(el);
       });
     };
