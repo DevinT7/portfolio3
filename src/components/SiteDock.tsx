@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Dock, DockItem, dockBtn, IconFile, IconGithub, IconLinkedin, IconMail, IconTheme, IconUser } from "@/components/Dock";
+import { MobileMenu } from "@/components/MobileMenu";
 import { ResumeViewer } from "@/components/ResumeViewer";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { site } from "@/content/site";
@@ -7,6 +8,8 @@ import { site } from "@/content/site";
 /** The top-right dock, shared by the home and About pages. `current` swaps the first icon: About on home, Home on About. */
 export function SiteDock({ current }: { current: "home" | "about" }) {
   return (
+    <>
+    <MobileMenu current={current} />
     <Dock>
       <DockItem label={current === "home" ? "About" : "Home"}>
         <Link href={current === "home" ? "/about" : "/"} transitionTypes={[current === "home" ? "nav-forward" : "nav-back"]} aria-label={current === "home" ? "About" : "Home"} className={dockBtn}>
@@ -36,6 +39,7 @@ export function SiteDock({ current }: { current: "home" | "about" }) {
         </ThemeToggle>
       </DockItem>
     </Dock>
+    </>
   );
 }
 

@@ -22,7 +22,7 @@ export default function About() {
       <NavOrigin />
 
       <header
-        className="rise flex h-20 items-center justify-between"
+        className="rise flex h-16 items-center justify-between md:h-20"
         data-reveal
       >
         <Link

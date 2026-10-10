@@ -52,7 +52,7 @@ export default function Home() {
         <NavOrigin />
         <Intro name={site.name} />
 
-        <div className="h-20" />
+        <div className="h-4 md:h-20" />
 
         <SiteDock current="home" />
 

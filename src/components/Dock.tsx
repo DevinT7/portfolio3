@@ -46,7 +46,7 @@ export function Dock({ children }: { children: ReactNode }) {
   };
 
   return (
-    <nav aria-label="Links" className="absolute inset-x-4 top-4 z-40 md:inset-x-auto md:top-6 md:right-8">
+    <nav aria-label="Links" className="absolute top-6 right-8 z-40 max-md:hidden">
       <ul
         ref={list}
         onPointerDown={(e) => {
