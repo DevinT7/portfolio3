@@ -159,15 +159,22 @@ html.intro .curtain {
    way in the direction of travel. While a transition is in flight <html> has `data-nav`, which
    lets the arriving page show at once instead of replaying its own reveals under the fade.
    The old page is fully gone before the new one starts, and wipes are skipped, so nothing overlaps. */
+/* No default group morph (the two pages differ in height, so it stretched the snapshots) and no
+   root cross-fade (it blended both screens under the page fades). Only the fades below run. */
+::view-transition-group(*) { animation: none; }
+::view-transition-image-pair(*) { isolation: auto; }
+::view-transition-old(root) { display: none; }
+::view-transition-new(root) { animation: none; }
+::view-transition-old(*), ::view-transition-new(*) { height: auto; width: 100%; }
 @keyframes vt-out { to { opacity: 0; } }
-@keyframes vt-in-fwd { from { opacity: 0; translate: 0 2.5vh; } }
-@keyframes vt-in-back { from { opacity: 0; translate: 0 -2.5vh; } }
+@keyframes vt-in-fwd { from { opacity: 0; translate: 0 1.5vh; } }
+@keyframes vt-in-back { from { opacity: 0; translate: 0 -1.5vh; } }
 ::view-transition-old(.nav-forward), ::view-transition-old(.nav-back) {
-  animation: 160ms ease-in both vt-out;
+  animation: 140ms ease-in both vt-out;
   mix-blend-mode: normal;
 }
-::view-transition-new(.nav-forward) { animation: 320ms var(--ease-out) 160ms both vt-in-fwd; mix-blend-mode: normal; }
-::view-transition-new(.nav-back) { animation: 320ms var(--ease-out) 160ms both vt-in-back; mix-blend-mode: normal; }
+::view-transition-new(.nav-forward) { animation: 300ms var(--ease-out) 140ms both vt-in-fwd; mix-blend-mode: normal; }
+::view-transition-new(.nav-back) { animation: 300ms var(--ease-out) 140ms both vt-in-back; mix-blend-mode: normal; }
 html[data-nav] .rise { opacity: 1; transform: none; transition: none; }
 html[data-nav] .wipe > .wipe-text, .js .wipe.is-set > .wipe-text { opacity: 1; animation: none; }
 html[data-nav] .wipe::after, .js .wipe.is-set::after { display: none; }

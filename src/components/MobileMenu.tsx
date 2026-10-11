@@ -56,7 +56,7 @@ export function MobileMenu({ current }: { current: "home" | "about" }) {
         </svg>
       </button>
 
-      <div className={`fixed inset-0 z-50 ${open ? "" : "pointer-events-none"}`} inert={!open}>
+      <div className={`fixed inset-0 z-50 overflow-hidden ${open ? "" : "pointer-events-none"}`} inert={!open}>
         <div
           onClick={close}
           className={`absolute inset-0 bg-black/40 backdrop-blur-[2px] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0"}`}
