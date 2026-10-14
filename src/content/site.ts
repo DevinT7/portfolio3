@@ -180,10 +180,13 @@ export const site = {
       stat: "Tech lead",
       role: "Software Tech Lead, Texas Convergent",
       when: "Jul 2026 — Now",
-      summary: "Event-to-image retrieval for Pax Historia, a YC-backed AI game studio: given an event in the game, find the right image for it.",
+      summary:
+        "Event-to-image retrieval for Pax Historia, a YC-backed AI game studio. Given a game event, its full world context, and an optional creator style, pick the right image, or decline when nothing fits.",
       did: [
-        "Leading a team of 13 engineers.",
-        "Benchmarking lexical, embedding, and hybrid multimodal retrieval against each other.",
+        "Leading a team of 13 engineers, alongside product and design, on a semester-long project for Pax Historia’s founder.",
+        "Building the benchmark first: graded relevance labels, hard negatives, no-match cases, and a style-conditioned slice, split into dev, calibration, and locked test sets.",
+        "Writing a one-command evaluation harness that scores any retrieval system on quality, misleading-match rate, abstention, style adherence, latency, and cost.",
+        "Comparing lexical, embedding, hybrid, and reranked retrieval on a quality-cost-latency frontier, then packaging the best for Pax’s shadow rollout.",
       ],
       stack: ["Python", "Embeddings"],
     },
