@@ -1,7 +1,5 @@
 import { site } from "@/content/site";
 
-type Ev = { type: string; created_at: string; repo: { name: string }; payload: { before?: string; head?: string } };
-
 const TZ = "America/Chicago";
 const DAYS = 14;
 const key = (d: Date) => new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(d); // YYYY-MM-DD
@@ -14,59 +12,64 @@ function nice(k: string) {
   return `${month} ${d}${suffix}`;
 }
 
-/** Commits in a push. The events API no longer reports this, so ask the compare API (immutable, cached long). */
-async function commitsIn(e: Ev): Promise<number> {
-  const { before, head } = e.payload;
-  if (!before || !head || /^0+$/.test(before)) return 1;
-  try {
-    const res = await fetch(`https://api.github.com/repos/${e.repo.name}/compare/${before}...${head}`, {
-      headers: { Accept: "application/vnd.github+json" },
-      next: { revalidate: 604800 },
-    });
-    if (!res.ok) return 1;
-    return Math.max(1, (await res.json()).total_commits ?? 1);
-  } catch {
-    return 1;
-  }
-}
+type Repo = { name: string; full_name: string; pushed_at: string };
+type Commit = { commit: { author: { date: string } } };
+
+const headers: HeadersInit = {
+  Accept: "application/vnd.github+json",
+  ...(process.env.GITHUB_TOKEN ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` } : {}),
+};
 
 /**
- * Live from GitHub's public events API (refreshed every 5 minutes on the server): a 14-day strip of
- * squares, one per day, shaded by how many commits you pushed, plus the last repo pushed to.
- * Renders nothing if GitHub can't be reached.
+ * Live from GitHub (refreshed every 10 minutes on the server): a 14-day strip of squares, one per day,
+ * shaded by how many commits you made, plus the last repo pushed to. The public events feed lags and drops
+ * pushes, so this reads recently pushed repos and their commits directly. Set GITHUB_TOKEN to lift the
+ * 60 req/hr unauthenticated limit. Renders nothing if GitHub can't be reached.
  */
 export async function GithubActivity() {
-  let events: Ev[] = [];
+  let repos: Repo[] = [];
   try {
-    const res = await fetch(`https://api.github.com/users/${site.github}/events/public?per_page=100`, {
-      headers: { Accept: "application/vnd.github+json" },
-      next: { revalidate: 300 },
+    const res = await fetch(`https://api.github.com/users/${site.github}/repos?sort=pushed&per_page=15`, {
+      headers,
+      next: { revalidate: 600 },
     });
     if (!res.ok) return null;
-    events = await res.json();
+    repos = await res.json();
   } catch {
     return null;
   }
-  const pushes = events.filter((e) => e.type === "PushEvent");
-  if (!pushes.length) return null;
+  if (!repos.length) return null;
 
   const today = new Date();
   const days = Array.from({ length: DAYS }, (_, i) => key(new Date(today.getTime() - (DAYS - 1 - i) * 86_400_000)));
   const count = new Map(days.map((d) => [d, 0]));
-  const recent = pushes.filter((e) => count.has(key(new Date(e.created_at))));
-  const sizes = await Promise.all(recent.map(commitsIn));
-  recent.forEach((e, i) => {
-    const k = key(new Date(e.created_at));
-    count.set(k, count.get(k)! + sizes[i]);
-  });
+  const since = new Date(today.getTime() - (DAYS + 1) * 86_400_000).toISOString();
+  const active = repos.filter((r) => r.pushed_at >= since);
+  const lists = await Promise.all(
+    active.map(async (r): Promise<Commit[]> => {
+      try {
+        const res = await fetch(
+          `https://api.github.com/repos/${r.full_name}/commits?author=${site.github}&since=${since}&per_page=100`,
+          { headers, next: { revalidate: 600 } },
+        );
+        return res.ok ? await res.json() : [];
+      } catch {
+        return [];
+      }
+    }),
+  );
+  for (const c of lists.flat()) {
+    const k = key(new Date(c.commit.author.date));
+    if (count.has(k)) count.set(k, count.get(k)! + 1);
+  }
   const total = [...count.values()].reduce((a, b) => a + b, 0);
-  const last = pushes[0];
-  const when = new Intl.DateTimeFormat("en-US", { timeZone: TZ, month: "short", day: "numeric" }).format(new Date(last.created_at));
-  const repo = last.repo.name.split("/").pop();
+  const last = repos[0];
+  const when = new Intl.DateTimeFormat("en-US", { timeZone: TZ, month: "short", day: "numeric" }).format(new Date(last.pushed_at));
+  const repo = last.name;
 
   return (
     <a
-      href={`https://github.com/${last.repo.name}`}
+      href={`https://github.com/${last.full_name}`}
       target="_blank"
       rel="noopener"
       className="group flex flex-wrap items-center gap-x-5 gap-y-3 outline-offset-4"
