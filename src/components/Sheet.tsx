@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 import { Thumb } from "./Thumb";
 
 const SafeRouteApp = dynamic(() => import("./safe-route/SafeRouteApp"), { ssr: false });
+const IntervalApp = dynamic(() => import("./interval/IntervalApp"), { ssr: false });
 
 type Props = {
   entries: (Entry & { found: Found; logo: Found; tint: number })[];
@@ -205,6 +206,7 @@ export function Sheet({ entries }: Props) {
               ))}
             </ul>
             {w.demo === "safe-route" && <SafeRouteApp />}
+            {w.demo === "interval" && <IntervalApp />}
             {w.shots && w.shots.length > 0 && (
               <div>
                 <p className="label mb-3">{w.demo ? "Screens from the iOS app" : "Screens"}</p>

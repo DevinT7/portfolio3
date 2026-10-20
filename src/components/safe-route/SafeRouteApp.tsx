@@ -8,6 +8,7 @@ import { Report } from "./Report";
 import { Chat } from "./Chat";
 import { MapScreen } from "./MapScreen";
 import { BLUE, Icon, TabGlyph } from "./ui";
+import { DemoStage, Phone } from "@/components/DemoStage";
 
 /**
  * A working web recreation of the Safe Route app (React Native / Expo) for the City of Austin panel: Home hub,
@@ -52,20 +53,8 @@ export default function SafeRouteApp() {
   const light = tab === "report"; // the app's report screen has a white header with a blue back arrow
 
   return (
-    <section aria-label="Safe Route app demo" className="-mx-6 border-y border-line bg-fg/[0.04] px-6 py-10 md:-mx-8 md:px-8">
-      <div className="mx-auto max-w-[22.5rem]">
-        <p className="label">Live demo</p>
-        <h3 className="display mt-1 text-4xl">Try the app</h3>
-        <p className="mt-2 text-sm leading-relaxed text-muted">Plan a walk on the map, file a report, join a campaign. Sample data, nothing saved.</p>
-      </div>
-
-      {/* isolate: keeps the app's own z-indexes below the panel's sticky header. Width follows the viewport height so the whole phone (iPhone 9:19.5) fits when it can. */}
-      <div
-        className="sr-app relative isolate mx-auto mt-7 rounded-[52px] bg-[#0c0c0e] p-[10px] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45)] ring-1 ring-black/30"
-        style={{ width: "min(100%, 22.5rem, max(16.5rem, calc((100dvh - 9rem) * 0.4615 + 20px)))" }}
-      >
-        <div className="relative flex aspect-[9/19.5] flex-col overflow-hidden rounded-[42px] bg-[#f8f9fa]">
-          <i className="absolute left-1/2 top-2.5 z-30 h-[26px] w-[88px] -translate-x-1/2 rounded-full bg-black" aria-hidden />
+    <DemoStage label="Safe Route app demo" title="Try the app" blurb="Plan a walk on the map, file a report, join a campaign. Sample data, nothing saved." note="A web recreation of the React Native app. Incidents are Austin PD reports and routes are simplified.">
+      <Phone className="sr-app" screenClass="bg-[#f8f9fa]">
 
           <header className={`relative z-20 flex shrink-0 items-end justify-between px-4 pb-3 pt-11 ${light ? "border-b border-[#e6e8eb] bg-white text-[#1a1a1a]" : "bg-black text-white"}`}>
             {light ? (
@@ -108,11 +97,7 @@ export default function SafeRouteApp() {
               </button>
             ))}
           </nav>
-          <i className="pointer-events-none absolute bottom-1.5 left-1/2 z-20 h-1 w-[110px] -translate-x-1/2 rounded-full bg-black" aria-hidden />
-        </div>
-      </div>
-
-      <p className="mx-auto mt-6 max-w-[22.5rem] text-xs leading-relaxed text-muted">A web recreation of the React Native app. Incidents are Austin PD reports and routes are simplified.</p>
-    </section>
+      </Phone>
+    </DemoStage>
   );
 }

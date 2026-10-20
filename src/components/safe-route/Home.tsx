@@ -33,12 +33,12 @@ export function Home({ go, joined, join, reports, toast }: Props) {
       <div className="px-4 pb-8 pt-4">
         <div className="grid grid-cols-3 gap-2.5">
           {[
-            [102, "Active Members", BLUE],
-            [CAMPAIGNS.length, "Safety Campaigns", GREEN],
-            [reports, "Recent Reports", RED],
-          ].map(([n, l, c]) => (
+            [102, "Active Members", BLUE, "shield"],
+            [CAMPAIGNS.length, "Safety Campaigns", GREEN, "people"],
+            [reports, "Recent Reports", RED, "alert"],
+          ].map(([n, l, c, ic]) => (
             <div key={l} className="sr-card flex flex-col items-center px-1.5 py-3.5 text-center">
-              <span className="h-2.5 w-2.5 rounded-full" style={{ background: c as string }} />
+              <Icon name={ic as string} size={26} color={c as string} />
               <p className="mt-2 text-2xl font-bold leading-none">{n}</p>
               <p className="mt-1.5 text-[11px] leading-tight text-[#666]">{l}</p>
             </div>

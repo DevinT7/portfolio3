@@ -215,6 +215,7 @@ html[data-nav] .wipe::after, .js .wipe.is-set::after { display: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 
 /* Safe Route app demo: styled like the shipped iOS app (light, system font), deliberately not the site's theme. */
+@layer components {
 .sr-app {
   --sr-bg: #f8f9fa; --sr-ink: #1a1a1a; --sr-sub: #666; --sr-line: #e6e8eb;
   --sr-blue: #007aff; --sr-red: #ff6b6b; --sr-green: #28a745; --sr-amber: #ffa500; --sr-tab: #0a7ea4;
@@ -226,7 +227,30 @@ html[data-nav] .wipe::after, .js .wipe.is-set::after { display: none; }
 .sr-app .sr-card { background: #fff; border-radius: 16px; box-shadow: 0 4px 8px rgb(0 0 0 / 0.08); }
 .sr-app .sr-card-sm { background: #fff; border-radius: 12px; box-shadow: 0 2px 6px rgb(0 0 0 / 0.06); }
 .sr-app .sr-h { font-size: 20px; font-weight: 700; line-height: 1.2; }
-.sr-app .sr-pill { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 20px; border-radius: 999px; font-size: 15px; font-weight: 600; color: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / 0.15); }
+.sr-app .sr-pill { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 14px; white-space: nowrap; border-radius: 999px; font-size: 15px; font-weight: 600; color: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / 0.15); }
 .sr-app .sr-input { width: 100%; background: #fff; border: 1px solid var(--sr-line); border-radius: 12px; padding: 0 14px; font-size: 15px; outline: none; box-shadow: 0 2px 6px rgb(0 0 0 / 0.05); }
 .sr-app .sr-input:focus { border-color: var(--sr-blue); }
 .sr-app ::placeholder { color: #9aa0a6; }
+}
+
+/* Interval app demo: the app's warm palette (Theme.swift), light only. */
+@layer components {
+.iv-app {
+  --iv-bg: #fff8f5; --iv-ink: #241912; --iv-sub: #564334; --iv-mute: #897362; --iv-line: #ddc1ae;
+  --iv-primary: #904d00; --iv-fixed: #ffdcc3; --iv-peach: #fff1e9; --iv-peach2: #ffeadd; --iv-coral: #a43c12; --iv-err: #ba1a1a;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+  color: var(--iv-ink);
+}
+.iv-app :where(button, input, textarea, select) { font-family: inherit; }
+.iv-app .iv-card { background: #fff; border: 1px solid rgb(221 193 174 / 0.7); border-radius: 24px; box-shadow: 0 10px 18px rgb(144 77 0 / 0.08), 0 2px 6px rgb(164 60 18 / 0.04); }
+.iv-app .iv-soft { background: var(--iv-peach); border: 1px solid rgb(221 193 174 / 0.7); border-radius: 24px; }
+.iv-app .iv-eyebrow { font-size: 11.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--iv-mute); }
+.iv-app .iv-title { font-size: 31px; font-weight: 700; line-height: 1.08; letter-spacing: -0.01em; }
+.iv-app .iv-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; width: 100%; border-radius: 999px; background: #8b4f1c; color: #fff; font-size: 16px; font-weight: 600; box-shadow: 0 8px 16px rgb(144 77 0 / 0.22); }
+.iv-app .iv-chip { display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 999px; background: #fff; border: 1px solid var(--iv-line); font-size: 13px; font-weight: 600; white-space: nowrap; }
+.iv-app .iv-input { width: 100%; background: #fff; border: 1px solid var(--iv-line); border-radius: 18px; padding: 0 16px; font-size: 15px; outline: none; }
+.iv-app .iv-input:focus { border-color: var(--iv-primary); }
+.iv-app ::placeholder { color: #a8927f; }
+.iv-app .iv-scroll { scrollbar-width: none; }
+.iv-app .iv-scroll::-webkit-scrollbar { display: none; }
+}

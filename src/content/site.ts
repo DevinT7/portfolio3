@@ -19,8 +19,8 @@ export type Entry = {
   links?: { label: string; href: string }[];
   /** Extra screenshots shown as a scrolling strip in the panel. */
   shots?: { src: string; alt: string }[];
-  /** Live demo rendered in the panel (see components/safe-route/SafeRouteApp). */
-  demo?: "safe-route";
+  /** Live demo rendered in the panel (components/safe-route/SafeRouteApp, components/interval/IntervalApp). */
+  demo?: "safe-route" | "interval";
 };
 
 export const site = {
@@ -209,6 +209,7 @@ export const site = {
         "On-device AI chat grounded in the user’s own records. Emergency words like chest pain bring up a one-tap 911/988 card.",
       ],
       stack: ["Swift", "SwiftUI", "SwiftData", "Apple Intelligence", "Vision"],
+      demo: "interval",
       links: [
         { label: "Devpost", href: "https://devpost.com/software/awesome-demo-project-h0ibsd" },
         { label: "Code", href: "https://github.com/PanavMhatre/Interval" },
