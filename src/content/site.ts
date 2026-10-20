@@ -19,7 +19,7 @@ export type Entry = {
   links?: { label: string; href: string }[];
   /** Extra screenshots shown as a scrolling strip in the panel. */
   shots?: { src: string; alt: string }[];
-  /** Live demo rendered in the panel (see components/SafeRouteDemo). */
+  /** Live demo rendered in the panel (see components/safe-route/SafeRouteApp). */
   demo?: "safe-route";
 };
 

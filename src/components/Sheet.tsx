@@ -7,7 +7,7 @@ import type { Found } from "@/lib/media";
 import dynamic from "next/dynamic";
 import { Thumb } from "./Thumb";
 
-const SafeRouteDemo = dynamic(() => import("./SafeRouteDemo"), { ssr: false });
+const SafeRouteApp = dynamic(() => import("./safe-route/SafeRouteApp"), { ssr: false });
 
 type Props = {
   entries: (Entry & { found: Found; logo: Found; tint: number })[];
@@ -204,10 +204,10 @@ export function Sheet({ entries }: Props) {
                 </li>
               ))}
             </ul>
-            {w.demo === "safe-route" && <SafeRouteDemo />}
+            {w.demo === "safe-route" && <SafeRouteApp />}
             {w.shots && w.shots.length > 0 && (
               <div>
-                <p className="label mb-3">Screens</p>
+                <p className="label mb-3">{w.demo ? "Screens from the iOS app" : "Screens"}</p>
                 {/* Bleeds to the panel edge so it reads as scrollable. */}
                 <ul className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2 md:-mx-8 md:px-8">
                   {w.shots.map((sh, i) => (

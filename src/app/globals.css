@@ -209,3 +209,24 @@ html[data-nav] .wipe::after, .js .wipe.is-set::after { display: none; }
 /* prompt-kit Loader "typing" (ui/loader.tsx), and Tilt (ui/tilt.tsx) switched off for reduced motion. */
 @keyframes typing { 0%, 100% { transform: translateY(0); opacity: 0.5; } 50% { transform: translateY(-3px); opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .tilt { transform: none !important; } }
+
+/* Horizontal chip rows (Safe Route demo): scrollable without a visible bar. */
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Safe Route app demo: styled like the shipped iOS app (light, system font), deliberately not the site's theme. */
+.sr-app {
+  --sr-bg: #f8f9fa; --sr-ink: #1a1a1a; --sr-sub: #666; --sr-line: #e6e8eb;
+  --sr-blue: #007aff; --sr-red: #ff6b6b; --sr-green: #28a745; --sr-amber: #ffa500; --sr-tab: #0a7ea4;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+  color: var(--sr-ink);
+  letter-spacing: 0;
+}
+.sr-app :where(button, input, textarea, select) { font-family: inherit; }
+.sr-app .sr-card { background: #fff; border-radius: 16px; box-shadow: 0 4px 8px rgb(0 0 0 / 0.08); }
+.sr-app .sr-card-sm { background: #fff; border-radius: 12px; box-shadow: 0 2px 6px rgb(0 0 0 / 0.06); }
+.sr-app .sr-h { font-size: 20px; font-weight: 700; line-height: 1.2; }
+.sr-app .sr-pill { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 20px; border-radius: 999px; font-size: 15px; font-weight: 600; color: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / 0.15); }
+.sr-app .sr-input { width: 100%; background: #fff; border: 1px solid var(--sr-line); border-radius: 12px; padding: 0 14px; font-size: 15px; outline: none; box-shadow: 0 2px 6px rgb(0 0 0 / 0.05); }
+.sr-app .sr-input:focus { border-color: var(--sr-blue); }
+.sr-app ::placeholder { color: #9aa0a6; }
