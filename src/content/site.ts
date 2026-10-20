@@ -19,6 +19,8 @@ export type Entry = {
   links?: { label: string; href: string }[];
   /** Extra screenshots shown as a scrolling strip in the panel. */
   shots?: { src: string; alt: string }[];
+  /** Live demo rendered in the panel (see components/SafeRouteDemo). */
+  demo?: "safe-route";
 };
 
 export const site = {
@@ -140,6 +142,7 @@ export const site = {
         "Pitched the MVP to Capital Factory investors and won Overall Best App out of 8 teams.",
       ],
       stack: ["React", "TypeScript", "Firebase", "GraphHopper", "Google Maps"],
+      demo: "safe-route",
       shots: [
         { src: "/ctm/home.webp", alt: "Safe Route home screen: Community Safety Hub with stats and quick actions" },
         { src: "/ctm/map.webp", alt: "Crime hotspot map of Austin with heat clusters" },

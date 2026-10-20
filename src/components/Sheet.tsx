@@ -4,7 +4,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import type { Entry } from "@/content/site";
 import type { Found } from "@/lib/media";
+import dynamic from "next/dynamic";
 import { Thumb } from "./Thumb";
+
+const SafeRouteDemo = dynamic(() => import("./SafeRouteDemo"), { ssr: false });
 
 type Props = {
   entries: (Entry & { found: Found; logo: Found; tint: number })[];
@@ -201,6 +204,7 @@ export function Sheet({ entries }: Props) {
                 </li>
               ))}
             </ul>
+            {w.demo === "safe-route" && <SafeRouteDemo />}
             {w.shots && w.shots.length > 0 && (
               <div>
                 <p className="label mb-3">Screens</p>
